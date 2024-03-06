@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model User {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  email      String   @unique
+  password   String
+  is_blocked Boolean  @default(false)
+  is_deleted Boolean  @default(false)
+  role       Role     @default(USER)
+  posts      Post[]
+  drafts     Draft[]
+}
+
+model Post {
+  id             Int             @id @default(autoincrement())
+  created_at     DateTime        @default(now())
+  updated_at     DateTime        @updatedAt
+  title          String
+  body           String?
+  media          String?
+  user_id        String
+  is_draft       Boolean         @default(false)
+  is_active      Boolean         @default(true)
+  is_deleted     Boolean         @default(false)
+  tags           Tag[]
+  user           User            @relation(fields: [user_id], references: [id])
+  drafts         Draft[]
+  advertisements Advertisement[]
+}
+
+model Draft {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  post_id    Int
+  user_id    String
+  post       Post     @relation(fields: [post_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
+}
+
+model Advertisement {
+  id                  Int      @id @default(autoincrement())
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  is_active           Boolean  @default(false)
+  is_deleted          Boolean  @default(false)
+  company             String?
+  title               String?
+  content             String?
+  image_backdrop_path String?
+  allowed_ad_per_page Int?
+  tags                Tag[]
+  post_id             Int?
+  post                Post?    @relation(fields: [post_id], references: [id])
+}
+
+model News_source {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  name       String   @unique
+  is_active  Boolean  @default(false)
+  is_deleted Boolean  @default(false)
+  url        String   @unique
+  tags       Tag[]
+}
+
+model Tag {
+  id               Int            @id @default(autoincrement())
+  label            String         @unique
+  is_active        Boolean        @default(true)
+  is_deleted       Boolean        @default(false)
+  post_id          Int?
+  post             Post?          @relation(fields: [post_id], references: [id])
+  advertisement_id Int?
+  advertisement    Advertisement? @relation(fields: [advertisement_id], references: [id])
+  news_source_id   Int?
+  news_source      News_source?   @relation(fields: [news_source_id], references: [id])
+}

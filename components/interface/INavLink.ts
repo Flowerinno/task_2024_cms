@@ -1,4 +1,5 @@
 export interface INavLink {
-    key: string;
-    value: string;
+	key: string;
+	value: string;
+	auth?: boolean;
 }

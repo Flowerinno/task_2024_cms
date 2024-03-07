@@ -1,6 +1,6 @@
 "use client";
 
-import { editUserSchema, EditUserSchema } from "utils/validation/form.schema";
+import { editUserSchema, EditUserSchema } from "utils/validation/user.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 
@@ -52,7 +52,7 @@ export default function EditUsers({ params }: { params: { user_id: string } }) {
 				});
 			}
 		});
-	},[form, params.user_id]);
+	}, [form, params.user_id]);
 
 	if (!user) {
 		return <LoadingDots />;

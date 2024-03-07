@@ -32,5 +32,10 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
 		}
 
 		return NextResponse.json({ message: "User deleted." });
-	} catch (error) {}
+	} catch (error) {
+		return NextResponse.json(
+			{ message: "Something went wrong on our end... We'll fix it soon." },
+			{ status: 500 }
+		);
+	}
 }

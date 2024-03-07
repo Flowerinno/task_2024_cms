@@ -1,8 +1,8 @@
 import { User } from "@prisma/client";
 import toast from "react-hot-toast";
-import { EditUserSchema } from "utils/validation/form.schema";
+import { EditUserSchema } from "utils/validation/user.schema";
 
-const base = "http://localhost:5173/api";
+const base = process.env.API_URL;
 
 export async function getUsers({
 	page = 1,

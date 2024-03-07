@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "utils/auth";
 import prisma from "@/lib/prisma";
-import { editUserSchema } from "utils/validation/form.schema";
+import { editUserSchema } from "utils/validation/user.schema";
 
 export async function PUT(req: NextRequest) {
 	const session = await auth();

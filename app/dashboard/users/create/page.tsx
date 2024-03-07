@@ -1,6 +1,6 @@
 "use client";
 
-import { registerSchema, RegisterSchema } from "utils/validation/form.schema";
+import { registerSchema, RegisterSchema } from "utils/validation/user.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 

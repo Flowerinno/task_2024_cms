@@ -49,8 +49,8 @@ export default function Form({ type }: { type: "login" | "register" }) {
 								router.push("/login");
 							}, 2000);
 						} else {
-							const { error } = await res.json();
-							toast.error(error);
+							const { message } = await res.json();
+							toast.error(message);
 						}
 					});
 				}

@@ -15,28 +15,43 @@ services:
       - 5555:5555
     volumes:
       - data:/var/lib/postgresql
-    # networks:
-    #   - my-network
+    networks:
+      - my-network
+  file_storage:
+    container_name: nextjs_file_storage
+    image: "minio/minio"
+    restart: always
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - 9000:9000
+    volumes:
+      - data:/data
+    networks:
+      - my-network
 
-#   app:
-#     container_name: nextjs-app
-#     build:
-#       context: .
-#       dockerfile: dev.Dockerfile
+  app:
+    depends_on:
+      - postgres
+    container_name: nextjs-app
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
 
-#     environment:
-#       - NODE_ENV=${NODE_ENV}
-#       - DATABASE_URL=${DATABASE_URL}
-#     env_file:
-#       - .env
-#     volumes:
-#       - .:/app
-#       - /app/node_modules
-#     ports:
-#       - 3000:3000
-#     networks:
-#       - my-network
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - DATABASE_URL=${DATABASE_URL}
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000
+    networks:
+      - my-network
 
-# networks:
-#   my-network:
-#     external: true
+networks:
+  my-network:
+    external: true

@@ -1,3 +1,4 @@
+import LoadingDots from "@/components/loading-dots";
 import { User } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { findUserById } from "utils";
@@ -18,4 +19,10 @@ export default async function Settings({
 			}
 		});
 	}, []);
+
+	if (!user) {
+		return <LoadingDots />;
+    }
+    
+    
 }

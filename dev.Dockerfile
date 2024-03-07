@@ -17,9 +17,8 @@ RUN \
 COPY . /usr/src/app
 RUN npm install
 
-RUN chmod -R 777 /usr/src/app/.next/build-manifest.json
-RUN chown -R root:root /usr/src/*
-RUN chmod a+w /usr/src/app -R
+# RUN chown -R root:root /usr/src/*
+# RUN chmod a+w /usr/src/app -R
 
 ENV NEXT_TELEMETRY_DISABLED 1
 

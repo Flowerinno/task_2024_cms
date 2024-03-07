@@ -9,12 +9,12 @@
 1. Running in DEVELOPMENT mode
 
 - `docker network create my-network` - to create a network
-- `docker-compose -f docker-compose.dev.yml up`
+- `docker-compose -f docker-compose.dev.yml up` - build the project in development mode
 
 2. Running in PRODUCTION MODE
 
 - `docker network create my-network` - to create a network
-- `docker-compose -f docker-compose.prod.yml up` - to start the project in production mode
+- `docker-compose -f docker-compose.prod.yml up` - build the project in production mode
 
 (To stop the docker container use `docker-compose down`)
 

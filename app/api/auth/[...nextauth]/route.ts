@@ -63,6 +63,14 @@ export const authOptions: NextAuthOptions = {
 					},
 				});
 
+				if (user?.is_blocked) {
+					throw new Error("User is blocked");
+				}
+
+				if (user?.is_deleted) {
+					throw new Error("User is deleted");
+				}
+
 				if (!user || !(await compare(password, user.password))) {
 					throw new Error("Invalid username or password");
 				}

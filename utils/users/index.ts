@@ -1,0 +1,144 @@
+import { User } from "@prisma/client";
+import toast from "react-hot-toast";
+import { EditUserSchema } from "utils/validation/form.schema";
+
+const base = "http://localhost:5173/api";
+
+export async function getUsers({
+	page = 1,
+	email = "",
+}: {
+	page?: number;
+	email: string;
+}): Promise<{ users: User[] | []; maxPage: number }> {
+	try {
+		const url = base + `/admin/users?page=${page}&email=${email}`;
+		const res = await fetch(url, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+
+		const data = await res.json();
+
+		return data;
+	} catch (error: { message: string } | any) {
+		toast.error(error?.message);
+		return { users: [], maxPage: 0 };
+	}
+}
+
+export async function findUserById({
+	id,
+}: {
+	id?: string;
+}): Promise<User | null> {
+	try {
+		const res = await fetch(base + `/admin/users/${id}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		return await res.json();
+	} catch (error) {
+		toast.error("An error occurred while fetching user");
+		return null;
+	}
+}
+
+export async function registerUser(
+	email: string,
+	password: string,
+	is_admin: boolean
+) {
+	try {
+		const res = await fetch(base + "/admin/users/create", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ email, password, is_admin }),
+		});
+
+		const data = await res.json();
+
+		if (res.status === 200) {
+			toast.success("User registered successfully");
+			return true;
+		}
+
+		toast.error(data?.message);
+	} catch (error: { message: string } | any) {
+		toast.error("Failed to create new user");
+		return false;
+	}
+}
+
+export async function removeUser(id: string) {
+	try {
+		const url = base + `/admin/users/delete`;
+		const res = await fetch(url, {
+			method: "DELETE",
+			body: JSON.stringify({
+				id,
+			}),
+		});
+
+		if (res.status === 200) {
+			toast.success("User removed successfully");
+		}
+	} catch (error) {
+		toast.error("An error occurred while removing user");
+		return null;
+	}
+}
+
+export async function undoDeletion(id: string) {
+	try {
+		const url = base + `/admin/users/delete/undo`;
+		const res = await fetch(url, {
+			method: "DELETE",
+			body: JSON.stringify({
+				id,
+			}),
+		});
+
+		if (res.status === 200) {
+			toast.success("Removed user from deleted");
+		}
+	} catch (error) {
+		toast.error("An error occurred while removing user from deleted");
+		return null;
+	}
+}
+
+export async function updateUser({
+	id,
+	email,
+	role,
+	is_blocked,
+	is_deleted,
+}: EditUserSchema): Promise<EditUserSchema | undefined> {
+	try {
+		const res = await fetch(base + "/admin/users/edit", {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ id, email, role, is_blocked, is_deleted }),
+		});
+
+		const data = await res.json();
+
+		if (res.status === 200) {
+			toast.success(data?.message);
+			return data?.user;
+		}
+
+		toast.error(data?.message);
+	} catch (error: { message: string } | any) {
+		toast.error("Failed to update user");
+	}
+}

@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { hash } from "bcrypt";
 
+import { faker } from "@faker-js/faker";
+
 const prisma = new PrismaClient();
 
 async function main() {
@@ -17,6 +19,19 @@ async function main() {
 				password,
 				role: "ADMIN",
 			},
+		});
+
+		const users = Array.from({ length: 100 }, () => {
+			const email = faker.internet.email();
+			return {
+				email,
+				password,
+				role: "USER",
+			} as const;
+		});
+
+		await prisma.user.createMany({
+			data: users,
 		});
 
 		console.log("Seeded the database");

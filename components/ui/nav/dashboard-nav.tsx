@@ -11,9 +11,7 @@ import {
 	NavigationMenuLink,
 	NavigationMenuList,
 	NavigationMenuTrigger,
-	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import Link from "next/link";
 
 const componentsFeed: { title: string; href: string; description: string }[] = [
 	{
@@ -77,16 +75,10 @@ export function DashboardNavigationMenu() {
 					<NavigationMenuContent>
 						<ul className="grid gap-3 grid-cols-3 p-6 md:w-[400px] lg:w-[500px]">
 							<ListItem href="/dashboard/users" title="List">
-								List users
+								List of users
 							</ListItem>
 							<ListItem href="/dashboard/users/create" title="Create">
 								Create user
-							</ListItem>
-							<ListItem href="/dashboard/users/delete" title="Delete">
-								Remove user
-							</ListItem>
-							<ListItem href="/dashboard/users/edit" title="Edit">
-								Edit user / Change role / Block
 							</ListItem>
 						</ul>
 					</NavigationMenuContent>
@@ -152,3 +144,5 @@ const ListItem = React.forwardRef<
 		</li>
 	);
 });
+
+ListItem.displayName = "ListItem";

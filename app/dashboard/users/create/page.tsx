@@ -43,7 +43,7 @@ export default function CreateUser() {
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
-					className="w-11/12 md:w-6/12 border-2 border-gray-300 p-10 m-0 rounded-md space-y-8"
+					className="w-11/12 md:w-6/12 p-10 m-0 rounded-md space-y-8"
 				>
 					<FormField
 						control={form.control}

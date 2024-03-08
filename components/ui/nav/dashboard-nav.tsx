@@ -15,31 +15,29 @@ import {
 
 const componentsFeed: { title: string; href: string; description: string }[] = [
 	{
+		title: "List",
+		href: "/dashboard/feed",
+		description: "Current active RSS feed sources.",
+	},
+	{
 		title: "Add new RSS feed source",
 		href: "/dashboard/feed/add",
 		description: "Add a new RSS feed source to the list of available sources.",
 	},
 	{
-		title: "Remove RSS feed source",
-		href: "/docs/feed/remove",
-		description:
-			"Remove an existing RSS feed source from the list of available sources.",
-	},
-	{
 		title: "Edit RSS feed source",
 		href: "/docs/feed/edit",
-		description:
-			"Edit an existing RSS feed source from the list of available sources.",
-	},
-	{
-		title: "Find and modify RSS feed source",
-		href: "/docs/feed/find",
-		description: "Find and modify an existing RSS feed item.",
+		description: "Edit an existing RSS feed source.",
 	},
 	{
 		title: "Tags",
 		href: "/docs/feed/tags",
 		description: "Add, remove, or edit tags.",
+	},
+	{
+		title: "New post",
+		href: "/docs/feed/posts/new",
+		description: "Create a new post.",
 	},
 ];
 
@@ -53,12 +51,12 @@ const componentsAdvertisement: {
 		href: "/dashboard/ads/add",
 		description: "Add and configure new advertisement.",
 	},
-	{
-		title: "Remove Advertisement",
-		href: "/docs/ads/remove",
-		description:
-			"Remove an existing advertisement from the list of available ads.",
-	},
+	// {
+	// 	title: "Remove Advertisement",
+	// 	href: "/docs/ads/remove",
+	// 	description:
+	// 		"Remove an existing advertisement from the list of available ads.",
+	// },
 	{
 		title: "Edit Advertisement",
 		href: "/docs/ads/edit",

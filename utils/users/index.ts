@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 import toast from "react-hot-toast";
 import { EditUserSchema } from "utils/validation/user.schema";
 
-const base = process.env.API_URL;
+const base = process.env.NEXT_PUBLIC_API_URL;
 
 export async function getUsers({
 	page = 1,

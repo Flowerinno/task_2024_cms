@@ -8,7 +8,7 @@ export default function DashboardLayout({
 	return (
 		<div className="flex flex-col h-screen ">
 			<DashboardNavigationMenu />
-			<div className="w-screen h-screen flex flex-col space-y-5 p-2 items-center">
+			<div className="h-screen flex flex-col space-y-5 p-2 items-center">
 				{children}
 			</div>
 		</div>

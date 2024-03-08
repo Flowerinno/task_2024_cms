@@ -63,7 +63,7 @@ export default function EditUsers({ params }: { params: { user_id: string } }) {
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
-					className="w-11/12 md:w-6/12 border-2 border-gray-300 p-10 m-0 rounded-md space-y-8"
+					className="w-11/12 md:w-6/12  p-10 m-0 rounded-md space-y-8"
 				>
 					<FormField
 						control={form.control}
@@ -120,7 +120,7 @@ export default function EditUsers({ params }: { params: { user_id: string } }) {
 											style={{ padding: 0, margin: 0 }}
 										>
 											{user?.is_blocked
-												? "User blocked (check to undo)"
+												? "User blocked (uncheck to undo)"
 												: "User NOT blocked (check to block)"}
 										</label>
 									</FormItem>
@@ -149,7 +149,7 @@ export default function EditUsers({ params }: { params: { user_id: string } }) {
 											style={{ padding: 0, margin: 0 }}
 										>
 											{user?.is_deleted
-												? "User deleted (check to undo)"
+												? "User deleted (uncheck to undo)"
 												: "User NOT deleted (check to delete)"}
 										</label>
 									</FormItem>

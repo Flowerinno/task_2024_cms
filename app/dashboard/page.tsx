@@ -12,7 +12,7 @@ export default async function Dashboard() {
 
 	return (
 		<div className="flex flex-col h-screen">
-			<div className="w-screen h-screen flex flex-col space-y-5 justify-center items-center">
+			<div className="flex flex-col space-y-5 justify-center items-center">
 				put something in here
 			</div>
 		</div>

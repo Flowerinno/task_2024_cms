@@ -6,4 +6,7 @@ export type FeedItem = {
 	contentSnippet: string;
 	isoDate: string;
 	id: string;
+	creator: string;
+	"dc:creator"?: string;
+	guid: string;
 };

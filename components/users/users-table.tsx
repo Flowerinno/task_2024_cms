@@ -85,7 +85,12 @@ export const columns: ColumnDef<User>[] = [
 		header: () => <div className="text-right">Block status</div>,
 		cell: ({ row }) => {
 			return (
-				<div className="text-right font-medium">
+				<div
+					className="text-right font-medium"
+					style={{
+						color: row.original.is_blocked ? "red" : "black",
+					}}
+				>
 					{row.original.is_blocked ? "Blocked" : "Not blocked"}
 				</div>
 			);
@@ -142,24 +147,6 @@ export const columns: ColumnDef<User>[] = [
 						>
 							Edit user
 						</DropdownMenuItem>
-						{!user?.is_deleted && (
-							<DropdownMenuItem
-								onClick={() => {
-									removeUser(user.id);
-								}}
-							>
-								Delete user
-							</DropdownMenuItem>
-						)}
-						{user?.is_deleted && (
-							<DropdownMenuItem
-								onClick={() => {
-									undoDeletion(user.id);
-								}}
-							>
-								Undo deletion
-							</DropdownMenuItem>
-						)}
 					</DropdownMenuContent>
 				</DropdownMenu>
 			);
@@ -178,6 +165,7 @@ export function UsersTable({
 	email: string;
 	maxPage: number;
 }) {
+	console.log(maxPage);
 	const [emailFilter, setEmailFilter] = React.useState(email ?? "");
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -206,7 +194,7 @@ export function UsersTable({
 	if (users?.length === 0 || !users) {
 		return null;
 	}
-	
+
 	return (
 		<div className="w-full">
 			<div className="flex items-center py-4">

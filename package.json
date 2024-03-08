@@ -26,6 +26,8 @@
 		"@radix-ui/react-popover": "^1.0.7",
 		"@radix-ui/react-select": "^2.0.0",
 		"@radix-ui/react-slot": "^1.0.2",
+		"@radix-ui/react-toggle": "^1.0.3",
+		"@radix-ui/react-toggle-group": "^1.0.4",
 		"@tanstack/react-table": "^8.13.2",
 		"@types/react": "^18.0.25",
 		"bcrypt": "^5.1.0",
@@ -39,11 +41,11 @@
 		"react-dom": "^18.2.0",
 		"react-hook-form": "^7.51.0",
 		"react-hot-toast": "^2.4.1",
-		"redis": "^4.6.13",
 		"rss-parser": "^3.13.0",
 		"tailwind-merge": "^2.0.0",
 		"tailwindcss-animate": "^1.0.7",
-		"zod": "^3.22.4"
+		"zod": "^3.22.4",
+		"zustand": "^4.5.2"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^8.4.1",

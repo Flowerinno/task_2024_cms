@@ -41,8 +41,11 @@ model Post {
   is_deleted     Boolean         @default(false)
   tags           Tag[]
   user           User            @relation(fields: [user_id], references: [id])
-  drafts         Draft[]
+  draft          Draft           @relation(fields: [draft_id], references: [id])
+  draft_id       Int
   advertisements Advertisement[]
+  news_source    News_source     @relation(fields: [news_source_id], references: [id])
+  news_source_id Int
 }
 
 model Draft {
@@ -51,8 +54,8 @@ model Draft {
   updated_at DateTime @updatedAt
   post_id    Int
   user_id    String
-  post       Post     @relation(fields: [post_id], references: [id])
   user       User     @relation(fields: [user_id], references: [id])
+  Post       Post[]
 }
 
 model Advertisement {
@@ -66,31 +69,34 @@ model Advertisement {
   content             String?
   image_backdrop_path String?
   allowed_ad_per_page Int?
-  tags                Tag[]
   post_id             Int?
   post                Post?    @relation(fields: [post_id], references: [id])
 }
 
 model News_source {
-  id         Int      @id @default(autoincrement())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  name       String   @unique
-  is_active  Boolean  @default(false)
-  is_deleted Boolean  @default(false)
-  url        String   @unique
-  tags       Tag[]
+  id              Int       @id @default(autoincrement())
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  name            String    @unique
+  is_active       Boolean   @default(false)
+  is_deleted      Boolean   @default(false)
+  url             String    @unique
+  selected_fields String
+  title           String
+  content         String?
+  pubDate         DateTime?
+  link            String?
+  creator         String?
+  tags            Tag[]
+  Post            Post[]
 }
 
 model Tag {
-  id               Int            @id @default(autoincrement())
-  label            String         @unique
-  is_active        Boolean        @default(true)
-  is_deleted       Boolean        @default(false)
-  post_id          Int?
-  post             Post?          @relation(fields: [post_id], references: [id])
-  advertisement_id Int?
-  advertisement    Advertisement? @relation(fields: [advertisement_id], references: [id])
-  news_source_id   Int?
-  news_source      News_source?   @relation(fields: [news_source_id], references: [id])
+  id          Int           @id @default(autoincrement())
+  label       String        @unique
+  is_active   Boolean       @default(true)
+  is_deleted  Boolean       @default(false)
+  post        Post          @relation(fields: [post_id], references: [id])
+  post_id     Int
+  news_source News_source[]
 }

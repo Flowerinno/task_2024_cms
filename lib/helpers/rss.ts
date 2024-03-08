@@ -11,6 +11,9 @@ const parser: Parser<FeedItem> = new Parser({
 			"contentSnippet",
 			"isoDate",
 			"id",
+			"guid",
+			"creator",
+			"dc:creator",
 		],
 	},
 });

@@ -8,7 +8,7 @@ export async function GET(req: NextApiRequest) {
 		const page = url.searchParams.get("page") ?? 1;
 		const email = url.searchParams.get("email")?.toLowerCase();
 
-		const maxPage = await prisma.user.count();
+		const maxPage = Math.ceil(await prisma.user.count()) / 10;
 
 		const users = await prisma.user.findMany({
 			where: {
@@ -30,7 +30,7 @@ export async function GET(req: NextApiRequest) {
 
 		const response = {
 			users,
-			maxPage: Math.ceil(maxPage / 10),
+			maxPage,
 		};
 
 		return NextResponse.json(response, { status: 200 });

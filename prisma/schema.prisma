@@ -24,7 +24,6 @@ model User {
   is_blocked Boolean  @default(false)
   is_deleted Boolean  @default(false)
   role       Role     @default(USER)
-  posts      Post[]
   drafts     Draft[]
 }
 
@@ -35,12 +34,10 @@ model Post {
   title          String
   body           String?
   media          String?
-  user_id        String
   is_draft       Boolean         @default(false)
   is_active      Boolean         @default(true)
   is_deleted     Boolean         @default(false)
   tags           Tag[]
-  user           User            @relation(fields: [user_id], references: [id])
   draft          Draft           @relation(fields: [draft_id], references: [id])
   draft_id       Int
   advertisements Advertisement[]
@@ -93,10 +90,11 @@ model News_source {
 
 model Tag {
   id          Int           @id @default(autoincrement())
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @default(now()) @updatedAt
   label       String        @unique
   is_active   Boolean       @default(true)
   is_deleted  Boolean       @default(false)
-  post        Post          @relation(fields: [post_id], references: [id])
-  post_id     Int
+  post        Post[]
   news_source News_source[]
 }

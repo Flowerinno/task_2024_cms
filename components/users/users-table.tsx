@@ -165,7 +165,6 @@ export function UsersTable({
 	email: string;
 	maxPage: number;
 }) {
-	console.log(maxPage);
 	const [emailFilter, setEmailFilter] = React.useState(email ?? "");
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 

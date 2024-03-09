@@ -16,9 +16,19 @@ export const addFeedSchema = z.object({
 				return { message: "Input must be a number" };
 			},
 		})
+		.min(5, "Interval must be at least 5 minutes")
 		.default(5),
 	include_links: z.boolean().default(false),
 });
 
+export const createTagsSchema = z.object({
+	label: z
+		.string()
+		.min(3, "Label must be at least 3 characters long")
+		.max(10, "Label must be at most 10 characters long"),
+	is_active: z.boolean().default(false),
+});
+
+export type CreateTagsSchema = z.infer<typeof createTagsSchema>;
 export type StepOneVerifySchema = z.infer<typeof stepOneVerifySchema>;
 export type AddFeedSchema = z.infer<typeof addFeedSchema>;

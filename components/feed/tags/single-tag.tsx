@@ -1,0 +1,43 @@
+import { Label } from "@/components/ui/label";
+import { Tag } from "@prisma/client";
+import { Switch } from "@/components/ui/switch";
+import { useTags } from "store";
+import { updateTagActivity } from "utils";
+
+interface SingleTagProps {
+	tag: Tag;
+}
+
+export const SingleTag = ({ tag }: SingleTagProps) => {
+	if (!tag) return null;
+
+	const updateTag = useTags((state) => state.updateTag);
+
+	const onUpdate = async () => {
+		const updatedTag = await updateTagActivity({
+			id: tag.id,
+			is_active: !tag.is_active,
+		});
+
+		if (updatedTag) {
+			updateTag(updatedTag);
+		}
+	};
+
+	return (
+		<div className=" max-h-24 h-fit flex flex-row flex-wrap items-center gap-2 border-[1px] p-3 cursor-pointer rounded-md">
+			<Label className="font-bold flex-1">#{tag.label}</Label>
+
+			<div className="flex flex-row gap-3 items-center">
+				<span>off</span>
+				<Switch
+					onCheckedChange={onUpdate}
+					name="is_active"
+					type="submit"
+					checked={tag.is_active}
+				/>
+				<span>on</span>
+			</div>
+		</div>
+	);
+};

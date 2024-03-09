@@ -42,7 +42,6 @@ export async function POST(req: Request) {
 		});
 		return NextResponse.json(user);
 	} catch (error) {
-		console.log(error);
 		return NextResponse.json(
 			{ message: "Something went wrong on our end... We'll fix it soon." },
 			{ status: 500 }

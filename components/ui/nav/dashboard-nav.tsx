@@ -25,18 +25,13 @@ const componentsFeed: { title: string; href: string; description: string }[] = [
 		description: "Add a new RSS feed source to the list of available sources.",
 	},
 	{
-		title: "Edit RSS feed source",
-		href: "/docs/feed/edit",
-		description: "Edit an existing RSS feed source.",
-	},
-	{
 		title: "Tags",
-		href: "/docs/feed/tags",
+		href: "/dashboard/feed/tags",
 		description: "Add, remove, or edit tags.",
 	},
 	{
 		title: "New post",
-		href: "/docs/feed/posts/new",
+		href: "/dashboard/feed/posts/new",
 		description: "Create a new post.",
 	},
 ];

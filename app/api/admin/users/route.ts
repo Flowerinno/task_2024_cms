@@ -8,7 +8,7 @@ export async function GET(req: NextApiRequest) {
 		const page = url.searchParams.get("page") ?? 1;
 		const email = url.searchParams.get("email")?.toLowerCase();
 
-		const maxPage = Math.ceil(await prisma.user.count()) / 10;
+		const maxPage = Math.ceil(await prisma.user.count()/ 10) ;
 
 		const users = await prisma.user.findMany({
 			where: {
@@ -16,7 +16,7 @@ export async function GET(req: NextApiRequest) {
 					contains: email ? email : undefined,
 				},
 			},
-
+			skip: Number(page) * 10 - 10,
 			take: Number(page) * 10,
 			select: {
 				id: true,

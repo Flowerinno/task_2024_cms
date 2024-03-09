@@ -14,16 +14,31 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { addFeedSchema, AddFeedSchema } from "utils/validation/feed.schema";
-import { useAddFeed } from "store";
+import { useAddFeed, useTags } from "store";
 import { FeedCreationSkeleton } from "../skeleton";
 import toast from "react-hot-toast";
 import { Label } from "@/components/ui/label";
+import { useEffect } from "react";
+import { getTags } from "utils";
 
 export const AddFeedForm = ({
 	setStep,
 }: {
 	setStep: (step: 1 | 2) => void;
 }) => {
+	const { tags, setTags } = useTags((state) => state);
+	useEffect(() => {
+		if (!tags.length) {
+			getTags()
+				.then((data) => {
+					setTags(data);
+				})
+				.catch(() => {
+					toast.error("Failed to fetch tags");
+				});
+		}
+	}, []);
+
 	const validatedFeed = useAddFeed((state) => state.validated_feed);
 	const includedFields = useAddFeed((state) => state.included_fields);
 
@@ -77,7 +92,15 @@ export const AddFeedForm = ({
 							<FormItem>
 								<FormLabel>Import interval (in minutes)</FormLabel>
 								<FormControl>
-									<Input type="number" placeholder="5 minutes" {...field} />
+									<Input
+										type="number"
+										placeholder="5 minutes"
+										{...field}
+										onChange={(e) => {
+											const value = parseInt(e.target.value);
+											field.onChange(value);
+										}}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>

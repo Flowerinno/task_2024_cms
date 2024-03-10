@@ -6,9 +6,10 @@ import { updateTagActivity } from "utils";
 
 interface SingleTagProps {
 	tag: Tag;
+	isSearching?: boolean;
 }
 
-export const SingleTag = ({ tag }: SingleTagProps) => {
+export const SingleTag = ({ tag, isSearching = false }: SingleTagProps) => {
 	if (!tag) return null;
 
 	const updateTag = useTags((state) => state.updateTag);
@@ -25,19 +26,20 @@ export const SingleTag = ({ tag }: SingleTagProps) => {
 	};
 
 	return (
-		<div className=" max-h-24 h-fit flex flex-row flex-wrap items-center gap-2 border-[1px] p-3 cursor-pointer rounded-md">
+		<div className="max-h-24 h-fit flex flex-row flex-wrap items-center gap-2 border-[1px] p-3 cursor-pointer rounded-md">
 			<Label className="font-bold flex-1">#{tag.label}</Label>
-
-			<div className="flex flex-row gap-3 items-center">
-				<span>off</span>
-				<Switch
-					onCheckedChange={onUpdate}
-					name="is_active"
-					type="submit"
-					checked={tag.is_active}
-				/>
-				<span>on</span>
-			</div>
+			{!isSearching && (
+				<div className="flex flex-row gap-3 items-center">
+					<span>off</span>
+					<Switch
+						onCheckedChange={onUpdate}
+						name="is_active"
+						type="submit"
+						checked={tag.is_active}
+					/>
+					<span>on</span>
+				</div>
+			)}
 		</div>
 	);
 };

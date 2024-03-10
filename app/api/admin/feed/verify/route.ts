@@ -2,6 +2,10 @@ import { parseRss } from "@/lib/helpers/rss";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "utils/auth";
 
+import prisma from "@/lib/prisma";
+
+export const revalidate = 0;
+
 export async function GET(req: NextRequest) {
 	try {
 		const url = new URL(req?.url || "", "http://localhost");
@@ -31,14 +35,41 @@ export async function GET(req: NextRequest) {
 			);
 		}
 
+		const isExists = await prisma.news_source.findUnique({
+			where: {
+				url: rss_url,
+			},
+		});
+
+		if (isExists) {
+			return NextResponse.json(
+				{
+					message: "Feed already exists",
+				},
+				{
+					status: 400,
+				}
+			);
+		}
+
 		const { items } = await parseRss(rss_url);
 
-		return NextResponse.json({
-			...items[0],
-		});
+		return NextResponse.json(
+			{
+				...items[0],
+			},
+			{
+				status: 200,
+			}
+		);
 	} catch (error) {
-		return NextResponse.json({
-			message: "An error occurred while verifying RSS feed",
-		});
+		return NextResponse.json(
+			{
+				message: "Could not verify RSS feed",
+			},
+			{
+				status: 400,
+			}
+		);
 	}
 }

@@ -30,7 +30,7 @@ export default function Tags() {
 	}, []);
 
 	return (
-		<div className="w-full h-screen flex flex-row gap-10">
+		<div className="w-full flex flex-row gap-10">
 			<div
 				id="tags_list"
 				className="relative flex-1 flex flex-row flex-wrap gap-3 justify-start h-fit basis-[2%] p-5"

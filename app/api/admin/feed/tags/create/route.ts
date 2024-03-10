@@ -70,8 +70,13 @@ export async function POST(req: NextRequest) {
 			status: 201,
 		});
 	} catch (error) {
-		return NextResponse.json({
-			message: "An error occurred while creating tag",
-		});
+		return NextResponse.json(
+			{
+				message: "An error occurred while creating tag",
+			},
+			{
+				status: 500,
+			}
+		);
 	}
 }

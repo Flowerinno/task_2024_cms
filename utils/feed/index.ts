@@ -1,4 +1,4 @@
-import { FeedItem } from "@/lib/helpers/types";
+import { CreateRssRequestInput, FeedItem } from "@/lib/helpers/types";
 import { News_source, Tag } from "@prisma/client";
 import toast from "react-hot-toast";
 
@@ -26,6 +26,93 @@ export async function getRssList(): Promise<News_source[] | []> {
 	}
 }
 
+export async function createRssSource(
+	payload: CreateRssRequestInput
+): Promise<{ id: string } | undefined> {
+	try {
+		const url = base + `/admin/feed/create`;
+		const res = await fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(payload),
+		});
+
+		const data = await res.json();
+
+		if (res.status !== 201 || !data?.id) {
+			toast.error(data?.message ?? "");
+			return;
+		}
+
+		toast.success("RSS feed created successfully");
+
+		return data;
+	} catch (_) {
+		toast.error("Failed to create RSS feed");
+	}
+}
+
+export async function updateRssSource({
+	id,
+	is_active,
+}: {
+	id: number;
+	is_active: boolean;
+}): Promise<News_source | undefined> {
+	try {
+		const url = base + `/admin/feed/update`;
+		const res = await fetch(url, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ id, is_active }),
+		});
+
+		const data = await res.json();
+
+		if (res.status !== 200) {
+			toast.error(data?.message ?? "");
+			return;
+		}
+
+		toast.success("RSS feed updated successfully");
+
+		return data;
+	} catch (_) {
+		toast.error("Failed to update RSS feed");
+	}
+}
+
+export async function deleteRssSource(id: number): Promise<boolean> {
+	try {
+		const url = base + `/admin/feed/delete`;
+		const res = await fetch(url, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ id }),
+		});
+
+		const data = await res.json();
+
+		if (res.status !== 200) {
+			toast.error(data?.message ?? "");
+			return false;
+		}
+
+		toast.success("RSS feed deleted successfully");
+
+		return true;
+	} catch (_) {
+		toast.error("Failed to delete RSS feed");
+		return false;
+	}
+}
+
 export async function verifyRss(
 	rss_url: string
 ): Promise<FeedItem | undefined> {
@@ -37,7 +124,9 @@ export async function verifyRss(
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
+				"Cache-Control": "no-store, max-age=0",
 			},
+			cache: "no-store",
 		});
 
 		const data = await res.json();

@@ -4,6 +4,7 @@ import { create } from "zustand";
 type Step = 1 | 2;
 type FeedStore = {
 	step: Step;
+	url: string;
 	validated_feed: FeedItem | null;
 	included_fields: {
 		title: boolean;
@@ -14,10 +15,12 @@ type FeedStore = {
 	setStep: (step: Step) => void;
 	setValidatedFeed: (feed: FeedItem) => void;
 	setIncludedFields: (field: keyof FeedStore["included_fields"]) => void;
+	setUrl: (url: string) => void;
 };
 
 export const useAddFeed = create<FeedStore>((set) => ({
 	step: 1,
+	url: "",
 	validated_feed: null,
 	included_fields: {
 		title: false,
@@ -36,4 +39,5 @@ export const useAddFeed = create<FeedStore>((set) => ({
 				[field]: state.included_fields[field] ? false : true,
 			},
 		})),
+	setUrl: (url: string) => set((state) => ({ ...state, url })),
 }));

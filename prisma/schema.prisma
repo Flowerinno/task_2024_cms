@@ -71,21 +71,21 @@ model Advertisement {
 }
 
 model News_source {
-  id              Int       @id @default(autoincrement())
-  created_at      DateTime  @default(now())
-  updated_at      DateTime  @updatedAt
-  name            String    @unique
-  is_active       Boolean   @default(false)
-  is_deleted      Boolean   @default(false)
-  url             String    @unique
-  selected_fields String
-  title           String
-  content         String?
-  pubDate         DateTime?
-  link            String?
-  creator         String?
-  tags            Tag[]
-  Post            Post[]
+  id               Int      @id @default(autoincrement())
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+  name             String   @unique
+  is_active        Boolean  @default(false)
+  is_deleted       Boolean  @default(false)
+  url              String   @unique
+  title_included   Boolean  @default(true)
+  content_included Boolean  @default(false)
+  pubDate_included Boolean  @default(false)
+  is_linkable      Boolean  @default(false)
+  creator_included Boolean  @default(false)
+  import_interval  Int      @default(5)
+  tags             Tag[]
+  Post             Post[]
 }
 
 model Tag {

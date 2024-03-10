@@ -17,7 +17,7 @@ const componentsFeed: { title: string; href: string; description: string }[] = [
 	{
 		title: "List",
 		href: "/dashboard/feed",
-		description: "Current active RSS feed sources.",
+		description: "RSS feed sources.",
 	},
 	{
 		title: "Add new RSS feed source",

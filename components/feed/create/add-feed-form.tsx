@@ -18,8 +18,10 @@ import { useAddFeed, useTags } from "store";
 import { FeedCreationSkeleton } from "../skeleton";
 import toast from "react-hot-toast";
 import { Label } from "@/components/ui/label";
-import { useEffect } from "react";
-import { getTags } from "utils";
+import { useEffect, useState } from "react";
+import { createRssSource, getTags } from "utils";
+import { Tag } from "@prisma/client";
+import { SingleTag } from "../tags";
 
 export const AddFeedForm = ({
 	setStep,
@@ -27,11 +29,17 @@ export const AddFeedForm = ({
 	setStep: (step: 1 | 2) => void;
 }) => {
 	const { tags, setTags } = useTags((state) => state);
+	const url = useAddFeed((state) => state.url);
+
+	const [isSearching, setIsSearching] = useState(false);
+	const [search, setSearch] = useState<Tag[] | []>([]);
+
 	useEffect(() => {
 		if (!tags.length) {
 			getTags()
 				.then((data) => {
-					setTags(data);
+					const activeOnly = data.filter((tag) => tag.is_active);
+					setTags(activeOnly);
 				})
 				.catch(() => {
 					toast.error("Failed to fetch tags");
@@ -53,11 +61,44 @@ export const AddFeedForm = ({
 		},
 	});
 
-	const onSubmit = (data: AddFeedSchema) => {
+	const onSubmit = async (data: AddFeedSchema) => {
 		if (!includedFields.title) {
 			toast.error("Select title field in the skeleton, as it's required.");
 			return;
 		}
+
+		if (!url) {
+			toast.error("Please verify the RSS feed first");
+			setStep(1);
+			return;
+		}
+
+		const payload = {
+			...data,
+			included_fields: includedFields,
+			url,
+		};
+
+		const res = await createRssSource(payload);
+
+		if (res?.id) {
+			setTimeout(() => {
+				setStep(1);
+			}, 1000);
+		}
+	};
+
+	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+
+		if (!value) {
+			setIsSearching(false);
+			return;
+		}
+
+		setIsSearching(true);
+		const filteredTags = tags.filter((tag) => tag.label.includes(value));
+		setSearch(filteredTags);
 	};
 
 	return (
@@ -112,7 +153,7 @@ export const AddFeedForm = ({
 						name="tags"
 						render={({ field: { ref } }) => (
 							<FormItem>
-								<FormLabel>Resource tags (max 3, add on space key)</FormLabel>
+								<FormLabel>Resource tags (max 3, add on TAB key)</FormLabel>
 								<div className="flex flex-row gap-3">
 									{form.getValues("tags")?.map((item, i) => (
 										<Label
@@ -132,8 +173,10 @@ export const AddFeedForm = ({
 								<br />
 								<FormControl>
 									<Input
+										id="tags_search_field"
+										placeholder="Search tags..."
 										onKeyDown={(e) => {
-											if (e.code === "Space") {
+											if (e.code === "Tab") {
 												e.preventDefault();
 												const value = e.currentTarget.value;
 												const existingTags = form.getValues("tags");
@@ -142,23 +185,56 @@ export const AddFeedForm = ({
 													value.length > 0 &&
 													value.length < 15 &&
 													existingTags.length < 3 &&
-													!existingTags.includes(value)
+													!existingTags.includes(value) &&
+													tags.find((tag) => tag.label === value)
 												) {
 													form.setValue("tags", [
 														...form.getValues("tags"),
 														value,
 													]);
 													e.currentTarget.value = "";
+													setIsSearching(false);
 												}
 											}
 										}}
 										ref={ref}
+										onChange={handleSearch}
 									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
+					<div className="flex flex-row flex-wrap gap-2">
+						{search.length > 0 &&
+							isSearching &&
+							search.map((tag) => {
+								return (
+									<div
+										className="w-fit cursor-pointer"
+										onClick={() => {
+											const input = document.getElementById(
+												"tags_search_field"
+											) as HTMLInputElement;
+											const existingTags = form.getValues("tags");
+
+											if (
+												existingTags.length < 3 &&
+												!existingTags.includes(tag.label)
+											)
+												form.setValue("tags", [
+													...form.getValues("tags"),
+													tag.label,
+												]);
+											setIsSearching(false);
+											input.value = "";
+										}}
+									>
+										<SingleTag key={tag.id} tag={tag} isSearching />
+									</div>
+								);
+							})}
+					</div>
 
 					<Controller
 						control={form.control}
@@ -199,12 +275,12 @@ export const AddFeedForm = ({
 										onChange={onChange}
 										checked={value}
 										name={name}
-										id="is_admin"
+										id="include_links"
 										className="accent-black"
 									/>
 
 									<label
-										htmlFor="is_admin"
+										htmlFor="include_links"
 										className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 										style={{ padding: 0, margin: 0 }}
 									>

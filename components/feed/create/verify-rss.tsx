@@ -27,6 +27,7 @@ export const VerifyRss = ({ setStep }: { setStep: (step: 1 | 2) => void }) => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const setValidatedFeed = useAddFeed((state) => state.setValidatedFeed);
+	const setUrl = useAddFeed((state) => state.setUrl);
 
 	const form = useForm<StepOneVerifySchema>({
 		resolver: zodResolver(stepOneVerifySchema),
@@ -42,13 +43,16 @@ export const VerifyRss = ({ setStep }: { setStep: (step: 1 | 2) => void }) => {
 
 		if (rssSample) {
 			setValidatedFeed(rssSample);
-			setIsLoading(false);
+			setUrl(data.url);
+			setTimeout(() => {
+				setIsLoading(false);
+				setStep(2);
+			}, 1000);
+		} else {
+			setTimeout(() => {
+				setIsLoading(false);
+			}, 2000);
 		}
-
-		setTimeout(() => {
-			setIsLoading(false);
-			setStep(2);
-		}, 2000);
 	};
 
 	return (

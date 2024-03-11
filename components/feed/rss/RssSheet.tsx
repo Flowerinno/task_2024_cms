@@ -15,14 +15,25 @@ import { Alert } from "@/components/alert";
 import { Separator } from "@/components/ui/separator";
 
 import { deleteRssSource, updateRssSource } from "utils";
+import { useRss } from "store";
 
 export const RssSheet = ({ source }: { source: News_source }) => {
-  const handleActive = () => {};
+  const { setActiveSource, removeSource } = useRss((state) => state);
+
+  const handleActive = async () => {
+    const is_active = !source.is_active;
+    const res = await updateRssSource({ id: source.id, is_active });
+
+    if (res) {
+      setActiveSource({ id: source.id, is_active });
+    }
+  };
+
   const handleDelete = async () => {
     const res = await deleteRssSource(source.id);
 
     if (res) {
-      console.log("Deleted");
+      removeSource(source.id);
     }
   };
 
@@ -51,10 +62,13 @@ export const RssSheet = ({ source }: { source: News_source }) => {
             Import interval: {source.import_interval} minutes
           </SheetDescription>
           <SheetDescription className="space-y-4">
-            <p>Source URL: </p>
-            <span className="rounded-md bg-gray-500 text-white p-1">
+            <a
+              href={source.url}
+              target="_blank"
+              className="rounded-md outline-none border-none text-blue-500 bg-gray-300 p-1"
+            >
               {source.url}
-            </span>
+            </a>
           </SheetDescription>
 
           <br />
@@ -64,7 +78,7 @@ export const RssSheet = ({ source }: { source: News_source }) => {
             </Label>
           </SheetDescription>
 
-          <SheetDescription className="border-[1px] border-gray-400 p-3 rounded-md flex flex-col gap-2">
+          <div className="border-[1px] border-gray-400 p-3 rounded-md flex flex-col gap-2">
             <div className="flex flex-1 items-center gap-2 select-none">
               <p
                 className="flex-1 border-[1px] border-gray-400 rounded-md p-1"
@@ -86,7 +100,7 @@ export const RssSheet = ({ source }: { source: News_source }) => {
                 Author: <span className="text-blue-400">Bob Ross</span>
               </div>
             )}
-          </SheetDescription>
+          </div>
           <br />
           <AlertDialog>
             <AlertDialogTrigger asChild>

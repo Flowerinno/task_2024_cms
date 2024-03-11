@@ -31,7 +31,7 @@ const componentsFeed: { title: string; href: string; description: string }[] = [
   },
   {
     title: "New post",
-    href: "/dashboard/feed/posts/new",
+    href: "/dashboard/feed/posts/create",
     description: "Create a new post.",
   },
 ];
@@ -46,12 +46,6 @@ const componentsAdvertisement: {
     href: "/dashboard/ads/add",
     description: "Add and configure new advertisement.",
   },
-  // {
-  // 	title: "Remove Advertisement",
-  // 	href: "/docs/ads/remove",
-  // 	description:
-  // 		"Remove an existing advertisement from the list of available ads.",
-  // },
   {
     title: "Edit Advertisement",
     href: "/docs/ads/edit",

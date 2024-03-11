@@ -19,14 +19,12 @@ export const useRss = create<RssStore>((set) => ({
   setSources: (sources: News_source[] | []) =>
     set((state) => ({ ...state, sources })),
   setActiveSource: ({ id, is_active }) =>
-    set((state) => {
-      state.sources.map((source) => {
-        if (source.id === id) {
-          source.is_active = is_active;
-        }
-      });
-      return state;
-    }),
+    set((state) => ({
+      ...state,
+      sources: state.sources.map((source) =>
+        source.id === id ? { ...source, is_active } : source,
+      ),
+    })),
   removeSource: (id: number) =>
     set((state) => ({
       ...state,

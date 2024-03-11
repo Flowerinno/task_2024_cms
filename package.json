@@ -6,7 +6,8 @@
     "start": "next start",
     "lint": "next lint && npx prettier . --write --ignore-unknown",
     "compose-dev": "docker-compose -f docker-compose.dev.yml up",
-    "cron": "sudo tsx cron-job.ts && node cron-job.js"
+    "cron": "sudo tsx cron-job.ts && node cron-job.js",
+    "postinstall": "npx prisma db push && npx prisma generate && npx prisma db seed"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

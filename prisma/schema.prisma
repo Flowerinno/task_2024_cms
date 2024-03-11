@@ -32,27 +32,33 @@ model Post {
   created_at     DateTime        @default(now())
   updated_at     DateTime        @updatedAt
   title          String
-  body           String?
+  content        String?
+  pubDate        DateTime?
+  creator        String?
   media          String?
-  is_draft       Boolean         @default(false)
+  link           String?
   is_active      Boolean         @default(true)
   is_deleted     Boolean         @default(false)
   tags           Tag[]
-  draft          Draft           @relation(fields: [draft_id], references: [id])
-  draft_id       Int
   advertisements Advertisement[]
-  news_source    News_source     @relation(fields: [news_source_id], references: [id])
-  news_source_id Int
+  news_source    News_source?    @relation(fields: [news_source_id], references: [id])
+  news_source_id Int?
 }
 
 model Draft {
-  id         Int      @id @default(autoincrement())
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  post_id    Int
-  user_id    String
-  user       User     @relation(fields: [user_id], references: [id])
-  Post       Post[]
+  id               Int       @id @default(autoincrement())
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+  title            String
+  content          String?
+  creator          String?
+  media            String?
+  link             String?
+  is_active        Boolean   @default(false)
+  pubDate_included Boolean   @default(false)
+  tags             Tag[]
+  User             User?     @relation(fields: [user_id], references: [id])
+  user_id          String
 }
 
 model Advertisement {
@@ -97,4 +103,6 @@ model Tag {
   is_deleted  Boolean       @default(false)
   post        Post[]
   news_source News_source[]
+  Draft       Draft?        @relation(fields: [draftId], references: [id])
+  draftId     Int?
 }

@@ -1,6 +1,8 @@
 import { CreateRssRequestInput, FeedItem } from "@/lib/helpers/types";
-import { News_source, Tag } from "@prisma/client";
+import { Draft, News_source, Tag } from "@prisma/client";
 import toast from "react-hot-toast";
+import { DraftResponse } from "./types";
+import { CreatePostSchema } from "utils/validation/feed.schema";
 
 const base = process.env.NEXT_PUBLIC_API_URL;
 
@@ -223,5 +225,81 @@ export async function updateTagActivity({
     return data;
   } catch (_) {
     toast.error("Failed to update tag");
+  }
+}
+
+export async function getDrafts(): Promise<DraftResponse[] | []> {
+  try {
+    const url = base + `/admin/feed/drafts`;
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+
+    if (res.status !== 200) {
+      toast.error(data?.message ?? "");
+    }
+
+    return data ?? [];
+  } catch (error: { message: string } | any) {
+    return [];
+  }
+}
+
+export async function createDraft(
+  payload: CreatePostSchema,
+): Promise<DraftResponse | undefined> {
+  try {
+    const url = base + `/admin/feed/drafts/create`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (res.status !== 201) {
+      toast.error(data?.message ?? "");
+      return;
+    }
+
+    toast.success("Draft created successfully");
+
+    return data?.draft;
+  } catch (_) {
+    toast.error("Failed to create draft");
+  }
+}
+
+export async function removeDraft(id: number) {
+  try {
+    const url = base + `/admin/feed/drafts/delete`;
+    const res = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+
+    const data = await res.json();
+
+    if (res.status !== 200) {
+      toast.error(data?.message ?? "");
+      return;
+    }
+
+    toast.success("Draft deleted successfully");
+
+    return true;
+  } catch (_) {
+    toast.error("Failed to delete draft");
   }
 }

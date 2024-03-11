@@ -12,7 +12,7 @@ import { getTags } from "utils";
 
 export default function Tags() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isInactiveShown, setIsInactiveShown] = useState(0);
+  const [isInactiveShown, setIsInactiveShown] = useState(1);
   const setTags = useTags((state) => state.setTags);
   const tags = useTags((state) => state.tags);
 
@@ -30,7 +30,7 @@ export default function Tags() {
   }, []);
 
   return (
-    <div className="w-full flex flex-row gap-10">
+    <div className="w-full h-screen flex flex-row gap-2  md:gap-10">
       <div
         id="tags_list"
         className="relative flex-1 flex flex-row flex-wrap gap-3 justify-start h-fit basis-[2%] p-5"
@@ -40,6 +40,7 @@ export default function Tags() {
             <Checkbox
               id="active_only"
               value={isInactiveShown}
+              defaultChecked={isInactiveShown === 1}
               onCheckedChange={() =>
                 setIsInactiveShown(isInactiveShown ? 0 : 1)
               }

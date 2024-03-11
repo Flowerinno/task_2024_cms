@@ -1,0 +1,69 @@
+import { NextResponse, NextRequest } from "next/server";
+import prisma from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      return NextResponse.json(
+        {
+          message: "Unauthorized",
+        },
+        {
+          status: 401,
+        },
+      );
+    }
+
+    const { id } = await req.json();
+
+    if (!id) {
+      return NextResponse.json(
+        {
+          message: "Draft id is required",
+        },
+        {
+          status: 400,
+        },
+      );
+    }
+
+    const deletedDraft = await prisma.draft.delete({
+      where: {
+        id,
+      },
+    });
+
+    if (deletedDraft) {
+      return NextResponse.json(
+        {
+          message: "Draft deleted successfully",
+        },
+        {
+          status: 200,
+        },
+      );
+    }
+
+    return NextResponse.json(
+      {
+        message: "Failed to delete draft",
+      },
+      {
+        status: 500,
+      },
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: "Failed to delete draft",
+      },
+      {
+        status: 500,
+      },
+    );
+  }
+}

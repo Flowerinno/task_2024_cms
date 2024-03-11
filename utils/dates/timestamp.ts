@@ -1,6 +1,6 @@
 export const formatTimestamp = (timestamp: Date) => {
   return new Date(timestamp).toLocaleDateString("en-US", {
-    month: "short",
+    month: "long",
     day: "numeric",
     year: "numeric",
     hour: "numeric",

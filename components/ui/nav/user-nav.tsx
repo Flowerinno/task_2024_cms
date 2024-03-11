@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 interface UserNavProps {
   session: Session;
@@ -43,12 +44,12 @@ export function UserNav({ session }: UserNavProps) {
         <DropdownMenuGroup>
           {user?.role === "ADMIN" && (
             <DropdownMenuItem>
-              Dashboard
+              <Link href={"/dashboard"}>Dashboard</Link>
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
           )}
           <DropdownMenuItem>
-            Settings
+            <Link href={"/user/settings"}>Settings</Link>
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>

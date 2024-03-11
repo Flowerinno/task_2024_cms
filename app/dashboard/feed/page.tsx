@@ -8,28 +8,28 @@ import { useRss } from "store";
 import { getRssList } from "utils";
 
 export default function Feed() {
-	const { sources, setSources } = useRss((state) => state);
+  const { sources, setSources } = useRss((state) => state);
 
-	useEffect(() => {
-		getRssList().then((data) => {
-			if (data) {
-				setSources(data);
-			}
-		});
-	}, []);
+  useEffect(() => {
+    getRssList().then((data) => {
+      if (data) {
+        setSources(data);
+      }
+    });
+  }, []);
 
-	if (!sources || sources.length === 0) {
-		return <NoData title="Add new RSS source." />;
-	}
+  if (!sources || sources.length === 0) {
+    return <NoData title="Add new RSS source." />;
+  }
 
-	return (
-		<>
-			<Label>RSS sources</Label>
-			<ul className="w-full flex flex-row flex-wrap items-center justify-center gap-4">
-				{sources?.map((source) => (
-					<RssSource key={source.id} source={source} />
-				))}
-			</ul>
-		</>
-	);
+  return (
+    <>
+      <Label>RSS sources</Label>
+      <ul className="w-full flex flex-row flex-wrap items-center justify-center gap-4">
+        {sources?.map((source) => (
+          <RssSource key={source.id} source={source} />
+        ))}
+      </ul>
+    </>
+  );
 }

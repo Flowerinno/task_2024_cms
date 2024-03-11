@@ -4,25 +4,23 @@ import { useEffect, useState } from "react";
 import { findUserById } from "utils";
 
 export default async function Settings({
-	params,
+  params,
 }: {
-	params: {
-		user_id: string;
-	};
+  params: {
+    user_id: string;
+  };
 }) {
-	const [user, setUser] = useState<Partial<User> | null>(null);
+  const [user, setUser] = useState<Partial<User> | null>(null);
 
-	useEffect(() => {
-		findUserById({ id: params.user_id }).then((res) => {
-			if (res) {
-				setUser(res);
-			}
-		});
-	}, []);
+  useEffect(() => {
+    findUserById({ id: params.user_id }).then((res) => {
+      if (res) {
+        setUser(res);
+      }
+    });
+  }, []);
 
-	if (!user) {
-		return <LoadingDots />;
-    }
-    
-    
+  if (!user) {
+    return <LoadingDots />;
+  }
 }

@@ -11,11 +11,11 @@ const EVERY_5_MINUTES = "0 */5 * * * *";
 console.log("CRON REGISTERED");
 
 const feedCron = new CronJob(
-	EVERY_5_MINUTES,
-	importFeedJob,
-	null,
-	false,
-	"Europe/Kyiv"
+  EVERY_5_MINUTES,
+  importFeedJob,
+  null,
+  false,
+  "Europe/Kyiv",
 );
 
 const app = express();
@@ -23,5 +23,5 @@ const app = express();
 feedCron.start();
 
 app.listen(8090, () => {
-	console.log("Cron job is started on port 8090");
+  console.log("Cron job is started on port 8090");
 });

@@ -1,16 +1,16 @@
 import { DashboardNavigationMenu } from "@/components/ui/nav/dashboard-nav";
 
 export default function DashboardLayout({
-	children,
+  children,
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	return (
-		<div className="flex flex-col">
-			<DashboardNavigationMenu />
-			<div className="h-screen flex flex-col space-y-5 p-2 items-center">
-				{children}
-			</div>
-		</div>
-	);
+  return (
+    <div className="flex flex-col">
+      <DashboardNavigationMenu />
+      <div className="h-screen flex flex-col space-y-5 p-2 items-center">
+        {children}
+      </div>
+    </div>
+  );
 }

@@ -135,5 +135,5 @@ export const shadcnPlugin = plugin(
       },
     },
     plugins: [AnimatePlugin],
-  }
+  },
 );

@@ -1,10 +1,33 @@
 import { CreateRssRequestInput, FeedItem } from "@/lib/helpers/types";
 import { Draft, News_source, Tag } from "@prisma/client";
 import toast from "react-hot-toast";
-import { DraftResponse } from "./types";
+import { DraftResponse, Statistics } from "./types";
 import { CreatePostSchema } from "utils/validation/feed.schema";
 
 const base = process.env.NEXT_PUBLIC_API_URL;
+
+export async function getStatistics(): Promise<Statistics | undefined> {
+  try {
+    const url = base + `/admin`;
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+
+    if (res.status !== 200) {
+      toast.error(data?.message ?? "");
+      return;
+    }
+
+    return data;
+  } catch (error: { message: string } | any) {
+    return;
+  }
+}
 
 export async function getRssList(): Promise<News_source[] | []> {
   try {

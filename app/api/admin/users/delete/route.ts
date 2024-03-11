@@ -1,12 +1,11 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "utils/auth";
 
-export async function DELETE(req: NextRequest, res: NextResponse) {
-  const session = await getServerSession(authOptions);
+export async function DELETE(req: NextRequest) {
+  const session = await auth();
 
-  if (!session || session.user.role !== "ADMIN") {
+  if (!session) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 

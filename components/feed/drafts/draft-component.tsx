@@ -34,12 +34,12 @@ export const DraftComponent = ({ draft }: { draft: DraftResponse }) => {
   return (
     <div className="border-[1px] w-11/12 border-gray-400 border-l-0 rounded-tr-md rounded-br-md p-2 cursor-pointer flex flex-row gap-2 ">
       <div
-        className="flex flex-col gap-1"
+        className="flex flex-col gap-1 flex-1"
         aria-label="Select current draft for modification"
         onClick={openDraft}
       >
         <Label
-          className="font-bold overflow-hidden text-ellipsis w-32"
+          className="font-bold overflow-hidden text-ellipsis min-w-24 w-46 max-w-46"
           aria-label={`Draft ${draft.title}`}
         >
           {draft.title}

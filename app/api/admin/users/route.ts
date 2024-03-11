@@ -1,9 +1,23 @@
 import prisma from "@/lib/prisma";
 import { NextApiRequest } from "next";
 import { NextResponse } from "next/server";
+import { auth } from "utils/auth";
 
 export async function GET(req: NextApiRequest) {
   try {
+    const session = await auth();
+
+    if (!session) {
+      return NextResponse.json(
+        {
+          message: "Unauthorized",
+        },
+        {
+          status: 401,
+        },
+      );
+    }
+
     const url = new URL(req?.url || "", "http://localhost");
     const page = url.searchParams.get("page") ?? 1;
     const email = url.searchParams.get("email")?.toLowerCase();

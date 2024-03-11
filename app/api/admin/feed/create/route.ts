@@ -1,14 +1,12 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { addFeedSchema } from "utils/validation/feed.schema";
-
+import { auth } from "utils/auth";
 import prisma from "@/lib/prisma";
+import { addFeedSchema } from "utils/validation/feed.schema";
 import { CreateRssRequestInput } from "@/lib/helpers/types";
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
 
     if (!session) {
       return NextResponse.json(

@@ -6,9 +6,9 @@ import { AddPostForm } from "@/components/feed/create";
 import LoadingDots from "@/components/loading-dots";
 import { Separator } from "@/components/ui/separator";
 import { getDrafts } from "utils";
-import toast from "react-hot-toast";
 import { DraftComponent } from "@/components/feed/drafts";
 import { Label } from "@/components/ui/label";
+import toast from "react-hot-toast";
 
 export default function CreatePost() {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +32,7 @@ export default function CreatePost() {
 
   return (
     <div className="flex flex-row w-full p-0">
-      <div id="drafts" className="flex-[0.4] flex flex-col gap-2">
+      <div id="drafts" className="flex-[0.3] flex flex-col gap-2">
         {drafts?.length > 0 ? (
           drafts.map((draft) => <DraftComponent key={draft.id} draft={draft} />)
         ) : (

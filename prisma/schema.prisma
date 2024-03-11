@@ -46,18 +46,18 @@ model Post {
 }
 
 model Draft {
-  id               Int       @id @default(autoincrement())
-  created_at       DateTime  @default(now())
-  updated_at       DateTime  @updatedAt
+  id               Int      @id @default(autoincrement())
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
   title            String
   content          String?
   creator          String?
   media            String?
   link             String?
-  is_active        Boolean   @default(false)
-  pubDate_included Boolean   @default(false)
+  is_active        Boolean  @default(false)
+  pubDate_included Boolean  @default(false)
   tags             Tag[]
-  User             User?     @relation(fields: [user_id], references: [id])
+  User             User?    @relation(fields: [user_id], references: [id])
   user_id          String
 }
 
@@ -77,19 +77,19 @@ model Advertisement {
 }
 
 model News_source {
-  id               Int      @id @default(autoincrement())
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
-  name             String   @unique
-  is_active        Boolean  @default(false)
-  is_deleted       Boolean  @default(false)
-  url              String   @unique
-  title_included   Boolean  @default(true)
-  content_included Boolean  @default(false)
-  pubDate_included Boolean  @default(false)
-  is_linkable      Boolean  @default(false)
-  creator_included Boolean  @default(false)
-  import_interval  Int      @default(5)
+  id               Int       @id @default(autoincrement())
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+  name             String    @unique
+  is_active        Boolean   @default(false)
+  is_deleted       Boolean   @default(false)
+  url              String    @unique
+  title_included   Boolean   @default(true)
+  content_included Boolean   @default(false)
+  pubDate_included Boolean   @default(false)
+  is_linkable      Boolean   @default(false)
+  creator_included Boolean   @default(false)
+  import_interval  Int       @default(5)
   tags             Tag[]
   Post             Post[]
 }

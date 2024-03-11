@@ -1,19 +1,27 @@
-import SignOut from "@/components/sign-out";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
+import LoadingDots from "@/components/loading-dots";
+import { Label } from "@/components/ui/label";
+import { stat } from "fs";
+import Link from "next/link";
+import { getStatistics } from "utils";
 
 export default async function Dashboard() {
-  const session = await getServerSession(authOptions);
+  const statistics = await getStatistics();
 
-  if (!session || session?.user.role !== "ADMIN") {
-    return redirect("/");
+  if (!statistics) {
+    return <LoadingDots />;
   }
-
+  console.log(statistics);
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-col space-y-5 justify-center items-center">
-        put something in here
+    <div className="flex flex-col w-full">
+      <div className="flex flex-row flex-wrap justify-around items-center p-3">
+        <Link href="/dashboard/users" className="font-bold text-3xl">
+          Users: <span className="text-2xl">{statistics.users}</span>
+        </Link>
+        <Link href="/">Posts: {statistics.posts}</Link>
+        <Link href="/dashboard/feed/tags">Tags: {statistics.tags}</Link>
+        <Link href="/dashboard/feed">
+          News Sources: {statistics.news_sources}
+        </Link>
       </div>
     </div>
   );

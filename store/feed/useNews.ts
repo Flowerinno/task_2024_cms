@@ -42,7 +42,7 @@ export const useNews = create<NewsStore>((set) => ({
         pubDate_included: false,
       },
     })),
-    removeFromDrafts: (id: number) =>
+  removeFromDrafts: (id: number) =>
     set((state) => ({
       ...state,
       drafts: state.drafts.filter((draft) => draft.id !== id),

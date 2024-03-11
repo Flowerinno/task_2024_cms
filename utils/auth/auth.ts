@@ -5,8 +5,8 @@ export const auth = async () => {
   const session = await getServerSession(authOptions);
 
   if (!session || session?.user?.role !== "ADMIN") {
-    return false;
+    return null;
   }
 
-  return true;
+  return session;
 };

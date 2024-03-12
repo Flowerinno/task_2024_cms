@@ -35,6 +35,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { removeUser, undoDeletion } from "utils";
+import Link from "next/link";
 
 type User = {
   id: string;
@@ -292,35 +293,19 @@ export function UsersTable({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <form method="GET" className="space-x-2">
-          <Button
-            variant="outline"
-            name="page"
-            size="sm"
-            value={page - 1}
-            type="submit"
-            onClick={() => {
-              table.previousPage();
-            }}
-            disabled={page === 1}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            type="submit"
-            value={page + 1}
-            name="page"
-            onClick={() => {
-              table.nextPage();
-            }}
-            disabled={page === maxPage}
-          >
-            Next
-          </Button>
-        </form>
+      <div className="flex items-center justify-end space-x-4 py-4">
+        <Link
+          href={`/dashboard/users?page=${page - 1 > 0 ? page - 1 : 1}`}
+          className="border-[1px] border-gray-400 p-1 rounded-md min-w-[100px] text-center hover:border-gray-600"
+        >
+          Previous
+        </Link>
+        <Link
+          href={`/dashboard/users?page=${page + 1 < maxPage ? page + 1 : maxPage}`}
+          className="border-[1px] border-gray-400 p-1 rounded-md min-w-[100px] text-center hover:border-gray-600"
+        >
+          Next
+        </Link>
       </div>
     </div>
   );

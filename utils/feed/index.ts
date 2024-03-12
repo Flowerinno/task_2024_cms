@@ -361,7 +361,7 @@ export async function getHomeFeed({
 }: {
   page: number;
   search: string;
-}): Promise<Post[] | []> {
+}): Promise<{ feed: Post[] | []; maxPage: number }> {
   try {
     const url = new URL(`${base}/news`);
 
@@ -373,19 +373,17 @@ export async function getHomeFeed({
       headers: {
         "Content-Type": "application/json",
       },
-      next: {
-        revalidate: 120, // revalidate after 2 minutes
-      },
+      cache: "no-store",
     });
 
-    const data = await res.json();
+    const { feed, maxPage, message } = await res.json();
 
     if (res.status !== 200) {
-      toast.error(data?.message ?? "");
+      toast.error(message ?? "");
     }
 
-    return data ?? [];
+    return { feed, maxPage } ?? [];
   } catch (error: { message: string } | any) {
-    return [];
+    return { feed: [], maxPage: 1 };
   }
 }

@@ -10,18 +10,25 @@ export async function GET(req: NextRequest) {
     const page_q = page && Number(page) > 0 ? page : "1";
     const search_q = search ? search : "";
 
-      const count = 10;
-      
+    const count = 10;
+    const maxPage = Math.ceil(
+      (await prisma.post.count({
+        where: {
+          is_active: true,
+          is_deleted: false,
+          title: {
+            contains: search_q,
+          },
+        },
+      })) / count,
+    );
     const feed = await prisma.post.findMany({
       where: {
+        is_active: true,
+        is_deleted: false,
         OR: [
           {
             title: {
-              contains: search_q,
-            },
-          },
-          {
-            content: {
               contains: search_q,
             },
           },
@@ -34,7 +41,12 @@ export async function GET(req: NextRequest) {
       skip: (Number(page_q) - 1) * count,
     });
 
-    return NextResponse.json({ message: "Hello, World!" });
+    return NextResponse.json(
+      { feed: feed, maxPage },
+      {
+        status: 200,
+      },
+    );
   } catch (error) {
     return NextResponse.json(
       { message: "Failed to get the feed" },

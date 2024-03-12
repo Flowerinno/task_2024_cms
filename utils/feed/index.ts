@@ -1,5 +1,5 @@
 import { CreateRssRequestInput, FeedItem } from "@/lib/helpers/types";
-import { Draft, News_source, Tag } from "@prisma/client";
+import { Draft, News_source, Post, Tag } from "@prisma/client";
 import toast from "react-hot-toast";
 import { DraftResponse, Statistics } from "./types";
 import { CreatePostSchema } from "utils/validation/feed.schema";
@@ -352,5 +352,40 @@ export async function createPost(payload: CreatePostSchema): Promise<boolean> {
   } catch (_) {
     toast.error("Failed to create post");
     return false;
+  }
+}
+
+export async function getHomeFeed({
+  page,
+  search,
+}: {
+  page: number;
+  search: string;
+}): Promise<Post[] | []> {
+  try {
+    const url = new URL(`${base}/news`);
+
+    url.searchParams.append("page", String(page));
+    url.searchParams.append("search", search);
+
+    const res = await fetch(url.href, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      next: {
+        revalidate: 120, // revalidate after 2 minutes
+      },
+    });
+
+    const data = await res.json();
+
+    if (res.status !== 200) {
+      toast.error(data?.message ?? "");
+    }
+
+    return data ?? [];
+  } catch (error: { message: string } | any) {
+    return [];
   }
 }

@@ -28,21 +28,24 @@ model User {
 }
 
 model Post {
-  id             Int             @id @default(autoincrement())
-  created_at     DateTime        @default(now())
-  updated_at     DateTime        @updatedAt
-  title          String
-  content        String?
-  pubDate        DateTime?
-  creator        String?
-  media          String?
-  link           String?
-  is_active      Boolean         @default(true)
-  is_deleted     Boolean         @default(false)
-  tags           Tag[]
-  advertisements Advertisement[]
-  news_source    News_source?    @relation(fields: [news_source_id], references: [id])
-  news_source_id Int?
+  id                  Int             @id @default(autoincrement())
+  created_at          DateTime        @default(now())
+  updated_at          DateTime        @updatedAt
+  title               String
+  content             String?
+  pubDate             DateTime?
+  creator             String?
+  media               String?
+  link                String?
+  is_active           Boolean         @default(true)
+  is_deleted          Boolean         @default(false)
+  tags                Tag[]
+  advertisements      Advertisement[]
+  news_source         News_source?    @relation(fields: [news_source_id], references: [id])
+  news_source_id      Int?
+  news_source_item_id String?
+
+  @@index([news_source_id])
 }
 
 model Draft {
@@ -90,6 +93,7 @@ model News_source {
   is_linkable      Boolean   @default(false)
   creator_included Boolean   @default(false)
   import_interval  Int       @default(5)
+  last_import_time DateTime?
   tags             Tag[]
   Post             Post[]
 }

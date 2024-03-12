@@ -42,14 +42,14 @@ const componentsAdvertisement: {
   description: string;
 }[] = [
   {
+    title: "List ads",
+    href: "/dashboard/ads",
+    description: "Current list of advertisements.",
+  },
+  {
     title: "Create new advertisement",
     href: "/dashboard/ads/add",
     description: "Add and configure new advertisement.",
-  },
-  {
-    title: "Edit Advertisement",
-    href: "/docs/ads/edit",
-    description: "Edit an existing advertisement.",
   },
 ];
 

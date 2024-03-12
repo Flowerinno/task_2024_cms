@@ -12,8 +12,13 @@ export function NavElements({
   return (
     <nav className="flex items-center space-x-4 lg:space-x-6">
       {navigationLinks.map((link: INavLink) => {
-        if ((link?.auth && session?.user.role !== "ADMIN") || !session)
+        if ((link?.admin && session?.user.role !== "ADMIN") || !session) {
           return null;
+        }
+
+        if (link?.auth && !session) {
+          return null;
+        }
 
         return (
           <Link

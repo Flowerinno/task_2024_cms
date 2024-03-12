@@ -10,9 +10,19 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 const navigation = [
   { key: "Home", value: "" },
   {
+    key: "Search",
+    value: "search",
+    auth: true,
+  },
+  {
+    key: "Tags",
+    value: "tags",
+    auth: true,
+  },
+  {
     key: "Dashboard",
     value: "dashboard",
-    auth: true,
+    admin: true,
   },
 ] as INavLink[];
 

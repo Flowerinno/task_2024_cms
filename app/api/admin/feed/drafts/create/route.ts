@@ -33,6 +33,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const validate = createPostSchema.safeParse(body);
+
+    if (!validate.success) {
+      return NextResponse.json(
+        {
+          message: "Invalid data",
+          errors: validate.error.errors,
+        },
+        {
+          status: 400,
+        },
+      );
+    }
+
     const {
       title,
       content,
@@ -42,7 +56,7 @@ export async function POST(req: NextRequest) {
       is_active,
       link,
       media,
-    } = body;
+    } = validate.data;
 
     const draft = await prisma.draft.create({
       data: {

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "utils/auth";
+import { createPostSchema } from "utils/validation/feed.schema";
+
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
@@ -17,6 +19,20 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
+
+    const validate = createPostSchema.safeParse(body);
+
+    if (!validate.success) {
+      return NextResponse.json(
+        {
+          message: "Invalid data",
+          errors: validate.error.errors,
+        },
+        {
+          status: 400,
+        },
+      );
+    }
 
     if (!body.title) {
       return NextResponse.json(
@@ -38,7 +54,7 @@ export async function POST(req: NextRequest) {
       is_active,
       link,
       media,
-    } = body;
+    } = validate.data;
 
     const newPost = await prisma.post.create({
       data: {

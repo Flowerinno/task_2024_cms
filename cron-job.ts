@@ -2,16 +2,18 @@ import express from "express";
 import { CronJob } from "cron";
 import { importFeedJob } from "./utils/cron/feedCron";
 
-//cron job for checks the feed every 5 minutes
-//this is kinda trash, but it's just for this project, vercel and other services have their own cron jobs (merchant etc.)
+//cron job checks the feed every minute
+//this is kinda trash, vercel and other services have their own cron jobs (merchant etc.). just a simple workaround
 
-const EVERY_SECOND = "* * * * * *";
-const EVERY_5_MINUTES = "0 */5 * * * *";
+const enum CRON {
+  EVERY_SECOND = "* * * * * *",
+  EVERY_10_SECONDS = "*/10 * * * * *",
+  EVERY_MINUTE = "0 */1 * *",
+}
 
 console.log("CRON REGISTERED");
-
 const feedCron = new CronJob(
-  EVERY_5_MINUTES,
+  CRON.EVERY_MINUTE,
   importFeedJob,
   null,
   false,

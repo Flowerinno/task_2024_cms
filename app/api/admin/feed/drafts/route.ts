@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "utils/auth";
 import { minio } from "@/lib/minio";
-import { bufferToDataUrl } from "utils/files";
 
 export async function GET() {
   try {
@@ -47,6 +46,7 @@ export async function GET() {
           const signedUrl = await minio.client.presignedGetObject(
             "default",
             `${draft.id}.png`,
+            60 * 60, // 1 hour expiry in seconds
           );
 
           return {
@@ -62,7 +62,6 @@ export async function GET() {
       status: 200,
     });
   } catch (error) {
-    console.log(error);
     return NextResponse.json(
       {
         message: "Failed to fetch drafts",

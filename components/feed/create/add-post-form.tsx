@@ -80,7 +80,8 @@ export const AddPostForm = () => {
     setSearch(filteredTags);
   };
 
-  const saveAsDraft = async () => {
+  const saveAsDraft = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     await form.trigger();
 
     if (draft) {

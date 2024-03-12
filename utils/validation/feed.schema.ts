@@ -1,4 +1,5 @@
 import z from "zod";
+import { allowedTypes, maxSizeInMB, fileArrayValidation } from "./files";
 
 export const stepOneVerifySchema = z.object({
   url: z.string().min(1),
@@ -34,6 +35,7 @@ export const createPostSchema = z.object({
   content: z.string().optional(),
   link: z.string().optional(),
   creator: z.string().optional(),
+  media: z.string().optional(),
   pubDate_included: z.boolean().default(false),
   tags: z
     .array(z.string().min(1, "Tag must be at least 1 character long"))

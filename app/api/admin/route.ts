@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import {  NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "utils/auth";
 
@@ -39,6 +39,7 @@ export async function GET() {
       tags: 0,
       news_sources: 0,
     };
+
     const stats = fields.reduce((acc, field, index) => {
       acc[field as Fields] = data[index];
       return acc;

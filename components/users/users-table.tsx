@@ -293,7 +293,7 @@ export function UsersTable({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <form className="space-x-2">
+        <form method="GET" className="space-x-2">
           <Button
             variant="outline"
             name="page"

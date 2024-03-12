@@ -16,6 +16,7 @@ export const DraftComponent = ({ draft }: { draft: DraftResponse }) => {
       content: draft.content || "",
       link: draft.link || "",
       creator: draft.creator || "",
+      media: draft.media || "",
       tags: draft.tags?.map((tag) => tag.label) || [],
       is_active: draft.is_active,
       pubDate_included: draft.pubDate_included,

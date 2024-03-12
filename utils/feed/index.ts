@@ -3,6 +3,7 @@ import { Draft, News_source, Tag } from "@prisma/client";
 import toast from "react-hot-toast";
 import { DraftResponse, Statistics } from "./types";
 import { CreatePostSchema } from "utils/validation/feed.schema";
+import { fileToDataUrl } from "utils/files";
 
 const base = process.env.NEXT_PUBLIC_API_URL;
 
@@ -13,7 +14,9 @@ export async function getStatistics(): Promise<Statistics | undefined> {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Cache-Control": "no-store, max-age=0",
       },
+      cache: "no-store",
     });
 
     const data = await res.json();
@@ -22,7 +25,6 @@ export async function getStatistics(): Promise<Statistics | undefined> {
       toast.error(data?.message ?? "");
       return;
     }
-
     return data;
   } catch (error: { message: string } | any) {
     return;
@@ -324,5 +326,31 @@ export async function removeDraft(id: number) {
     return true;
   } catch (_) {
     toast.error("Failed to delete draft");
+  }
+}
+
+export async function createPost(payload: CreatePostSchema): Promise<boolean> {
+  try {
+    const url = base + `/admin/feed/posts/create`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (res.status !== 201) {
+      toast.error(data?.message ?? "");
+      return false;
+    }
+
+    toast.success(data?.message ?? "Post created successfully");
+    return true;
+  } catch (_) {
+    toast.error("Failed to create post");
+    return false;
   }
 }

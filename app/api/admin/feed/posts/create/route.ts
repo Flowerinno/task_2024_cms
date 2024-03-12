@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { createPostSchema } from "utils/validation/feed.schema";
 import { auth } from "utils/auth";
-import { minio } from "@/lib/minio";
-import { dataUrlToBuffer } from "utils/files";
-
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
@@ -44,50 +40,25 @@ export async function POST(req: NextRequest) {
       media,
     } = body;
 
-    const draft = await prisma.draft.create({
+    const newPost = await prisma.post.create({
       data: {
         title,
-        content,
-        creator,
-        pubDate_included: pubDate_included || false,
-        is_active: is_active || false,
-        link: link || "",
+        content: content || null,
+        creator: creator || null,
+        pubDate: pubDate_included ? new Date() : null,
         media: media ? "1" : null,
         tags: {
           connect: tags.map((tag: string) => ({ label: tag })),
         },
-        User: {
-          connect: {
-            id: session.user.id,
-          },
-        },
-      },
-      include: {
-        tags: {
-          select: {
-            label: true,
-          },
-        },
-        User: {
-          select: {
-            email: true,
-            id: true,
-          },
-        },
+        is_active: is_active || false,
+        link: link || "",
       },
     });
 
-    if (draft) {
-      if (media) {
-        await minio.createBucket("default");
-        const buffer = dataUrlToBuffer(media);
-        await minio.client.putObject("default", `${draft.id}.png`, buffer);
-      }
-
+    if (newPost) {
       return NextResponse.json(
         {
-          message: "Draft created",
-          draft,
+          message: "Post created successfully",
         },
         {
           status: 201,
@@ -97,19 +68,19 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       {
-        message: "Failed to create draft",
+        message: "Failed to create post",
       },
       {
-        status: 500,
+        status: 400,
       },
     );
   } catch (error) {
     return NextResponse.json(
       {
-        message: "Failed to create draft",
+        message: "Failed to create tag",
       },
       {
-        status: 500,
+        status: 400,
       },
     );
   }

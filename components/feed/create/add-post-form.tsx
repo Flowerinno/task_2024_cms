@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNews, useTags } from "store";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Tag } from "@prisma/client";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { createDraft, getTags } from "utils";
+import { createDraft, createPost, getTags } from "utils";
 import {
   CreatePostSchema,
   createPostSchema,
@@ -23,8 +23,12 @@ import {
 import { SingleTag } from "../tags";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Image from "next/image";
+import { fileToDataUrl } from "utils/files";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 export const AddPostForm = () => {
+  const imgRef = useRef<HTMLImageElement | null>(null);
   const { tags, setTags } = useTags((state) => state);
   const { draft, addToDrafts, resetSelectedDraft } = useNews((state) => state);
 
@@ -49,7 +53,19 @@ export const AddPostForm = () => {
     defaultValues: draft,
   });
 
-  const onSubmit = async (data: any) => {};
+  const onSubmit = async (data: CreatePostSchema) => {
+    const payload = {
+      ...data,
+    };
+
+    const res = await createPost(payload);
+
+    if (res && imgRef.current) {
+      resetSelectedDraft();
+      imgRef.current.src = "";
+      form.reset();
+    }
+  };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -65,6 +81,8 @@ export const AddPostForm = () => {
   };
 
   const saveAsDraft = async () => {
+    await form.trigger();
+
     if (draft) {
       const payload = {
         ...form.getValues(),
@@ -72,13 +90,16 @@ export const AddPostForm = () => {
 
       const res = await createDraft(payload);
 
-      if (res?.id) {
-        addToDrafts(res);
+      if (res?.id && imgRef?.current?.src) {
+        addToDrafts({ ...res, media: payload.media as string });
         resetSelectedDraft();
+        imgRef.current.src = "";
         form.reset();
       }
     }
   };
+
+  form.watch("media");
 
   useEffect(() => {
     form.setValue("title", draft?.title);
@@ -88,7 +109,21 @@ export const AddPostForm = () => {
     form.setValue("tags", draft?.tags);
     form.setValue("is_active", draft?.is_active);
     form.setValue("pubDate_included", draft?.pubDate_included);
-  }, [draft?.title]);
+    form.setValue("media", draft?.media);
+  }, [draft?.title, draft?.media]);
+
+  useEffect(() => {
+    if (form?.getValues("media")) {
+      if (form.getValues("media")) {
+        const file = form.getValues("media");
+        const img = imgRef.current;
+
+        if (file && img) {
+          img.src = file;
+        }
+      }
+    }
+  }, [form.getValues("media")]);
 
   return (
     <div className="flex-1 flex flex-col items-center justify-start p-0">
@@ -151,6 +186,52 @@ export const AddPostForm = () => {
               </FormItem>
             )}
           />
+
+          <Image
+            aria-label="Post image preview"
+            alt="Post image preview"
+            ref={imgRef}
+            className="w-full h-64 object-contain rounded-lg"
+            src={""}
+            style={{
+              display: form.getValues("media") ? "block" : "none",
+            }}
+          />
+
+          <div className="relative">
+            <FormField
+              control={form.control}
+              name="media"
+              render={({ field: { ref } }) => (
+                <FormItem>
+                  <FormLabel className="flex flex-row gap-2">Media </FormLabel>
+                  <FormControl>
+                    <Input
+                      accept="image/png"
+                      type="file"
+                      onChange={async (e) => {
+                        if (e?.target?.files) {
+                          const file = e?.target?.files[0];
+                          form.setValue("media", await fileToDataUrl(file));
+                        }
+                      }}
+                      ref={ref}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Cross2Icon
+              className="absolute right-0 top-0 cursor-pointer"
+              aria-label="Remove asset"
+              color="red"
+              onClick={() => {
+                if (imgRef.current) imgRef.current.src = "";
+                form.setValue("media", "");
+              }}
+            />
+          </div>
 
           <FormField
             control={form.control}

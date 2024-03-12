@@ -18,10 +18,9 @@ export async function GET(req: NextRequest) {
     }
 
     const rssList = await prisma.news_source.findMany();
-    console.log(rssList);
+    
     return NextResponse.json(rssList);
   } catch (error) {
-    console.log(error);
     return NextResponse.json({
       message: "An error occurred while fetching RSS list",
     });

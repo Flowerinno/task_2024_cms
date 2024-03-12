@@ -2,6 +2,8 @@ import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "utils/auth";
 
+import { minio } from "@/lib/minio";
+
 export async function DELETE(req: NextRequest) {
   try {
     const session = await auth();
@@ -37,6 +39,7 @@ export async function DELETE(req: NextRequest) {
     });
 
     if (deletedDraft) {
+      await minio.client.removeObject("default", `${id}.png`);
       return NextResponse.json(
         {
           message: "Draft deleted successfully",

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Loading from "./loading";
 import Link from "next/link";
 import { FeedPostSkeleton } from "@/components/feed";
+import { FeedPost } from "@/components/feed/posts";
 
 export default async function Home({
   searchParams: { page, search },
@@ -24,7 +25,7 @@ export default async function Home({
   });
 
   return (
-    <div className="flex flex-col items-center justify-center gap-3 p-5 md:p-10 bg-white overflow-x-hidden">
+    <div className="flex flex-col items-center justify-center gap-3 p-5 md:p-10 overflow-x-hidden">
       <form
         method="GET"
         className="w-full md:w-11/12 flex flex-col md:flex-row gap-2"
@@ -51,7 +52,7 @@ export default async function Home({
       <br />
       <Suspense fallback={<Loading />}>
         {feed.map((post, i) => {
-          return <p key={i}>{post?.title}</p>;
+          return <FeedPost key={i} post={post} />;
         })}
       </Suspense>
       <FeedPagination page={page_q} maxPage={maxPage} />

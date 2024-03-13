@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "utils/auth";
 import { createPostSchema } from "utils/validation/feed.schema";
+import { minio } from "@/lib/minio";
+import { dataUrlToBuffer } from "utils/files";
 
 export async function POST(req: NextRequest) {
   try {
@@ -72,6 +74,15 @@ export async function POST(req: NextRequest) {
     });
 
     if (newPost) {
+      if (media) {
+        await minio.createBucket("default");
+        const buffer = dataUrlToBuffer(media);
+        await minio.client.putObject(
+          "default",
+          `post_${newPost.id}.png`,
+          buffer,
+        );
+      }
       return NextResponse.json(
         {
           message: "Post created successfully",
@@ -93,7 +104,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       {
-        message: "Failed to create tag",
+        message: "Failed to create post",
       },
       {
         status: 400,

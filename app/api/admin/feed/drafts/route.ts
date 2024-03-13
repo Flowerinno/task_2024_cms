@@ -45,7 +45,7 @@ export async function GET() {
         if (draft.media) {
           const signedUrl = await minio.client.presignedGetObject(
             "default",
-            `${draft.id}.png`,
+            `draft_${draft.id}.png`,
             60 * 60, // 1 hour expiry in seconds
           );
 

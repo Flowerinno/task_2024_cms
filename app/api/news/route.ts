@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { minio } from "@/lib/minio";
 
 export async function GET(req: NextRequest) {
   try {
@@ -41,8 +42,26 @@ export async function GET(req: NextRequest) {
       skip: (Number(page_q) - 1) * count,
     });
 
+    const feedWithMedia = await Promise.all(
+      feed.map(async (post) => {
+        if (post.media) {
+          const signedUrl = await minio.client.presignedGetObject(
+            "default",
+            `post_${post.id}.png`,
+            60, // 1 minute expiry in seconds
+          );
+
+          return {
+            ...post,
+            media: signedUrl,
+          };
+        }
+        return post;
+      }),
+    );
+
     return NextResponse.json(
-      { feed: feed, maxPage },
+      { feed: feedWithMedia, maxPage },
       {
         status: 200,
       },

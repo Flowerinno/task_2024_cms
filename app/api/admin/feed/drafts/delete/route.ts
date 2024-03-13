@@ -39,7 +39,7 @@ export async function DELETE(req: NextRequest) {
     });
 
     if (deletedDraft) {
-      await minio.client.removeObject("default", `${id}.png`);
+      await minio.client.removeObject("default", `draft_${id}.png`);
       return NextResponse.json(
         {
           message: "Draft deleted successfully",

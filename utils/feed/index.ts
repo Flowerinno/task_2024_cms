@@ -176,7 +176,9 @@ export async function getTags(): Promise<Tag[] | []> {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Cache-Control": "no-store, max-age=0",
       },
+      cache: "no-store",
     });
 
     const data = await res.json();
@@ -188,6 +190,40 @@ export async function getTags(): Promise<Tag[] | []> {
     return data ?? [];
   } catch (error: { message: string } | any) {
     return [];
+  }
+}
+
+export async function searchByTags({
+  page,
+  search,
+}: {
+  page: number;
+  search: string;
+}): Promise<{ feed: PostWithTags[] | []; maxPage: number }> {
+  try {
+    const url = new URL(base + `/admin/feed/tags/search`);
+
+    url.searchParams.append("page", String(page));
+    url.searchParams.append("search", search);
+
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store, max-age=0",
+      },
+      cache: "no-store",
+    });
+
+    const data = await res.json();
+
+    if (res.status !== 200) {
+      toast.error(data?.message ?? "");
+    }
+
+    return data;
+  } catch (error: { message: string } | any) {
+    return { feed: [], maxPage: 1 };
   }
 }
 

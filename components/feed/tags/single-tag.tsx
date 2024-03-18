@@ -1,3 +1,5 @@
+"use client";
+
 import { Label } from "@/components/ui/label";
 import { Tag } from "@prisma/client";
 import { Switch } from "@/components/ui/switch";

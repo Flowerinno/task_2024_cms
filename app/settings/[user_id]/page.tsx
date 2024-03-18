@@ -1,3 +1,5 @@
+'use client';
+
 import LoadingDots from "@/components/loading-dots";
 import { User } from "@prisma/client";
 import { useEffect, useState } from "react";

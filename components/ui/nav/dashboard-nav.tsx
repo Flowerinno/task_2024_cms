@@ -15,7 +15,7 @@ import {
 
 const componentsFeed: { title: string; href: string; description: string }[] = [
   {
-    title: "List",
+    title: "RSS List",
     href: "/dashboard/feed",
     description: "RSS feed sources.",
   },

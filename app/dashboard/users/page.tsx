@@ -1,4 +1,5 @@
 "use client";
+
 import LoadingDots from "@/components/loading-dots";
 import { UsersTable } from "@/components/users";
 import { useEffect } from "react";

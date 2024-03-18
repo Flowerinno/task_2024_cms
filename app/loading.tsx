@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 export default function Loading() {
   const path = usePathname();
 
-  const includedPaths = ["/", "/search", "/tags"];
+  const includedPaths = ["/", "/tags"];
 
   if (!includedPaths.includes(path)) {
     return null;

@@ -26,7 +26,7 @@ export async function GET() {
         message: "Failed to fetch tags",
       },
       {
-        status: 5000,
+        status: 500,
       },
     );
   }

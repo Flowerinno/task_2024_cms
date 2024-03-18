@@ -43,6 +43,17 @@ export const createPostSchema = z.object({
   is_active: z.boolean().default(false),
 });
 
+export const updatePostSchema = z.object({
+  id: z.number(),
+  is_active: z.boolean(),
+  is_deleted: z.boolean(),
+  title: z.string(),
+  content: z.string().optional(),
+  link: z.string().optional(),
+  creator: z.string().optional(),
+});
+
+export type UpdatePostSchema = z.infer<typeof updatePostSchema>;
 export type CreatePostSchema = z.infer<typeof createPostSchema>;
 export type CreateTagsSchema = z.infer<typeof createTagsSchema>;
 export type StepOneVerifySchema = z.infer<typeof stepOneVerifySchema>;

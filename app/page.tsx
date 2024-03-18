@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Loading from "./loading";
 import Link from "next/link";
-import { FeedPostSkeleton } from "@/components/feed";
 import { FeedPost } from "@/components/feed/posts";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
 export default async function Home({
   searchParams: { page, search },
@@ -19,13 +20,17 @@ export default async function Home({
   const page_q = page && Number(page) > 0 ? Number(page) : 1;
   const search_q = search ? search : "";
 
+  const session = await getServerSession(authOptions);
+
+  const isAdmin = session?.user?.role === "ADMIN";
+
   const { feed, maxPage } = await getHomeFeed({
     page: page_q,
     search: search_q,
   });
 
   return (
-    <div className="flex flex-col items-center justify-center gap-3 p-5 md:p-10 overflow-x-hidden">
+    <div className="flex flex-col items-center justify-center gap-3 p-5 md:p-10 overflow-x-hidden relative">
       <form
         method="GET"
         className="w-full md:w-11/12 flex flex-col md:flex-row gap-2"
@@ -52,7 +57,7 @@ export default async function Home({
       <br />
       <Suspense fallback={<Loading />}>
         {feed.map((post, i) => {
-          return <FeedPost key={i} post={post} />;
+          return <FeedPost key={i} post={post} isAdmin={isAdmin} />;
         })}
       </Suspense>
       <FeedPagination page={page_q} maxPage={maxPage} />

@@ -95,7 +95,11 @@ export async function POST(req: NextRequest) {
       if (media) {
         await minio.createBucket("default");
         const buffer = dataUrlToBuffer(media);
-        await minio.client.putObject("default", `draft_${draft.id}.png`, buffer);
+        await minio.client.putObject(
+          "default",
+          `draft_${draft.id}.png`,
+          buffer,
+        );
       }
 
       return NextResponse.json(

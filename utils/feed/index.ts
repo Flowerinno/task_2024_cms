@@ -1,7 +1,7 @@
 import { CreateRssRequestInput, FeedItem } from "@/lib/helpers/types";
 import { Draft, News_source, Post, Tag } from "@prisma/client";
 import toast from "react-hot-toast";
-import { DraftResponse, Statistics } from "./types";
+import { DraftResponse, PostWithTags, Statistics } from "./types";
 import { CreatePostSchema } from "utils/validation/feed.schema";
 import { fileToDataUrl } from "utils/files";
 
@@ -361,7 +361,7 @@ export async function getHomeFeed({
 }: {
   page: number;
   search: string;
-}): Promise<{ feed: Post[] | []; maxPage: number }> {
+}): Promise<{ feed: PostWithTags[] | []; maxPage: number }> {
   try {
     const url = new URL(`${base}/news`);
 
@@ -385,5 +385,32 @@ export async function getHomeFeed({
     return { feed, maxPage } ?? [];
   } catch (error: { message: string } | any) {
     return { feed: [], maxPage: 1 };
+  }
+}
+
+export async function removePost(id: number): Promise<boolean> {
+  try {
+    const url = base + `/admin/feed/posts/delete`;
+    const res = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+
+    const data = await res.json();
+
+    if (res.status !== 200) {
+      toast.error(data?.message ?? "");
+      return false;
+    }
+
+    toast.success("Post deleted successfully");
+
+    return true;
+  } catch (_) {
+    toast.error("Failed to delete post");
+    return false;
   }
 }

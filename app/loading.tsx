@@ -4,7 +4,7 @@ import { FeedPostSkeleton } from "@/components/feed";
 import { usePathname } from "next/navigation";
 export default function Loading() {
   const path = usePathname();
-  
+
   const includedPaths = ["/", "/search", "/tags"];
 
   if (!includedPaths.includes(path)) {

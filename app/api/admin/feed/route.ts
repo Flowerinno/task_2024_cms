@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     }
 
     const rssList = await prisma.news_source.findMany();
-    
+
     return NextResponse.json(rssList);
   } catch (error) {
     return NextResponse.json({

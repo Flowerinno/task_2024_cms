@@ -1,4 +1,4 @@
-import { Draft } from "@prisma/client";
+import { Draft, Post, Tag } from "@prisma/client";
 
 type UserDraft = { User: { email: string; id: string } };
 type Tags = { tags: { label: string }[] };
@@ -10,3 +10,5 @@ export type Statistics = {
   tags: number;
   news_sources: number;
 };
+
+export type PostWithTags = Post & { tags: Tag[] };

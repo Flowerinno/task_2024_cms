@@ -24,7 +24,7 @@ import { SingleTag } from "../tags";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import { fileToDataUrl } from "utils/files";
+import { fileToDataUrl, presignedToDataUrl } from "utils/files";
 import { Cross2Icon } from "@radix-ui/react-icons";
 
 export const AddPostForm = () => {
@@ -110,24 +110,31 @@ export const AddPostForm = () => {
     form.setValue("tags", draft?.tags);
     form.setValue("is_active", draft?.is_active);
     form.setValue("pubDate_included", draft?.pubDate_included);
-    form.setValue("media", draft?.media);
-  }, [draft?.title, draft?.media]);
-
-  useEffect(() => {
-    if (form?.getValues("media")) {
-      if (form.getValues("media")) {
-        const file = form.getValues("media");
-        const img = imgRef.current;
-
-        if (file && img) {
-          img.src = file;
-        }
+    if (draft?.media) {
+      if (draft.media.startsWith("http")) {
+        presignedToDataUrl(draft.media).then((file) => {
+          form.setValue("media", file as string);
+        });
+      } else {
+        form.setValue("media", draft?.media);
       }
     }
-  }, [form.getValues("media")]);
+  }, [draft?.title, draft?.media]);
+
+  const mediaDep = form.getValues("media");
+  useEffect(() => {
+    if (form?.getValues("media")) {
+      const file = form.getValues("media");
+      const img = imgRef.current;
+
+      if (file && img) {
+        img.src = file;
+      }
+    }
+  }, [mediaDep]);
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-start p-0">
+    <div className="flex-[0.7] flex flex-col items-center justify-start p-0">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

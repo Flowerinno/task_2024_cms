@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     const page_q = page && Number(page) > 0 ? page : "1";
     const search_q = search ? search : "";
 
-    const count = 10;
+    const count = 30;
     const maxPage = Math.ceil(
       (await prisma.post.count({
         where: {
@@ -40,6 +40,14 @@ export async function GET(req: NextRequest) {
       },
       take: count,
       skip: (Number(page_q) - 1) * count,
+      include: {
+        tags: {
+          where: {
+            is_active: true,
+            is_deleted: false,
+          },
+        },
+      },
     });
 
     const feedWithMedia = await Promise.all(

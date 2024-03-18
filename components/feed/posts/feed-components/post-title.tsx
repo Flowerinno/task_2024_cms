@@ -10,7 +10,7 @@ export const PostTitle = ({
 }) => {
   if (link !== null) {
     return (
-      <Label>
+      <Label className="font-bold text-blue-400 text-[16px]">
         <a href={link} target="_blank">
           {title}
         </a>
@@ -18,5 +18,5 @@ export const PostTitle = ({
     );
   }
 
-  return <Label>{title}</Label>;
+  return <Label className="font-bold text-[16px]">{title}</Label>;
 };

@@ -8,12 +8,13 @@ import { importFeedJob } from "./utils/cron/feedCron";
 const enum CRON {
   EVERY_SECOND = "* * * * * *",
   EVERY_10_SECONDS = "*/10 * * * * *",
-  EVERY_MINUTE = "0 */1 * *",
+  EVERY_MINUTE = "*/1 * * * *",
+  EVERY_5_MINUTES = "0 */5 * * * *",
 }
 
 console.log("CRON REGISTERED");
 const feedCron = new CronJob(
-  CRON.EVERY_MINUTE,
+  CRON.EVERY_10_SECONDS,
   importFeedJob,
   null,
   false,
@@ -25,5 +26,5 @@ const app = express();
 feedCron.start();
 
 app.listen(8090, () => {
-  console.log("Cron job is started on port 8090");
+  console.log("Cron job started on port 8090");
 });

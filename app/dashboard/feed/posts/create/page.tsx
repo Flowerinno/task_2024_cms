@@ -31,15 +31,18 @@ export default function CreatePost() {
   if (isLoading) return <LoadingDots />;
 
   return (
-    <div className="flex flex-row w-full p-0">
-      <div id="drafts" className="flex-[0.3] flex flex-col gap-2">
+    <div className="flex flex-col md:flex-row w-full p-0">
+      <div
+        id="drafts"
+        className="flex md:flex-[0.3] md:flex-col flex-row p-2 overflow-x-scroll gap-2"
+      >
         {drafts?.length > 0 ? (
           drafts.map((draft) => <DraftComponent key={draft.id} draft={draft} />)
         ) : (
           <Label className="self-center">No drafts</Label>
         )}
       </div>
-      <Separator orientation="vertical" />
+      <Separator orientation="vertical" className="hidden md:block" />
       <AddPostForm />
     </div>
   );

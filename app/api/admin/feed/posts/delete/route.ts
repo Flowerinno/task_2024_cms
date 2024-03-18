@@ -21,10 +21,10 @@ export async function DELETE(req: NextRequest) {
 
     const { id } = await req.json();
 
-    if (!id) {
+    if (!id || isNaN(id)) {
       return NextResponse.json(
         {
-          message: "Draft id is required",
+          message: "Post id is required",
         },
         {
           status: 400,
@@ -32,15 +32,15 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    const deletedDraft = await prisma.draft.delete({
+    const deletedPost = await prisma.post.delete({
       where: {
         id,
       },
     });
 
-    if (deletedDraft) {
-      if (deletedDraft.media) {
-        await minio.client.removeObject("default", `draft_${id}.png`);
+    if (deletedPost) {
+      if (deletedPost.media) {
+        await minio.client.removeObject("default", `post_${id}.png`);
       }
       return NextResponse.json(
         {
@@ -54,7 +54,7 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json(
       {
-        message: "Failed to delete draft",
+        message: "Failed to delete post",
       },
       {
         status: 500,
@@ -63,7 +63,7 @@ export async function DELETE(req: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       {
-        message: "Failed to delete draft",
+        message: "Failed to delete post",
       },
       {
         status: 500,

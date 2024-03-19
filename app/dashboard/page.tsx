@@ -46,6 +46,12 @@ export default function Dashboard() {
       href: "/dashboard/feed",
       count: statistics.news_sources,
     },
+    {
+      id: 5,
+      title: "Advertisement",
+      href: "/dashboard/ads",
+      count: statistics.ads,
+    },
   ];
 
   return (

@@ -64,19 +64,31 @@ model Draft {
   user_id          String
 }
 
+model AdvertisementDraft {
+  id          Int      @id @default(autoincrement())
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  is_active   Boolean  @default(false)
+  is_deleted  Boolean  @default(false)
+  ad_priority Int      @default(0)
+  title       String
+  link        String?
+  media       String?
+  post_id     Int?
+}
+
 model Advertisement {
-  id                  Int      @id @default(autoincrement())
-  created_at          DateTime @default(now())
-  updated_at          DateTime @updatedAt
-  is_active           Boolean  @default(false)
-  is_deleted          Boolean  @default(false)
-  company             String?
-  title               String?
-  content             String?
-  image_backdrop_path String?
-  allowed_ad_per_page Int?
-  post_id             Int?
-  post                Post?    @relation(fields: [post_id], references: [id])
+  id          Int      @id @default(autoincrement())
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  is_active   Boolean  @default(false)
+  is_deleted  Boolean  @default(false)
+  ad_priority Int      @default(0)
+  title       String
+  link        String?
+  media       String?
+  post_id     Int?
+  post        Post?    @relation(fields: [post_id], references: [id])
 }
 
 model News_source {

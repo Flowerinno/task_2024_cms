@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "utils/auth";
 import prisma from "@/lib/prisma";
 import { updatePostSchema } from "utils/validation/feed.schema";
-import { redirect } from "next/navigation";
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();

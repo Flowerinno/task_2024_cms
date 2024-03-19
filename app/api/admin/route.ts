@@ -23,14 +23,16 @@ export async function GET() {
     const postsCount = prisma.post.count();
     const tagsCount = prisma.tag.count();
     const newsSourceCount = prisma.news_source.count();
+    const ads = prisma.advertisement.count();
 
-    const fields = ["users", "posts", "tags", "news_sources"];
+    const fields = ["users", "posts", "tags", "news_sources", "ads"];
 
     const data = await Promise.all([
       usersCount,
       postsCount,
       tagsCount,
       newsSourceCount,
+      ads,
     ]);
 
     const initial = {
@@ -38,6 +40,7 @@ export async function GET() {
       posts: 0,
       tags: 0,
       news_sources: 0,
+      ads: 0,
     };
 
     const stats = fields.reduce((acc, field, index) => {

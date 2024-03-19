@@ -9,6 +9,7 @@ export type Statistics = {
   posts: number;
   tags: number;
   news_sources: number;
+  ads: number
 };
 
 export type PostWithTags = Post & { tags: Tag[] };

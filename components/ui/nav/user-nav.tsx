@@ -50,7 +50,7 @@ export function UserNav({ session }: UserNavProps) {
             </DropdownMenuItem>
           )}
           <DropdownMenuItem>
-            <Link href={"/user/settings"}>Settings</Link>
+            <Link href={`/settings/${session.user.id}`}>Settings</Link>
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>

@@ -1,9 +1,8 @@
 import { CreateRssRequestInput, FeedItem } from "@/lib/helpers/types";
-import { Draft, News_source, Post, Tag } from "@prisma/client";
+import { News_source, Tag } from "@prisma/client";
 import toast from "react-hot-toast";
 import { DraftResponse, PostWithTags, Statistics } from "./types";
 import { CreatePostSchema } from "utils/validation/feed.schema";
-import { fileToDataUrl } from "utils/files";
 
 const base = process.env.NEXT_PUBLIC_API_URL;
 

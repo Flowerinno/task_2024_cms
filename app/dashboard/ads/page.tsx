@@ -2,9 +2,34 @@ import React from "react";
 
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { minio } from "@/lib/minio";
+import { Advertisement } from "@prisma/client";
+import { SingleAdvertisement } from "@/components/ads";
 
 export default async function Ads() {
-  const ads = await prisma?.advertisement.findMany();
+  let ads = await prisma?.advertisement.findMany();
+
+  let adsWithMedia: Advertisement[] | [] = [];
+
+  if (ads && ads?.length > 0) {
+    adsWithMedia = await Promise.all(
+      ads.map(async (ad) => {
+        if (ad.media) {
+          const signedUrl = await minio.client.presignedGetObject(
+            "default",
+            `ads_${ad.id}.png`,
+            60 * 60, // 1 hour expiry in seconds
+          );
+
+          return {
+            ...ad,
+            media: signedUrl,
+          };
+        }
+        return ad;
+      }),
+    );
+  }
 
   if (ads?.length === 0) {
     return (
@@ -20,14 +45,10 @@ export default async function Ads() {
   }
 
   return (
-    <div>
-      {ads?.length &&
-        ads.map((ad) => {
-          return (
-            <Label className="border-2 rounded-md p-2 w-24 m-2" key={ad.id}>
-              {ad.title}
-            </Label>
-          );
+    <div className="w-full flex flex-row flex-wrap justify-center gap-10 p-3">
+      {adsWithMedia?.length &&
+        adsWithMedia.map((ad) => {
+          return <SingleAdvertisement key={ad.id} ad={ad} />;
         })}
     </div>
   );

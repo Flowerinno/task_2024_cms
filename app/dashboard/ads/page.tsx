@@ -1,8 +1,7 @@
+import React from "react";
+
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import React from "react";
-import { auth } from "utils/auth";
 
 export default async function Ads() {
   const ads = await prisma?.advertisement.findMany();
@@ -20,5 +19,16 @@ export default async function Ads() {
     );
   }
 
-  return <div>Ads</div>;
+  return (
+    <div>
+      {ads?.length &&
+        ads.map((ad) => {
+          return (
+            <Label className="border-2 rounded-md p-2 w-24 m-2" key={ad.id}>
+              {ad.title}
+            </Label>
+          );
+        })}
+    </div>
+  );
 }

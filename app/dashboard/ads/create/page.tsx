@@ -31,7 +31,7 @@ export default async function CreateAdd() {
     <div className="flex min-h-screen flex-col md:flex-row w-full p-2">
       <div
         id="drafts"
-        className="flex md:flex-[0.3] md:flex-col flex-row p-2 overflow-y-auto overflow-x-auto gap-2 h-24"
+        className="flex min-h-24 h-24 md:h-full flex-[0.3] md:flex-col flex-row p-2 md:overflow-x-auto gap-2"
       >
         {draftsWithSignedUrl &&
         draftsWithSignedUrl?.length > 0 &&

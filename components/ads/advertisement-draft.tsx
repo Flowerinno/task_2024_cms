@@ -26,7 +26,7 @@ export const AdDraft = ({ draft }: { draft: AdvertisementDraft }) => {
   };
 
   return (
-    <div className="border-[1px] w-11/12 border-gray-400 border-l-0 rounded-tr-md rounded-br-md p-2 cursor-pointer flex flex-row gap-2 ">
+    <div className="border-[1px] w-[300px] md:w-11/12 border-gray-400 border-l-0 rounded-tr-md rounded-br-md p-2 cursor-pointer flex flex-row gap-2">
       <div
         className="flex flex-col gap-1 flex-1"
         aria-label="Select current draft for modification"

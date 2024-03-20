@@ -390,6 +390,29 @@ export async function createPost(payload: CreatePostSchema): Promise<boolean> {
   }
 }
 
+export async function getPost(id: number) {
+  try {
+    const url = base + `/admin/feed/posts/find/${id}`;
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+
+    if (res.status !== 200) {
+      toast.error(data?.message ?? "");
+      return;
+    }
+    console.log(data, "data");
+    return data;
+  } catch (_) {
+    toast.error("Failed to fetch post");
+  }
+}
+
 export async function getHomeFeed({
   page,
   search,

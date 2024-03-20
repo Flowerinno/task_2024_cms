@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Label } from "@/components/ui/label";
 import {
   PostContent,
   PostControls,
@@ -19,10 +20,12 @@ export async function FeedPost({
   return (
     <div className="flex flex-col sm:flex-row rounded-md w-full md:w-11/12 border-[1px] border-gray-400">
       {post?.media && (
-        <img
+        <Image
           aria-label={post.title}
           src={post.media}
-          className="rounded-sm h-[200px] w-full sm:w-[200px]"
+          className="rounded-sm h-[200px] w-full sm:w-[300px]"
+          width={200}
+          height={200}
           alt={post.title}
         />
       )}
@@ -32,6 +35,7 @@ export async function FeedPost({
           <div className="flex flex-row gap-3 items-center">
             <PostPublicationDate pubDate={post.created_at} />
             {isAdmin && <PostControls post_id={post.id} />}
+            <Label>ID: {post.id}</Label>
           </div>
         </div>
         <PostContent title={post.title} content={post.content} />

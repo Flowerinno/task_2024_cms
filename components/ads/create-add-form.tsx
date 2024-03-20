@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,
@@ -11,23 +11,24 @@ import {
   Form,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AdvertisementDraft, Tag } from "@prisma/client";
+import { AdvertisementDraft } from "@prisma/client";
 import { Controller, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { fileToDataUrl, presignedToDataUrl } from "utils/files";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useAdStore } from "store/ads/useAdStore";
 import { createAdSchema } from "utils/validation/ads.schema";
-import { createAdDraft } from "utils/ads";
+import { createAd, createAdDraft } from "utils/ads";
 import { useRouter } from "next/navigation";
+import { getPost } from "utils";
+import toast from "react-hot-toast";
 
 export const CreateAdForm = () => {
   const router = useRouter();
   const imgRef = useRef<HTMLImageElement | null>(null);
+  const [postMessage, setPostMessage] = useState("");
   const { draft, resetSelectedDraft } = useAdStore((state) => state);
 
   const form = useForm<Partial<AdvertisementDraft>>({
@@ -36,9 +37,25 @@ export const CreateAdForm = () => {
   });
 
   const onSubmit = async (data: Partial<AdvertisementDraft>) => {
+    if (data.post_id && data.post_id !== 0) {
+      const post = await getPost(data.post_id);
+      if (!post) {
+        toast.error(`Post with ID ${data.post_id} not found`);
+        return;
+      }
+    }
+
     const payload = {
       ...data,
     };
+
+    const res = await createAd(payload);
+
+    if (res?.id) {
+      resetSelectedDraft();
+      imgRef.current!.src = "";
+      form.reset();
+    }
   };
 
   const saveAsDraft = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -62,10 +79,16 @@ export const CreateAdForm = () => {
   form.watch("media");
 
   useEffect(() => {
+    setPostMessage("");
     form.setValue("title", draft?.title);
     form.setValue("link", draft?.link);
     form.setValue("is_active", draft?.is_active);
-    form.setValue("ad_priority", draft?.ad_priority ?? 0);
+    form.setValue("post_id", draft?.post_id ?? 0);
+
+    form.setValue(
+      "ad_priority", //@ts-expect-error
+      draft?.ad_priority ? draft.ad_priority.toString() : "0",
+    );
     if (draft?.media) {
       if (draft.media.startsWith("http")) {
         presignedToDataUrl(draft.media).then((file) => {
@@ -95,7 +118,7 @@ export const CreateAdForm = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full md:w-8/12  p-5 m-0 rounded-md space-y-8"
+          className="w-full md:w-8/12 p-5 m-0 rounded-md space-y-8"
         >
           <FormField
             control={form.control}
@@ -116,7 +139,7 @@ export const CreateAdForm = () => {
             name="link"
             render={({ field: { value, ...rest } }) => (
               <FormItem>
-                <FormLabel>Clickable link URL</FormLabel>
+                <FormLabel>Clickable link URL (optional)</FormLabel>
                 <FormControl>
                   <Input value={value ?? ""} {...rest} />
                 </FormControl>
@@ -128,14 +151,36 @@ export const CreateAdForm = () => {
           <FormField
             control={form.control}
             name="post_id"
-            render={({ field: { value, ...rest } }) => (
+            render={({ field: { value, onChange, onBlur, ...rest } }) => (
               <FormItem>
                 <FormLabel>
                   Insert to a specific post by ID - integer (optional)
                 </FormLabel>
                 <FormControl>
-                  <Input min={1} value={value ? Number(value) : 0} {...rest} />
+                  <Input
+                    min={0}
+                    type="number"
+                    value={value ? Number(value) : 0}
+                    onBlur={(e) => {
+                      try {
+                        getPost(Number(e.target.value)).then((post) => {
+                          if (post?.id) {
+                            setPostMessage(`Post found: ${post.title}`);
+                          } else {
+                            setPostMessage("Post not found");
+                          }
+                        });
+                      } catch (error) {
+                        setPostMessage("Post not found");
+                      }
+                    }}
+                    onChange={(e) => {
+                      onChange(Number(e.target.value));
+                    }}
+                    {...rest}
+                  />
                 </FormControl>
+                {postMessage && <FormLabel>{postMessage}</FormLabel>}
                 <FormMessage />
               </FormItem>
             )}
@@ -159,7 +204,7 @@ export const CreateAdForm = () => {
               render={({ field: { ref } }) => (
                 <FormItem>
                   <FormLabel className="flex flex-row gap-2">
-                    Ad Media
+                    Ad Media (optional)
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -237,7 +282,7 @@ export const CreateAdForm = () => {
                     max={100}
                     step={1}
                     type="range"
-                    defaultValue={value ? Number(value) : 0}
+                    defaultValue={value ?? "0"}
                     {...rest}
                   />
                 </FormControl>
@@ -245,11 +290,11 @@ export const CreateAdForm = () => {
               </FormItem>
             )}
           />
-          <div className="flex flex-row gap-10">
-            <Button className="w-full" type="submit">
-              Create new advertisement
+          <div className="flex flex-row gap-2">
+            <Button className="flex-1" type="submit">
+              Create ad
             </Button>
-            <Button className="w-full" onClick={saveAsDraft}>
+            <Button className="flex-1" onClick={saveAsDraft}>
               Save as draft
             </Button>
           </div>

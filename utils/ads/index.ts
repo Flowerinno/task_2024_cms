@@ -1,11 +1,38 @@
-import { AdvertisementDraft } from "@prisma/client";
+import { Advertisement, AdvertisementDraft } from "@prisma/client";
 import toast from "react-hot-toast";
 
 const base = process.env.NEXT_PUBLIC_API_URL;
 
 export const getAds = async () => {};
 
-export const createAd = async () => {};
+export const createAd = async (
+  payload: Partial<AdvertisementDraft>,
+): Promise<Advertisement | undefined> => {
+  try {
+    const url = base + `/admin/ads/create`;
+    const res = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+
+    if (!data?.id) {
+      toast.error("Failed to create ad");
+      return;
+    }
+
+    toast.success("Ad created successfully");
+
+    return data;
+  } catch (error: { message: string } | any) {
+    toast.error("Failed to create ad");
+    return;
+  }
+};
 
 export const updateAd = async () => {};
 

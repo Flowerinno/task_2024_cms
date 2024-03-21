@@ -34,7 +34,32 @@ export const createAd = async (
   }
 };
 
-export const updateAd = async () => {};
+export const updateAd = async (payload: { id: number; is_active: boolean }) => {
+  try {
+    const url = base + `/admin/ads/update/active`;
+    const res = await fetch(url, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+
+    if (!data?.id) {
+      toast.error("Failed to update ad");
+      return;
+    }
+
+    toast.success("Ad updated successfully");
+
+    return data;
+  } catch (error: { message: string } | any) {
+    toast.error("Failed to update ad");
+    return;
+  }
+};
 
 export const deleteAd = async () => {};
 

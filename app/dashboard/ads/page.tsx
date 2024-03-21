@@ -5,9 +5,16 @@ import Link from "next/link";
 import { minio } from "@/lib/minio";
 import { Advertisement } from "@prisma/client";
 import { SingleAdvertisement } from "@/components/ads";
+import { auth } from "utils/auth";
 
-export default async function Ads() {
+export default async function Ads({
+  searchParams,
+}: {
+  searchParams: { message: string | null };
+}) {
   let ads = await prisma?.advertisement.findMany();
+
+  const session = await auth();
 
   let adsWithMedia: Advertisement[] | [] = [];
 
@@ -48,7 +55,7 @@ export default async function Ads() {
     <div className="w-full flex flex-row flex-wrap justify-center gap-10 p-3">
       {adsWithMedia?.length &&
         adsWithMedia.map((ad) => {
-          return <SingleAdvertisement key={ad.id} ad={ad} />;
+          return <SingleAdvertisement key={ad.id} session={session} ad={ad} />;
         })}
     </div>
   );

@@ -45,6 +45,11 @@ export const CreateAdForm = () => {
       }
     }
 
+    if (data?.link && !data.link.startsWith("http")) {
+      toast.error("Invalid link format");
+      return;
+    }
+
     const payload = {
       ...data,
     };

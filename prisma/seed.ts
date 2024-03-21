@@ -34,6 +34,13 @@ async function main() {
       data: users,
     });
 
+    await prisma.settings.create({
+      data: {
+        search_ads_per_page: 1,
+        feed_ads_per_page: 1,
+      },
+    });
+
     console.log("Seeded the database");
   } catch (error) {
     console.error("Error seeding the database:", error);

@@ -74,6 +74,8 @@ model AdvertisementDraft {
   title       String
   link        String?
   media       String?
+  is_feed     Boolean  @default(true)
+  is_search   Boolean  @default(false)
   post_id     Int?
 }
 
@@ -87,6 +89,8 @@ model Advertisement {
   title       String
   link        String?
   media       String?
+  is_feed     Boolean  @default(true)
+  is_search   Boolean  @default(false)
   post_id     Int?
   post        Post?    @relation(fields: [post_id], references: [id])
 }
@@ -121,4 +125,12 @@ model Tag {
   news_source News_source[]
   Draft       Draft?        @relation(fields: [draftId], references: [id])
   draftId     Int?
+}
+
+model Settings {
+  id                  Int      @id @default(1)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  feed_ads_per_page   Int      @default(1)
+  search_ads_per_page Int      @default(1)
 }

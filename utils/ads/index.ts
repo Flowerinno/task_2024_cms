@@ -61,7 +61,30 @@ export const updateAd = async (payload: { id: number; is_active: boolean }) => {
   }
 };
 
-export const deleteAd = async () => {};
+export const deleteAd = async (id: number) => {
+  try {
+    const url = base + `/admin/ads/delete`;
+    const res = await fetch(url, {
+      method: "DELETE",
+      body: JSON.stringify({ id }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+
+    if (res.status !== 200) {
+      toast.error("Failed to delete ad");
+      return;
+    }
+
+    return data;
+  } catch (error) {
+    toast.error("Failed to delete ad");
+    return;
+  }
+};
 
 export const getAdDrafts = async (): Promise<AdvertisementDraft[] | []> => {
   try {

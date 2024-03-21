@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent } from "@/components/ui/popover";
 import { formatTimestamp } from "utils/dates/timestamp";
 import { Button } from "../ui/button";
-import { updateAd } from "utils/ads";
+import { deleteAd, updateAd } from "utils/ads";
 
 export const AdPopover = ({
   ad,
@@ -95,7 +95,17 @@ export const AdPopover = ({
           >
             {is_active ? "Deactivate" : "Activate"}
           </Button>
-          <Button variant="destructive" className="flex-1" onClick={() => {}}>
+          <Button
+            variant="destructive"
+            className="flex-1"
+            onClick={() => {
+              deleteAd(ad.id).then((res) => {
+                if (res) {
+                  window.location.reload();
+                }
+              });
+            }}
+          >
             Delete
           </Button>
         </div>

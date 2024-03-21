@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { title, is_active, link, media, ad_priority, post_id } =
+    const { title, is_active, link, media, ad_priority, post_id, is_feed, is_search } =
       validate.data;
 
     const ad = await prisma.advertisement.create({
@@ -58,6 +58,8 @@ export async function POST(req: NextRequest) {
         media: media ? "1" : null,
         post_id: post_id === 0 ? null : post_id,
         ad_priority: Number(ad_priority) || 0,
+        is_feed: is_feed || true,
+        is_search: is_search || false,
       },
     });
 

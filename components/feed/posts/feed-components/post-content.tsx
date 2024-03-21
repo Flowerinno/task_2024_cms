@@ -28,10 +28,14 @@ export const PostContent = ({
   if (!content) return null;
 
   return (
-    <div className="text-gray-600 max-w-11/12 flex flex-col items-start p-0">
+    <div
+      className="text-gray-600 max-w-11/12 flex flex-col items-start p-0"
+      aria-label="Post content section"
+    >
       <Accordion className="w-full" type="single" collapsible>
         <AccordionItem className="text-left" value="item-1">
           <AccordionTrigger
+            aria-label="Post expand button"
             onClick={handleOpen}
             className="text-left p-0 m-0 font-bold"
           >

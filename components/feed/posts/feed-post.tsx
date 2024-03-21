@@ -18,7 +18,10 @@ export async function FeedPost({
   isAdmin?: boolean;
 }) {
   return (
-    <div className="flex flex-col sm:flex-row rounded-md w-full md:w-11/12 border-[1px] border-gray-400">
+    <div
+      className="flex flex-col sm:flex-row rounded-md w-full md:w-11/12 border-[1px] border-gray-400"
+      aria-label="News CMS post contents"
+    >
       {post?.media && (
         <Image
           aria-label={post.title}

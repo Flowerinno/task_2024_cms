@@ -51,11 +51,6 @@ const componentsAdvertisement: {
     href: "/dashboard/ads/create",
     description: "Add and configure new advertisement.",
   },
-  {
-    title: "Configure ads",
-    href: "/dashboard/ads/configure",
-    description: "Configure ads slots/behaviour etc.",
-  },
 ];
 
 export function DashboardNavigationMenu() {

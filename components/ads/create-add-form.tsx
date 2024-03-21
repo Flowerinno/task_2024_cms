@@ -71,6 +71,8 @@ export const CreateAdForm = () => {
       ...form.getValues(),
     };
 
+    console.log(payload);
+
     const res = await createAdDraft(payload);
 
     if (res?.id && imgRef?.current?.src) {
@@ -261,6 +263,60 @@ export const CreateAdForm = () => {
                       style={{ padding: 0, margin: 0 }}
                     >
                       Activate on creation
+                    </label>
+                  </FormItem>
+                );
+              }}
+            />
+            <Controller
+              control={form.control}
+              name="is_feed"
+              render={({ field: { onChange, onBlur, value, name } }) => {
+                return (
+                  <FormItem className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      checked={value}
+                      name={name}
+                      id="is_feed"
+                      className="accent-black"
+                    />
+
+                    <label
+                      htmlFor="is_feed"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      style={{ padding: 0, margin: 0 }}
+                    >
+                      Visible in feed
+                    </label>
+                  </FormItem>
+                );
+              }}
+            />
+            <Controller
+              control={form.control}
+              name="is_search"
+              render={({ field: { onChange, onBlur, value, name } }) => {
+                return (
+                  <FormItem className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      checked={value}
+                      name={name}
+                      id="is_search"
+                      className="accent-black"
+                    />
+
+                    <label
+                      htmlFor="is_search"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      style={{ padding: 0, margin: 0 }}
+                    >
+                      Visible in search
                     </label>
                   </FormItem>
                 );

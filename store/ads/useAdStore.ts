@@ -15,6 +15,8 @@ export const useAdStore = create<AdStore>((set) => ({
     media: "",
     ad_priority: 0,
     is_active: false,
+    is_feed: true,
+    is_search: false,
     post_id: 0,
   },
   selectDraft: (draft: AdvertisementDraft) =>
@@ -24,13 +26,12 @@ export const useAdStore = create<AdStore>((set) => ({
       ...state,
       draft: {
         title: "",
-        content: "",
         link: "",
-        creator: "",
-        tags: [],
         media: "",
+        ad_priority: 0,
+        is_feed: true,
+        is_search: false,
         is_active: false,
-        pubDate_included: false,
       },
     })),
 }));

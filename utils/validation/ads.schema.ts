@@ -8,6 +8,8 @@ export const createAdSchema = z.object({
   link: z.string().optional(),
   media: z.string().optional(),
   is_active: z.boolean().default(false),
+  is_feed: z.boolean().default(true),
+  is_search: z.boolean().default(false),
   ad_priority: z.string().optional(),
   post_id: z.number().optional(),
 });

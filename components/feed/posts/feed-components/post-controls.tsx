@@ -30,6 +30,7 @@ export const PostControls = ({ post_id }: PostControlsProps) => {
         <Button
           variant="destructive"
           onClick={onClick}
+            aria-label="Delete post"
           className="text-[10px] p-1 h-fit"
           size="sm"
         >

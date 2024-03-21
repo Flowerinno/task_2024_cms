@@ -44,7 +44,7 @@ export const SingleAdvertisement = ({
         <Label
           className="absolute left-2 top-5 font-bold text-xl cursor-pointer text-center"
           style={{
-            color: ad?.media ? "white" : "black",
+            color: ad?.media ? "red" : "black",
           }}
         >
           {ad.title}
@@ -65,13 +65,13 @@ export const SingleAdvertisement = ({
           alt={ad.title}
           width={200}
           height={200}
-          className="w-full h-24 rounded-sm object-fill"
+          className="w-full h-24 rounded-sm object-fill opacity-80"
         />
       )}
       <Label
         className="absolute left-2 top-6 font-bold text-xl text-center cursor-pointer"
         style={{
-          color: ad?.media ? "white" : "black",
+          color: ad?.media ? "red" : "black",
         }}
       >
         {ad.title}

@@ -5,9 +5,13 @@ export const PostTags = ({ tags }: { tags: Tag[] | [] }) => {
   if (tags.length === 0) return null;
 
   return (
-    <ul className="flex flex-row flex-wrap gap-2">
+    <ul aria-label="Tags list" className="flex flex-row flex-wrap gap-2">
       {tags.map((tag) => (
-        <li key={tag.id} className="text-xs bg-gray-200 p-1 rounded-md">
+        <li
+          key={tag.id}
+          aria-label="Single tag"
+          className="text-xs bg-gray-200 p-1 rounded-md"
+        >
           #{tag.label}
         </li>
       ))}

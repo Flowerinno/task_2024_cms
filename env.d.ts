@@ -1,14 +1,15 @@
 namespace NodeJS {
   interface ProcessEnv {
-    NEXTAUTH_URL: string;
     NODE_ENV: "development" | "production";
+    NEXTAUTH_URL: string;
+    NEXTAUTH_SECRET: string;
     NEXT_PUBLIC_API_URL: string;
     MINIO_ROOT_USER: string;
     MINIO_ROOT_PASSWORD: string;
-    REDIS_PASSWORD: string;
-    REDIS_PORT: string;
-    REDIS_HOST: string;
-    REDIS_URL: string;
-    REDIS_RESET_CODE: string;
+    MINIO_ENDPOINT: string;
+    MINIO_PORT: number;
+    MINIO_ACCESS_KEY: string;
+    MINIO_SECRET_KEY: string;
+    DATABASE_URL: string;
   }
 }

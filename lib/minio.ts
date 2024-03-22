@@ -1,11 +1,11 @@
 import { Client } from "minio";
 
 export const minioClient = new Client({
-  endPoint: "localhost",
-  port: 9000,
+  endPoint: process.env.MINIO_ENDPOINT,
+  port: process.env.MINIO_PORT,
   useSSL: false,
-  accessKey: "RzGICTSX9BVqbacYQFVY",
-  secretKey: "RpNrpgHiUCRKnNKrEH73CwNJ01G0NIdRFmJucscj",
+  accessKey: process.env.MINIO_ACCESS_KEY,
+  secretKey: process.env.MINIO_SECRET_KEY,
 });
 
 export class MinioController {

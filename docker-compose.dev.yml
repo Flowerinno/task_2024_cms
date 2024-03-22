@@ -50,13 +50,16 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - NEXTAUTH_URL=${NEXTAUTH_URL}
-      - API_URL=${API_URL}
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_PORT=${MINIO_PORT}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
     env_file:
       - .env
     volumes:
-      - .:/src/app
+      - ~/minio/data:/data
     ports:
       - 5173:5173
     networks:

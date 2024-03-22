@@ -46,8 +46,6 @@ export default async function Tags({
     randomAdsIndexes[i] = Math.floor(Math.random() * feed?.length);
   }
 
-  console.log(ads);
-
   return (
     <div className="flex flex-col items-center justify-center gap-3 p-5 md:p-10 overflow-x-hidden relative">
       <form

@@ -29,7 +29,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.redirect(fromURL, 301);
   } catch (error) {
-    console.log(error);
     return NextResponse.redirect(fromURL, 301);
   }
 }

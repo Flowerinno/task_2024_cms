@@ -226,8 +226,6 @@ export const CreateAdForm = () => {
                           form.setValue("media", await fileToDataUrl(file));
                         }
                       }}
-                      onErrorCapture={(e) => console.log(e)}
-                      onError={(e) => console.log(e)}
                       ref={ref}
                     />
                   </FormControl>

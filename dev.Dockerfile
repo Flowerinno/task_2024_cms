@@ -17,14 +17,5 @@ RUN \
 COPY . /usr/src/app
 RUN npm install
 
-# RUN chown -R root:root /usr/src/*
-# RUN chmod a+w /usr/src/app -R
-
-ENV NEXT_TELEMETRY_DISABLED 1
-
-CMD \
-  if [ -f yarn.lock ]; then yarn dev; \
-  elif [ -f package-lock.json ]; then npm run dev; \
-  elif [ -f pnpm-lock.yaml ]; then pnpm dev; \
-  else npm run dev; \
-  fi
+# Run the cron job in a separate shell
+CMD ["npm", "run", "dev"] & npm run cron

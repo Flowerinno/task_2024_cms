@@ -411,7 +411,7 @@ export async function getPost(id: number) {
       toast.error(data?.message ?? "");
       return;
     }
-    console.log(data, "data");
+    
     return data;
   } catch (_) {
     toast.error("Failed to fetch post");

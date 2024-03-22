@@ -1,9 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { minio } from "@/lib/minio";
+import { rateLimit } from "utils";
 
 export async function GET(req: NextRequest) {
+  const currHeaders = new Headers(req.headers);
   try {
+    const limiter = rateLimit({
+      uniqueTokenPerInterval: 500, // 500 unique tokens per minute
+      interval: 60000, // 1 minute
+    });
+
+    await limiter.check(currHeaders, 100, "secret_token");
+
     const url = new URL(req.url);
     const page = url.searchParams.get("page");
     const search = url.searchParams.get("search");
@@ -136,8 +145,8 @@ export async function GET(req: NextRequest) {
     );
   } catch (error) {
     return NextResponse.json(
-      { message: "Failed to get the feed" },
-      { status: 500 },
+      { message: "Failed to get the feed / Request Limit" },
+      { status: 500, headers: currHeaders },
     );
   }
 }

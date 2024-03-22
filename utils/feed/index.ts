@@ -1,5 +1,5 @@
 import { CreateRssRequestInput, FeedItem } from "@/lib/helpers/types";
-import { News_source, Tag } from "@prisma/client";
+import { Advertisement, News_source, Tag } from "@prisma/client";
 import toast from "react-hot-toast";
 import { DraftResponse, PostWithTags, Statistics } from "./types";
 import { CreatePostSchema } from "utils/validation/feed.schema";
@@ -419,7 +419,12 @@ export async function getHomeFeed({
 }: {
   page: number;
   search: string;
-}): Promise<{ feed: PostWithTags[] | []; maxPage: number }> {
+}): Promise<{
+  feed: PostWithTags[] | [];
+  maxPage: number;
+  ads: Advertisement[] | [];
+  adsPerPage: number;
+}> {
   try {
     const url = new URL(`${base}/news`);
 
@@ -434,15 +439,15 @@ export async function getHomeFeed({
       cache: "no-store",
     });
 
-    const { feed, maxPage, message } = await res.json();
+    const { feed, maxPage, ads, adsPerPage, message } = await res.json();
 
     if (res.status !== 200) {
       toast.error(message ?? "");
     }
 
-    return { feed, maxPage } ?? [];
+    return { feed, maxPage, ads, adsPerPage };
   } catch (error: { message: string } | any) {
-    return { feed: [], maxPage: 1 };
+    return { feed: [], maxPage: 1, ads: [], adsPerPage: 1 };
   }
 }
 

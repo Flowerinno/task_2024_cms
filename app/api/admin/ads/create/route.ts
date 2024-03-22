@@ -47,8 +47,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { title, is_active, link, media, ad_priority, post_id, is_feed, is_search } =
-      validate.data;
+    const {
+      title,
+      is_active,
+      link,
+      media,
+      ad_priority,
+      post_id,
+      is_feed,
+      is_search,
+    } = validate.data;
 
     const ad = await prisma.advertisement.create({
       data: {
@@ -60,20 +68,25 @@ export async function POST(req: NextRequest) {
         ad_priority: Number(ad_priority) || 0,
         is_feed: is_feed || true,
         is_search: is_search || false,
+        ...(post_id
+          ? {
+              Post: {
+                connect: {
+                  id: post_id,
+                },
+              },
+            }
+          : {}),
       },
     });
 
-      if (ad) {
-        if (media) {
-            await minio.createBucket("default");
-            const buffer = dataUrlToBuffer(media);
-            await minio.client.putObject(
-              "default",
-              `ads_${ad.id}.png`,
-              buffer,
-            );
-        }
-          
+    if (ad) {
+      if (media) {
+        await minio.createBucket("default");
+        const buffer = dataUrlToBuffer(media);
+        await minio.client.putObject("default", `ads_${ad.id}.png`, buffer);
+      }
+
       return NextResponse.json(ad);
     }
 
@@ -86,6 +99,7 @@ export async function POST(req: NextRequest) {
       },
     );
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       {
         message: "Failed to create ad",

@@ -25,7 +25,7 @@ export async function FeedPost({
       {post?.media && (
         <Image
           aria-label={post.title}
-          src={post.media}
+          src={post.media ?? ""}
           className="rounded-sm h-[200px] w-full sm:w-[300px]"
           width={200}
           height={200}

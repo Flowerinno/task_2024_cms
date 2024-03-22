@@ -34,7 +34,7 @@ export const SingleAdvertisement = ({
       >
         {ad?.media && (
           <Image
-            src={ad.media}
+            src={ad.media ?? ""}
             alt={ad.title}
             width={200}
             height={200}
@@ -61,7 +61,7 @@ export const SingleAdvertisement = ({
     >
       {ad?.media && (
         <Image
-          src={ad.media}
+          src={ad.media ?? ""}
           alt={ad.title}
           width={200}
           height={200}

@@ -11,6 +11,14 @@ export async function GET(req: NextRequest) {
     const page_q = page && Number(page) > 0 ? page : "1";
     const search_q = search ? search : "";
 
+    const settings = await prisma.settings.findFirst({
+      where: {
+        id: 1,
+      },
+    });
+
+    let adsPerPage = settings?.feed_ads_per_page || 1;
+
     const count = 30;
     const maxPage = Math.ceil(
       (await prisma.post.count({
@@ -23,17 +31,14 @@ export async function GET(req: NextRequest) {
         },
       })) / count,
     );
+
     const feed = await prisma.post.findMany({
       where: {
         is_active: true,
         is_deleted: false,
-        OR: [
-          {
-            title: {
-              contains: search_q,
-            },
-          },
-        ],
+        title: {
+          contains: search_q,
+        },
       },
       orderBy: {
         created_at: "desc",
@@ -47,29 +52,85 @@ export async function GET(req: NextRequest) {
             is_deleted: false,
           },
         },
+        advertisement: true,
       },
     });
 
     const feedWithMedia = await Promise.all(
       feed.map(async (post) => {
+        let postMedia, adMedia;
         if (post.media) {
-          const signedUrl = await minio.client.presignedGetObject(
+          postMedia = await minio.client.presignedGetObject(
             "default",
             `post_${post.id}.png`,
             60, // 1 minute expiry in seconds
           );
+        }
+
+        let ad = post?.advertisement;
+        if (ad?.id && ad?.is_active && adsPerPage >= 1) {
+          adsPerPage -= 1; // decrease adpsPerPage by 1 when inserting an ad
+
+          if (ad?.media) {
+            adMedia = await minio.client.presignedGetObject(
+              "default",
+              `ads_${ad.id}.png`,
+              60,
+            );
+          }
+        } else if (ad) {
+          ad = null;
+        }
+
+        return {
+          ...post,
+          media: postMedia,
+          advertisement: ad?.is_active
+            ? {
+                ...ad,
+                media: adMedia,
+              }
+            : null,
+        };
+      }),
+    );
+
+    const ads = await prisma.advertisement.findMany({
+      where: {
+        is_active: true,
+        is_deleted: false,
+        is_feed: true,
+        post_id: null,
+        title: {
+          contains: search_q
+        }
+      },
+      orderBy: {
+        ad_priority: "desc",
+      },
+      take: adsPerPage,
+    });
+
+    const adsWithMedia = await Promise.all(
+      ads.map(async (ad) => {
+        if (ad.media) {
+          const signedUrl = await minio.client.presignedGetObject(
+            "default",
+            `ads_${ad.id}.png`,
+            60, // 1 minute expiry in seconds
+          );
 
           return {
-            ...post,
+            ...ad,
             media: signedUrl,
           };
         }
-        return post;
+        return ad;
       }),
     );
 
     return NextResponse.json(
-      { feed: feedWithMedia, maxPage },
+      { feed: feedWithMedia, maxPage, ads: adsWithMedia, adsPerPage },
       {
         status: 200,
       },

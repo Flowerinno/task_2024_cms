@@ -8,7 +8,7 @@ export const PostTitle = ({
   title: string;
   link: string | null;
 }) => {
-  if (link !== null) {
+  if (link) {
     return (
       <Label aria-label={title} className="font-bold text-blue-400 text-[16px]">
         <a href={link} target="_blank">

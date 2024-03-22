@@ -71,8 +71,6 @@ export const CreateAdForm = () => {
       ...form.getValues(),
     };
 
-    console.log(payload);
-
     const res = await createAdDraft(payload);
 
     if (res?.id && imgRef?.current?.src) {
@@ -210,19 +208,26 @@ export const CreateAdForm = () => {
               name="media"
               render={({ field: { ref } }) => (
                 <FormItem>
-                  <FormLabel className="flex flex-row gap-2">
+                  <FormLabel
+                    htmlFor="ad_input_upload"
+                    className="flex flex-row gap-2"
+                  >
                     Ad Media (optional)
                   </FormLabel>
                   <FormControl>
                     <Input
+                      id="ad_input_upload"
                       accept="image/png"
                       type="file"
+                      className="cursor-pointer"
                       onChange={async (e) => {
                         if (e?.target?.files) {
                           const file = e?.target?.files[0];
                           form.setValue("media", await fileToDataUrl(file));
                         }
                       }}
+                      onErrorCapture={(e) => console.log(e)}
+                      onError={(e) => console.log(e)}
                       ref={ref}
                     />
                   </FormControl>

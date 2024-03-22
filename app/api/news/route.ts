@@ -20,23 +20,13 @@ export async function GET(req: NextRequest) {
     let adsPerPage = settings?.feed_ads_per_page || 1;
 
     const count = 30;
-    const maxPage = Math.ceil(
-      (await prisma.post.count({
-        where: {
-          is_active: true,
-          is_deleted: false,
-          title: {
-            contains: search_q,
-          },
-        },
-      })) / count,
-    );
 
     const feed = await prisma.post.findMany({
       where: {
         is_active: true,
         is_deleted: false,
         title: {
+          mode: "insensitive",
           contains: search_q,
         },
       },
@@ -95,6 +85,15 @@ export async function GET(req: NextRequest) {
       }),
     );
 
+    const maxPage = Math.ceil(
+      (await prisma.post.count({
+        where: {
+          is_active: true,
+          is_deleted: false,
+        },
+      })) / count,
+    );
+
     const ads = await prisma.advertisement.findMany({
       where: {
         is_active: true,
@@ -102,8 +101,8 @@ export async function GET(req: NextRequest) {
         is_feed: true,
         post_id: null,
         title: {
-          contains: search_q
-        }
+          contains: search_q,
+        },
       },
       orderBy: {
         ad_priority: "desc",

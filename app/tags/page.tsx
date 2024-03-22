@@ -9,6 +9,10 @@ import { FeedPost } from "@/components/feed/posts";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { Label } from "@/components/ui/label";
+import React from "react";
+import { Advertisement } from "@prisma/client";
+import { SingleAdvertisement } from "@/components/ads";
+import { PostWithTags } from "utils/feed/types";
 
 export default async function Tags({
   searchParams: { page, search },
@@ -24,7 +28,7 @@ export default async function Tags({
   const session = await getServerSession(authOptions);
   const isAdmin = session?.user?.role === "ADMIN";
 
-  const { maxPage, feed } = await searchByTags({
+  const { maxPage, feed, ads, adsPerPage } = await searchByTags({
     page: page_q,
     search: search_q,
   });
@@ -35,6 +39,14 @@ export default async function Tags({
       is_deleted: false,
     },
   });
+
+  let randomAdsIndexes: Record<string, number> = {};
+
+  for (let i = 0; i < ads?.length; i++) {
+    randomAdsIndexes[i] = Math.floor(Math.random() * feed?.length);
+  }
+
+  console.log(ads);
 
   return (
     <div className="flex flex-col items-center justify-center gap-3 p-5 md:p-10 overflow-x-hidden relative">
@@ -89,10 +101,45 @@ export default async function Tags({
             <span>-</span>
           )}
         </form>
-        {feed?.length > 0 &&
-          feed.map((post, i) => {
-            return <FeedPost key={i} post={post} isAdmin={isAdmin} />;
-          })}
+        {feed.map((item: PostWithTags, i) => {
+          if (item.advertisement?.id) {
+            return (
+              <React.Fragment key={item.id}>
+                <FeedPost
+                  key={i}
+                  post={item as PostWithTags}
+                  isAdmin={isAdmin}
+                />
+                <SingleAdvertisement
+                  key={i}
+                  ad={item.advertisement as Advertisement}
+                  session={session}
+                />
+              </React.Fragment>
+            );
+          }
+
+          for (const [key, value] of Object.entries(randomAdsIndexes)) {
+            if (i === value) {
+              const ad = ads[Number(key)];
+
+              return (
+                <React.Fragment key={item.id}>
+                  <FeedPost post={item as PostWithTags} isAdmin={isAdmin} />
+                  <SingleAdvertisement key={ad?.id} ad={ad} session={session} />
+                </React.Fragment>
+              );
+            }
+          }
+
+          return (
+            <FeedPost
+              key={item.id}
+              post={item as PostWithTags}
+              isAdmin={isAdmin}
+            />
+          );
+        })}
         {feed?.length > 0 ? (
           <FeedPagination page={page_q} maxPage={maxPage} />
         ) : (

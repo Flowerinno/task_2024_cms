@@ -14,7 +14,7 @@ const enum CRON {
 
 console.log("CRON REGISTERED");
 const feedCron = new CronJob(
-  CRON.EVERY_10_SECONDS,
+  CRON.EVERY_MINUTE,
   importFeedJob,
   null,
   false,

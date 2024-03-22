@@ -198,7 +198,12 @@ export async function searchByTags({
 }: {
   page: number;
   search: string;
-}): Promise<{ feed: PostWithTags[] | []; maxPage: number }> {
+}): Promise<{
+  feed: PostWithTags[] | [];
+  maxPage: number;
+  ads: Advertisement[];
+  adsPerPage: number;
+}> {
   try {
     const url = new URL(base + `/admin/feed/tags/search`);
 
@@ -222,7 +227,7 @@ export async function searchByTags({
 
     return data;
   } catch (error: { message: string } | any) {
-    return { feed: [], maxPage: 1 };
+    return { feed: [], maxPage: 1, ads: [], adsPerPage: 1 };
   }
 }
 

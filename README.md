@@ -1,42 +1,30 @@
-# Kononov Aleksandr [Task 2024006](https://cloud.devit.group/apps/files/?dir=/&openfile=2751712)
-
-## Estimate ~3.5 weeks of work (05.03.2024 - 31.03.2024)
-
-## All information related to project structure and implementation details is in the [PROJECT folder](https://github.com/Flowerinno/task_2024_cms/tree/main/PROJECT/database)
+# Kononov Aleksandr
+## Estimate ~3.5 weeks
 
 ## Running the project
 
-1. Running in DEVELOPMENT mode
+### Prerequisites
 
-- `docker network create my-network` - to create a network
-- `docker-compose -f docker-compose.dev.yml up` - build the project in development mode
+- Docker/Compose
+- Node.js
+- npm
 
-2. Running in PRODUCTION MODE
+### Start the project
+- `npm run compose-dev` - build the project in development mode
+  (To stop the docker containers - `npm run stop`).
 
-- `docker network create my-network` - to create a network
-- `docker-compose -f docker-compose.prod.yml up` - build the project in production mode
+The following commands are executed on the docker container:
 
-(To stop the docker container use `docker-compose down`)
+- Seed the database -> `npx prisma db seed` (admin and additional users will be created)
+- Start the cron job server -> `npm run cron`
 
-- Seed the database -> `npx prisma db seed`
+Admin login credentials:
 
-## Project features
+```
+email: admin@gmail.com |
+password: 1234 |
+```
 
-### `USERS`
+### Minio s3 compatible storage [(description here)](https://github.com/Flowerinno/task_2024_cms/tree/main/PROJECT/minio)
 
-- User authentication/authorization
-- User roles
-- User permissions
-- User settings
-
-  - CRUD operations for users
-  - ROLES operations (block / graceful deletion)
-  - Pagination/Filtering users list
-
-### `RSS FEED`
-
--- in progress --
-
-### `Ads`
-
--- in progress --
+- Required access_key and secret_key, navigate to localhost:9000, login with provided credentials and create the keys.

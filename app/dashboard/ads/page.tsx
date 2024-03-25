@@ -21,15 +21,11 @@ export default async function Ads() {
     adsWithMedia = await Promise.all(
       ads.map(async (ad) => {
         if (ad.media) {
-          const signedUrl = await minio.client.presignedGetObject(
-            "default",
-            `ads_${ad.id}.png`,
-            60 * 60, // 1 hour expiry in seconds
-          );
+          const adMedia = await minio.getObject("default", `ads_${ad.id}.png`);
 
           return {
             ...ad,
-            media: signedUrl,
+            media: adMedia ?? null,
           };
         }
         return ad;
@@ -62,7 +58,11 @@ export default async function Ads() {
         <SheetContent className="flex flex-col gap-10">
           <Label className="font-bold text-xl">Configure ads appearance</Label>
 
-          <form action='/api/admin/ads/update/settings' method='POST' className="flex flex-col gap-3">
+          <form
+            action="/api/admin/ads/update/settings"
+            method="POST"
+            className="flex flex-col gap-3"
+          >
             <Label htmlFor="feed_ads_per_page">
               Visibile ads per feed page
             </Label>

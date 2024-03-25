@@ -6,7 +6,8 @@
     "start": "next start",
     "lint": "next lint",
     "compose-dev": "docker-compose -f docker-compose.dev.yml up",
-    "cron": "sudo tsx cron-job.ts && node cron-job.js"
+    "stop": "docker-compose -f docker-compose.dev.yml down",
+    "cron": "tsx cron-job.ts && node cron-job.js"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

@@ -9,6 +9,18 @@ async function main() {
   console.log("Started seeding");
   try {
     const password = await hash("1234", 10);
+
+    const isSeeded = await prisma.user.findUnique({
+      where: {
+        email: "admin@gmail.com",
+      },
+    });
+
+    if (isSeeded) {
+      console.log("Database already seeded");
+      return;
+    }
+
     await prisma.user.upsert({
       where: {
         email: "admin@gmail.com",
@@ -43,8 +55,7 @@ async function main() {
 
     console.log("Seeded the database");
   } catch (error) {
-    console.error("Error seeding the database:", error);
-    throw error;
+    console.error("Database already seeded", error);
   } finally {
     await prisma.$disconnect();
   }

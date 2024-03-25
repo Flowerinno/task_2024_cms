@@ -1,2 +1,2 @@
-export * from "./feed";
-export * from "./users";
+export * from './feed'
+export * from './users'

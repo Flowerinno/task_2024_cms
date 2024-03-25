@@ -1,167 +1,167 @@
-import { Advertisement, AdvertisementDraft } from "@prisma/client";
-import toast from "react-hot-toast";
+import { Advertisement, AdvertisementDraft } from '@prisma/client'
+import toast from 'react-hot-toast'
 
-const base = process.env.NEXT_PUBLIC_API_URL;
+const base = process.env.NEXT_PUBLIC_API_URL
 
-export const getAds = async () => {};
+export const getAds = async () => {}
 
 export const createAd = async (
   payload: Partial<AdvertisementDraft>,
 ): Promise<Advertisement | undefined> => {
   try {
-    const url = base + `/admin/ads/create`;
+    const url = base + `/admin/ads/create`
     const res = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(payload),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    });
+    })
 
-    const data = await res.json();
+    const data = await res.json()
 
     if (!data?.id) {
-      toast.error("Failed to create ad");
-      return;
+      toast.error('Failed to create ad')
+      return
     }
 
-    toast.success("Ad created successfully");
+    toast.success('Ad created successfully')
 
-    return data;
+    return data
   } catch (error: { message: string } | any) {
-    toast.error("Failed to create ad");
-    return;
+    toast.error('Failed to create ad')
+    return
   }
-};
+}
 
 export const updateAd = async (payload: { id: number; is_active: boolean }) => {
   try {
-    const url = base + `/admin/ads/update/active`;
+    const url = base + `/admin/ads/update/active`
     const res = await fetch(url, {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(payload),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    });
+    })
 
-    const data = await res.json();
+    const data = await res.json()
 
     if (!data?.id) {
-      toast.error("Failed to update ad");
-      return;
+      toast.error('Failed to update ad')
+      return
     }
 
-    toast.success("Ad updated successfully");
+    toast.success('Ad updated successfully')
 
-    return data;
+    return data
   } catch (error: { message: string } | any) {
-    toast.error("Failed to update ad");
-    return;
+    toast.error('Failed to update ad')
+    return
   }
-};
+}
 
 export const deleteAd = async (id: number) => {
   try {
-    const url = base + `/admin/ads/delete`;
+    const url = base + `/admin/ads/delete`
     const res = await fetch(url, {
-      method: "DELETE",
+      method: 'DELETE',
       body: JSON.stringify({ id }),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    });
+    })
 
-    const data = await res.json();
+    const data = await res.json()
 
     if (res.status !== 200) {
-      toast.error("Failed to delete ad");
-      return;
+      toast.error('Failed to delete ad')
+      return
     }
 
-    return data;
+    return data
   } catch (error) {
-    toast.error("Failed to delete ad");
-    return;
+    toast.error('Failed to delete ad')
+    return
   }
-};
+}
 
 export const getAdDrafts = async (): Promise<AdvertisementDraft[] | []> => {
   try {
-    const url = base + `/admin/ads/drafts`;
+    const url = base + `/admin/ads/drafts`
     const res = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "no-store, max-age=0",
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-store, max-age=0',
       },
-      cache: "no-store",
-    });
+      cache: 'no-store',
+    })
 
-    const data = await res.json();
+    const data = await res.json()
 
     if (res.status !== 200) {
-      toast.error("Failed to fetch drafts");
-      return [];
+      toast.error('Failed to fetch drafts')
+      return []
     }
 
-    return data;
+    return data
   } catch (error: { message: string } | any) {
-    toast.error("Failed to fetch drafts");
-    return [];
+    toast.error('Failed to fetch drafts')
+    return []
   }
-};
+}
 
 export const createAdDraft = async (
   payload: Partial<AdvertisementDraft>,
 ): Promise<AdvertisementDraft | undefined> => {
   try {
-    const url = base + `/admin/ads/drafts/create`;
+    const url = base + `/admin/ads/drafts/create`
     const res = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(payload),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    });
+    })
 
-    const data = await res.json();
+    const data = await res.json()
 
     if (res.status !== 201) {
-      toast.error("Failed to create draft");
-      return;
+      toast.error('Failed to create draft')
+      return
     }
 
-    toast.success("Draft created successfully");
+    toast.success('Draft created successfully')
 
-    return data?.draft;
+    return data?.draft
   } catch (error: { message: string } | any) {
-    toast.error("Failed to create draft");
-    return;
+    toast.error('Failed to create draft')
+    return
   }
-};
+}
 
 export const deleteAdDraft = async (id: number) => {
   try {
-    const url = base + `/admin/ads/drafts/delete`;
+    const url = base + `/admin/ads/drafts/delete`
     const res = await fetch(url, {
-      method: "DELETE",
+      method: 'DELETE',
       body: JSON.stringify({ id }),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    });
+    })
 
-    const data = await res.json();
+    const data = await res.json()
 
     if (res.status !== 200) {
-      toast.error("Failed to delete draft");
-      return;
+      toast.error('Failed to delete draft')
+      return
     }
 
-    return data;
+    return data
   } catch (error: { message: string } | any) {
-    toast.error("Failed to delete draft");
-    return;
+    toast.error('Failed to delete draft')
+    return
   }
-};
+}

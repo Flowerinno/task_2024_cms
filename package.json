@@ -3,12 +3,14 @@
   "scripts": {
     "dev": "rm -rf .next && prisma generate && next dev -p 5173",
     "build": "next build",
+    "build:start": "next build && next start -p 5173",
     "start": "next start",
     "lint": "next lint",
     "prettier:fix": "npx prettier app --write",
     "compose-dev": "docker-compose -f docker-compose.dev.yml up",
     "stop": "docker-compose -f docker-compose.dev.yml down",
-    "cron": "tsx cron-job.ts && node cron-job.js"
+    "cron": "tsx cron-job.ts && node cron-job.js",
+    "cypress:open": "cypress open"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
@@ -53,6 +55,7 @@
     "react-hook-form": "^7.51.0",
     "react-hot-toast": "^2.4.1",
     "rss-parser": "^3.13.0",
+    "sharp": "^0.33.3",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1",
@@ -66,6 +69,7 @@
     "@types/node": "^20.11.25",
     "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.4.16",
+    "cypress": "^13.7.1",
     "eslint": "8.11.0",
     "eslint-config-next": "^13.0.5",
     "eslint-config-prettier": "^9.1.0",

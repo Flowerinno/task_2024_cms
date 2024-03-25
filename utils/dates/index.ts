@@ -1,1 +1,1 @@
-export { formatFeedDate } from "./formatFeedDate";
+export { formatFeedDate } from './formatFeedDate'

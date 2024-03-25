@@ -55,7 +55,7 @@ export const CreateTagsForm = () => {
               <FormItem>
                 <FormLabel>Tag label (unique identifier)</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input type='text' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

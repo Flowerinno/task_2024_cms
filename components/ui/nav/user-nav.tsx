@@ -25,7 +25,7 @@ export function UserNav({ session }: UserNavProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Button id='user_avatar' variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarFallback>
               {session.user?.role === "ADMIN" ? "A" : "U"}

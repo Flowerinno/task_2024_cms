@@ -1,12 +1,12 @@
-import { Tag } from "@prisma/client";
-import { create } from "zustand";
+import { Tag } from '@prisma/client'
+import { create } from 'zustand'
 
 type TagsStore = {
-  tags: Tag[] | [];
-  setTags: (tags: Tag[] | []) => void;
-  setTag: (tag: Tag) => void;
-  updateTag: (tag: Tag) => void;
-};
+  tags: Tag[] | []
+  setTags: (tags: Tag[] | []) => void
+  setTag: (tag: Tag) => void
+  updateTag: (tag: Tag) => void
+}
 
 export const useTags = create<TagsStore>((set) => ({
   tags: [],
@@ -20,6 +20,6 @@ export const useTags = create<TagsStore>((set) => ({
     set((state) => ({
       ...state,
       tags: state.tags.map((t) => (t.id === tag.id ? tag : t)),
-    }));
+    }))
   },
-}));
+}))

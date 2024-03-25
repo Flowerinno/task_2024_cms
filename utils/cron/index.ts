@@ -1,1 +1,1 @@
-export { importFeedJob } from "./feedCron";
+export { importFeedJob } from './feedCron'

@@ -4,6 +4,7 @@ import { Separator } from '@/components/ui/separator'
 import { Label } from '@/components/ui/label'
 import { AdDraft } from '@/components/ads'
 import { minio } from '@/lib/minio'
+import prisma from '@/lib/prisma'
 
 export default async function CreateAdd() {
   const drafts = (await prisma?.advertisementDraft.findMany()) ?? []

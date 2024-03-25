@@ -9,6 +9,7 @@ import { auth } from 'utils/auth'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import prisma from '@/lib/prisma'
 
 export default async function Ads() {
   let ads = await prisma?.advertisement.findMany()

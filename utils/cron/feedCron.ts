@@ -1,8 +1,8 @@
-import { parseRss } from "@/lib/helpers/rss";
-import prisma from "@/lib/prisma";
+import { parseRss } from '@/lib/helpers/rss'
+import prisma from '@/lib/prisma'
 
 export const importFeedJob = async () => {
-  console.log("job working");
+  console.log('job working')
 
   try {
     const sources = await prisma.news_source.findMany({
@@ -13,25 +13,27 @@ export const importFeedJob = async () => {
       include: {
         tags: true,
       },
-    });
+    })
 
     for await (const source of sources) {
       const isImportTimeValid = source.last_import_time
         ? new Date().getTime() - new Date(source.last_import_time).getTime() >
           source.import_interval * 60 * 1000
-        : true;
+        : true
 
       if (!isImportTimeValid) {
         console.log(
-          "Feed import job skipped for source ",
+          'Feed import job skipped for source ',
           source.name,
-          "because of import interval",
-        );
-        continue;
+          'because of import interval',
+        )
+        continue
       }
 
-      const { items } = await parseRss(source.url);
-      let count = 0;
+      const { items } = await parseRss(source.url)
+
+      let count = 0
+
       for (const rss of items) {
         const post = await prisma.post.findFirst({
           where: {
@@ -39,18 +41,15 @@ export const importFeedJob = async () => {
             news_source_item_id: rss.guid,
             news_source_id: source.id,
           },
-        });
+        })
 
         if (!post) {
           await prisma.post.create({
             data: {
-              title: rss.title ?? "Daily news",
+              title: rss.title ?? 'Daily news',
               content: source?.content_included ? rss.content : null,
               creator: source?.content_included ? rss.creator : null,
-              pubDate:
-                source?.pubDate_included && rss.pubDate
-                  ? new Date(rss.pubDate)
-                  : null,
+              pubDate: source?.pubDate_included && rss.pubDate ? new Date(rss.pubDate) : null,
               is_active: true,
               link: source?.is_linkable ? rss.link : null,
               media: null,
@@ -60,8 +59,8 @@ export const importFeedJob = async () => {
                 connect: source.tags.map((tag) => ({ id: tag.id })),
               },
             },
-          });
-          count++;
+          })
+          count++
         }
       }
 
@@ -72,13 +71,13 @@ export const importFeedJob = async () => {
         data: {
           last_import_time: new Date(),
         },
-      });
-      console.log(count, "new posts created");
+      })
+      console.log(count, 'new posts created')
       console.log(
         `Feed import job completed ${new Date().getHours()}:${new Date().getMinutes()} for source ${source.name}`,
-      );
+      )
     }
   } catch (error) {
-    console.error("Feed import job failed", error);
+    console.error('Feed import job failed', error)
   }
-};
+}

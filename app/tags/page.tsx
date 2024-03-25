@@ -13,6 +13,7 @@ import React from 'react'
 import { Advertisement } from '@prisma/client'
 import { SingleAdvertisement } from '@/components/ads'
 import { PostWithTags } from 'utils/feed/types'
+import prisma from '@/lib/prisma'
 
 export default async function Tags({
   searchParams: { page, search },

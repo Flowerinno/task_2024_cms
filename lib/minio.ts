@@ -36,7 +36,7 @@ export class MinioController {
         (resolve, reject) => {
           let buffers: Buffer[] = [];
           minioClient.getObject(bucketName, objectName).then(async (stream) => {
-            stream.on("data", (chunk) => {
+            stream.on("data", (chunk: Buffer) => {
               buffers.push(chunk);
             });
 

@@ -1,3 +1,3 @@
-export const bufferToDataUrl = (buffer: Buffer, type: string) => {
-  return `data:${type};base64,${buffer.toString("base64")}`;
+export const bufferToDataUrl = (buffer: Buffer[], type: string) => {
+  return `data:${type};base64,${buffer.join(",").toString()}`;
 };

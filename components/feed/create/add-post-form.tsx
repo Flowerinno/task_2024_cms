@@ -111,13 +111,7 @@ export const AddPostForm = () => {
     form.setValue("is_active", draft?.is_active);
     form.setValue("pubDate_included", draft?.pubDate_included);
     if (draft?.media) {
-      if (draft.media.startsWith("http")) {
-        presignedToDataUrl(draft.media).then((file) => {
-          form.setValue("media", file as string);
-        });
-      } else {
-        form.setValue("media", draft?.media);
-      }
+      form.setValue("media", draft?.media);
     }
   }, [draft?.title, draft?.media]);
 

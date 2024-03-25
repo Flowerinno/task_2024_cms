@@ -1,7 +1,8 @@
 "use client";
-
+import React from "react";
 import { FeedPostSkeleton } from "@/components/feed";
 import { usePathname } from "next/navigation";
+
 export default function Loading() {
   const path = usePathname();
 

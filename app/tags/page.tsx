@@ -28,7 +28,7 @@ export default async function Tags({
   const session = await getServerSession(authOptions);
   const isAdmin = session?.user?.role === "ADMIN";
 
-  const { maxPage, feed, ads, adsPerPage } = await searchByTags({
+  const { maxPage, feed, ads } = await searchByTags({
     page: page_q,
     search: search_q,
   });

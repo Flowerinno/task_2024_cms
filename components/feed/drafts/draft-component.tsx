@@ -48,7 +48,6 @@ export const DraftComponent = ({ draft }: { draft: DraftResponse }) => {
         <Label className="cursor-pointer">
           {formatTimestamp(draft.created_at)}
         </Label>
-        <Label className="cursor-pointer">Author: {draft.User.email}</Label>
       </div>
       <Delete
         color="red"

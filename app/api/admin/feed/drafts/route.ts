@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "utils/auth";
 import { minio } from "@/lib/minio";
+import { bufferToDataUrl } from "utils/files";
 
 export async function GET() {
   try {
@@ -19,19 +20,10 @@ export async function GET() {
     }
 
     const drafts = await prisma.draft.findMany({
-      where: {
-        user_id: session.user.id,
-      },
       orderBy: {
         created_at: "desc",
       },
       include: {
-        User: {
-          select: {
-            email: true,
-            id: true,
-          },
-        },
         tags: {
           select: {
             label: true,
@@ -43,15 +35,14 @@ export async function GET() {
     const draftsWithSignedUrl = await Promise.all(
       drafts.map(async (draft) => {
         if (draft.media) {
-          const signedUrl = await minio.client.presignedGetObject(
+          const dataURL = await minio.getObject(
             "default",
             `draft_${draft.id}.png`,
-            60 * 60, // 1 hour expiry in seconds
           );
 
           return {
             ...draft,
-            media: signedUrl,
+            media: dataURL ?? null,
           };
         }
         return draft;
@@ -62,6 +53,7 @@ export async function GET() {
       status: 200,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       {
         message: "Failed to fetch drafts",

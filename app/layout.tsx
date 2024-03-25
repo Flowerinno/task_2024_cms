@@ -24,10 +24,6 @@ export const metadata: Metadata = {
     description,
   },
   creator: "Aleksandr Kononov",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
 };
 
 export default async function RootLayout({

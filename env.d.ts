@@ -8,7 +8,7 @@ namespace NodeJS {
     MINIO_ROOT_PASSWORD: string;
     MINIO_ENDPOINT: string;
     MINIO_PORT: number;
-    MINIO_ACCESS_KEY: string;
+    MINIO_KEY: string;
     MINIO_SECRET_KEY: string;
     DATABASE_URL: string;
   }

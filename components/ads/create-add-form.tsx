@@ -16,7 +16,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { fileToDataUrl, presignedToDataUrl } from "utils/files";
+import { fileToDataUrl } from "utils/files";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useAdStore } from "store/ads/useAdStore";
 import { createAdSchema } from "utils/validation/ads.schema";
@@ -95,13 +95,7 @@ export const CreateAdForm = () => {
       draft?.ad_priority ? draft.ad_priority.toString() : "0",
     );
     if (draft?.media) {
-      if (draft.media.startsWith("http")) {
-        presignedToDataUrl(draft.media).then((file) => {
-          form.setValue("media", file as string);
-        });
-      } else {
-        form.setValue("media", draft?.media);
-      }
+      form.setValue("media", draft?.media);
     }
   }, [draft?.title, draft?.media]);
 

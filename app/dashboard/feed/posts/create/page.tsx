@@ -17,6 +17,7 @@ export default function CreatePost() {
   useEffect(() => {
     getDrafts()
       .then((res) => {
+        console.log(res);
         setDrafts(res);
         setIsLoading(false);
       })

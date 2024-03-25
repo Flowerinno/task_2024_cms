@@ -12,15 +12,14 @@ export default async function CreateAdd() {
     drafts &&
       drafts.map(async (draft) => {
         if (draft.media) {
-          const signedUrl = await minio.client.presignedGetObject(
+          const dataURL = await minio.getObject(
             "default",
             `ads_draft_${draft.id}.png`,
-            60 * 60, // 1 hour expiry in seconds
           );
 
           return {
             ...draft,
-            media: signedUrl,
+            media: dataURL ?? null,
           };
         }
         return draft;

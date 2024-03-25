@@ -70,22 +70,11 @@ export async function POST(req: NextRequest) {
         tags: {
           connect: tags.map((tag: string) => ({ label: tag })),
         },
-        User: {
-          connect: {
-            id: session.user.id,
-          },
-        },
       },
       include: {
         tags: {
           select: {
             label: true,
-          },
-        },
-        User: {
-          select: {
-            email: true,
-            id: true,
           },
         },
       },
@@ -122,6 +111,7 @@ export async function POST(req: NextRequest) {
       },
     );
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       {
         message: "Failed to create draft",

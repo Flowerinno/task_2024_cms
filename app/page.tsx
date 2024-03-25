@@ -29,7 +29,7 @@ export default async function Home({
 
   const isAdmin = session?.user?.role === "ADMIN";
 
-  const { feed, maxPage, ads, adsPerPage } = await getHomeFeed({
+  const { feed, maxPage, ads } = await getHomeFeed({
     page: page_q,
     search: search_q,
   });
@@ -67,45 +67,53 @@ export default async function Home({
       </form>
       <br />
       <Suspense fallback={<Loading />}>
-        {feed?.length > 0 ? feed.map((item: PostWithTags, i) => {
-          if (item.advertisement?.id) {
-            return (
-              <React.Fragment key={item.id}>
-                <FeedPost
-                  key={i}
-                  post={item as PostWithTags}
-                  isAdmin={isAdmin}
-                />
-                <SingleAdvertisement
-                  key={i}
-                  ad={item.advertisement as Advertisement}
-                  session={session}
-                />
-              </React.Fragment>
-            );
-          }
-
-          for (const [key, value] of Object.entries(randomAdsIndexes)) {
-            if (i === value) {
-              const ad = ads[Number(key)];
-
+        {feed?.length > 0 ? (
+          feed.map((item: PostWithTags, i) => {
+            if (item?.advertisement?.id) {
               return (
                 <React.Fragment key={item.id}>
-                  <FeedPost post={item as PostWithTags} isAdmin={isAdmin} />
-                  <SingleAdvertisement key={ad?.id} ad={ad} session={session} />
+                  <FeedPost
+                    key={i}
+                    post={item as PostWithTags}
+                    isAdmin={isAdmin}
+                  />
+                  <SingleAdvertisement
+                    key={i}
+                    ad={item.advertisement as Advertisement}
+                    session={session}
+                  />
                 </React.Fragment>
               );
             }
-          }
 
-          return (
-            <FeedPost
-              key={item.id}
-              post={item as PostWithTags}
-              isAdmin={isAdmin}
-            />
-          );
-        }) : <Label>No posts found.</Label>}
+            for (const [key, value] of Object.entries(randomAdsIndexes)) {
+              if (i === value) {
+                const ad = ads[Number(key)];
+
+                return (
+                  <React.Fragment key={item.id}>
+                    <FeedPost post={item as PostWithTags} isAdmin={isAdmin} />
+                    <SingleAdvertisement
+                      key={ad?.id}
+                      ad={ad}
+                      session={session}
+                    />
+                  </React.Fragment>
+                );
+              }
+            }
+
+            return (
+              <FeedPost
+                key={item.id}
+                post={item as PostWithTags}
+                isAdmin={isAdmin}
+              />
+            );
+          })
+        ) : (
+          <Label>No posts found.</Label>
+        )}
       </Suspense>
       <FeedPagination page={page_q} maxPage={maxPage} />
     </div>

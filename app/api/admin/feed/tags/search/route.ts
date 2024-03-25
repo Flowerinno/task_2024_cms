@@ -62,11 +62,7 @@ export async function GET(req: NextRequest) {
       feed.map(async (post) => {
         let postMedia, adMedia;
         if (post.media) {
-          postMedia = await minio.client.presignedGetObject(
-            "default",
-            `post_${post.id}.png`,
-            60, // 1 minute expiry in seconds
-          );
+          postMedia = await minio.getObject("default", `post_${post.id}.png`);
         }
 
         let ad = post?.advertisement;
@@ -74,11 +70,7 @@ export async function GET(req: NextRequest) {
           adsPerPage -= 1; // decrease adpsPerPage by 1 when inserting an ad
 
           if (ad?.media) {
-            adMedia = await minio.client.presignedGetObject(
-              "default",
-              `ads_${ad.id}.png`,
-              60,
-            );
+            adMedia = await minio.getObject("default", `ads_${ad.id}.png`);
           }
         } else if (ad) {
           ad = null;
@@ -122,15 +114,11 @@ export async function GET(req: NextRequest) {
     const adsWithMedia = await Promise.all(
       ads.map(async (ad) => {
         if (ad.media) {
-          const signedUrl = await minio.client.presignedGetObject(
-            "default",
-            `ads_${ad.id}.png`,
-            60, // 1 minute expiry in seconds
-          );
+          const adsMedia = await minio.getObject("default", `ads_${ad.id}.png`);
 
           return {
             ...ad,
-            media: signedUrl,
+            media: adsMedia,
           };
         }
         return ad;

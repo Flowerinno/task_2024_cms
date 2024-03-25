@@ -62,7 +62,7 @@ model Draft {
   pubDate_included Boolean  @default(false)
   tags             Tag[]
   User             User?    @relation(fields: [user_id], references: [id])
-  user_id          String
+  user_id          String?
 }
 
 model AdvertisementDraft {

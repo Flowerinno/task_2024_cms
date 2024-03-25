@@ -5,6 +5,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prettier:fix": "npx prettier app --write",
     "compose-dev": "docker-compose -f docker-compose.dev.yml up",
     "stop": "docker-compose -f docker-compose.dev.yml down",
     "cron": "tsx cron-job.ts && node cron-job.js"

@@ -1,73 +1,73 @@
-import { NextResponse, NextRequest } from "next/server";
-import prisma from "@/lib/prisma";
-import { auth } from "utils/auth";
+import { NextResponse, NextRequest } from 'next/server'
+import prisma from '@/lib/prisma'
+import { auth } from 'utils/auth'
 
-import { minio } from "@/lib/minio";
+import { minio } from '@/lib/minio'
 
 export async function DELETE(req: NextRequest) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session) {
       return NextResponse.json(
         {
-          message: "Unauthorized",
+          message: 'Unauthorized',
         },
         {
           status: 401,
         },
-      );
+      )
     }
 
-    const { id } = await req.json();
+    const { id } = await req.json()
 
     if (!id || isNaN(id)) {
       return NextResponse.json(
         {
-          message: "Post id is required",
+          message: 'Post id is required',
         },
         {
           status: 400,
         },
-      );
+      )
     }
 
     const deletedPost = await prisma.post.delete({
       where: {
         id,
       },
-    });
+    })
 
     if (deletedPost) {
       if (deletedPost.media) {
-        await minio.client.removeObject("default", `post_${id}.png`);
+        await minio.client.removeObject('default', `post_${id}.png`)
       }
       return NextResponse.json(
         {
-          message: "Draft deleted successfully",
+          message: 'Draft deleted successfully',
         },
         {
           status: 200,
         },
-      );
+      )
     }
 
     return NextResponse.json(
       {
-        message: "Failed to delete post",
+        message: 'Failed to delete post',
       },
       {
         status: 500,
       },
-    );
+    )
   } catch (error) {
     return NextResponse.json(
       {
-        message: "Failed to delete post",
+        message: 'Failed to delete post',
       },
       {
         status: 500,
       },
-    );
+    )
   }
 }

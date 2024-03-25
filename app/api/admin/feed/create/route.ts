@@ -1,67 +1,60 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "utils/auth";
-import prisma from "@/lib/prisma";
-import { addFeedSchema } from "utils/validation/feed.schema";
-import { CreateRssRequestInput } from "@/lib/helpers/types";
+import { NextRequest, NextResponse } from 'next/server'
+import { auth } from 'utils/auth'
+import prisma from '@/lib/prisma'
+import { addFeedSchema } from 'utils/validation/feed.schema'
+import { CreateRssRequestInput } from '@/lib/helpers/types'
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session) {
       return NextResponse.json(
         {
-          message: "Unauthorized",
+          message: 'Unauthorized',
         },
         {
           status: 401,
         },
-      );
+      )
     }
 
-    const {
-      is_active,
-      name,
-      tags,
-      import_interval,
-      include_links,
-      included_fields,
-      url,
-    } = (await req.json()) as CreateRssRequestInput;
+    const { is_active, name, tags, import_interval, include_links, included_fields, url } =
+      (await req.json()) as CreateRssRequestInput
 
     const validate = addFeedSchema.safeParse({
       name,
       tags,
       import_interval,
       include_links,
-    });
+    })
 
     if (!validate.success || !url) {
       return NextResponse.json(
         {
-          message: "Invalid data",
+          message: 'Invalid data',
         },
         {
           status: 400,
         },
-      );
+      )
     }
 
     const isExists = await prisma.news_source.findUnique({
       where: {
         name,
       },
-    });
+    })
 
     if (isExists) {
       return NextResponse.json(
         {
-          message: "Feed with such name already exists",
+          message: 'Feed with such name already exists',
         },
         {
           status: 400,
         },
-      );
+      )
     }
 
     for await (const tag of tags) {
@@ -69,17 +62,17 @@ export async function POST(req: NextRequest) {
         where: {
           label: tag,
         },
-      });
+      })
 
       if (!isTagExists) {
         return NextResponse.json(
           {
-            message: "Tag with such id does not exist",
+            message: 'Tag with such id does not exist',
           },
           {
             status: 400,
           },
-        );
+        )
       }
     }
 
@@ -100,36 +93,36 @@ export async function POST(req: NextRequest) {
           })),
         },
       },
-    });
+    })
 
     if (!newSource) {
       return NextResponse.json(
         {
-          message: "Failed to create RSS source",
+          message: 'Failed to create RSS source',
         },
         {
           status: 500,
         },
-      );
+      )
     }
 
     return NextResponse.json(
       {
         id: newSource.id,
-        message: "RSS source created successfully",
+        message: 'RSS source created successfully',
       },
       {
         status: 201,
       },
-    );
+    )
   } catch (error) {
     return NextResponse.json(
       {
-        message: "An error occurred while RSS source",
+        message: 'An error occurred while RSS source',
       },
       {
         status: 500,
       },
-    );
+    )
   }
 }

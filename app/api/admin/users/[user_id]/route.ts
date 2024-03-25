@@ -1,15 +1,13 @@
-import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import prisma from '@/lib/prisma'
+import { NextResponse } from 'next/server'
 
-export async function GET(
-  req: Request,
-  { params }: { params: { user_id: string } },
-) {
-  const { user_id } = params;
+export async function GET(req: Request, { params }: { params: { user_id: string } }) {
+  const { user_id } = params
 
   if (!user_id) {
-    return NextResponse.json({ message: "No/Wrong slug..." }, { status: 404 });
+    return NextResponse.json({ message: 'No/Wrong slug...' }, { status: 404 })
   }
+
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -23,16 +21,16 @@ export async function GET(
         is_blocked: true,
         is_deleted: true,
       },
-    });
+    })
 
     if (!user) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+      return NextResponse.json({ message: 'User not found' }, { status: 404 })
     }
 
-    return NextResponse.json(user);
+    return NextResponse.json(user)
   } catch (error) {
     return NextResponse.json({
-      message: "An error occurred while fetching user",
-    });
+      message: 'An error occurred while fetching user',
+    })
   }
 }

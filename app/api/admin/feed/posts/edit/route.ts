@@ -1,31 +1,31 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "utils/auth";
-import prisma from "@/lib/prisma";
-import { updatePostSchema } from "utils/validation/feed.schema";
+import { NextRequest, NextResponse } from 'next/server'
+import { auth } from 'utils/auth'
+import prisma from '@/lib/prisma'
+import { updatePostSchema } from 'utils/validation/feed.schema'
 
 export async function POST(req: NextRequest) {
-  const formData = await req.formData();
+  const formData = await req.formData()
 
-  const id = formData.get("id");
-  const is_active = formData.get("is_active") === "on" ? true : false;
-  const is_deleted = formData.get("is_deleted") === "on" ? true : false;
-  const title = formData.get("title");
-  const content = formData.get("content");
-  const link = formData.get("link");
-  const creator = formData.get("creator");
+  const id = formData.get('id')
+  const is_active = formData.get('is_active') === 'on' ? true : false
+  const is_deleted = formData.get('is_deleted') === 'on' ? true : false
+  const title = formData.get('title')
+  const content = formData.get('content')
+  const link = formData.get('link')
+  const creator = formData.get('creator')
 
   try {
-    const session = await auth();
+    const session = await auth()
 
     if (!session) {
       return NextResponse.json(
         {
-          message: "Unauthorized",
+          message: 'Unauthorized',
         },
         {
           status: 401,
         },
-      );
+      )
     }
 
     const validate = updatePostSchema.safeParse({
@@ -36,13 +36,13 @@ export async function POST(req: NextRequest) {
       content,
       link,
       creator,
-    });
+    })
 
     if (!validate.success) {
-      throw new Error("Invalid input");
+      throw new Error('Invalid input')
     }
 
-    const { data } = validate;
+    const { data } = validate
 
     await prisma.post.update({
       where: {
@@ -56,12 +56,9 @@ export async function POST(req: NextRequest) {
         link: data.link,
         creator: data.creator,
       },
-    });
+    })
   } catch (_) {
   } finally {
-    return NextResponse.redirect(
-      new URL(req.url).origin + `/dashboard/feed/posts/edit/${id}`,
-      302,
-    );
+    return NextResponse.redirect(new URL(req.url).origin + `/dashboard/feed/posts/edit/${id}`, 302)
   }
 }

@@ -8,6 +8,7 @@
     "lint": "next lint",
     "prettier:fix": "npx prettier app --write",
     "compose-dev": "docker-compose -f docker-compose.dev.yml up",
+    "compose-prod": "docker-compose -f docker-compose.prod.yml up",
     "stop": "docker-compose -f docker-compose.dev.yml down",
     "cron": "tsx cron-job.ts && node cron-job.js",
     "cypress:open": "cypress open"

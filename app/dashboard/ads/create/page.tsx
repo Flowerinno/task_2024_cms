@@ -1,4 +1,3 @@
-import React from 'react'
 import { CreateAdForm } from '@/components/ads/create-add-form'
 import { Separator } from '@/components/ui/separator'
 import { Label } from '@/components/ui/label'

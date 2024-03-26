@@ -55,7 +55,7 @@ export default function Tags() {
         ) : isLoading ? (
           <LoadingDots />
         ) : (
-          <NoData title='No tags found' />
+          <NoData title='No tags found' href='/dashboard/feed/tags' />
         )}
       </div>
       <Separator orientation='vertical' />

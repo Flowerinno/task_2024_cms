@@ -1,3 +1,4 @@
+import React from 'react'
 import { Suspense } from 'react'
 import { getHomeFeed } from 'utils'
 import { FeedPagination } from '@/components/feed/posts/feed-pagination'
@@ -11,7 +12,6 @@ import { authOptions } from './api/auth/[...nextauth]/route'
 import { SingleAdvertisement } from '@/components/ads'
 import { PostWithTags } from 'utils/feed/types'
 import { Advertisement } from '@prisma/client'
-import React from 'react'
 import { Label } from '@/components/ui/label'
 
 export default async function Home({

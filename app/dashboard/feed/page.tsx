@@ -28,7 +28,7 @@ export default function Feed() {
   }
 
   if (!sources || sources.length === 0) {
-    return <NoData title='Add new RSS source.' />
+    return <NoData title='Add new RSS source.' href='/dashboard/feed/add' />
   }
 
   return (

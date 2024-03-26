@@ -1,117 +1,109 @@
-import { User } from "@prisma/client";
-import toast from "react-hot-toast";
-import { EditUserSchema } from "utils/validation/user.schema";
+import { User } from '@prisma/client'
+import toast from 'react-hot-toast'
+import { EditUserSchema } from 'utils/validation/user.schema'
 
-const base = process.env.NEXT_PUBLIC_API_URL;
+const base = process.env.NEXT_PUBLIC_API_URL
 
 export async function getUsers({
   page = 1,
-  email = "",
+  email = '',
 }: {
-  page?: number;
-  email: string;
+  page?: number
+  email: string
 }): Promise<{ users: User[] | []; maxPage: number }> {
   try {
-    const url = base + `/admin/users?page=${page}&email=${email}`;
+    const url = base + `/admin/users?page=${page}&email=${email}`
     const res = await fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      cache: "no-store",
-    });
+      cache: 'no-store',
+    })
 
-    const data = await res.json();
+    const data = await res.json()
 
-    return data;
+    return data
   } catch (error: { message: string } | any) {
-    toast.error(error?.message);
-    return { users: [], maxPage: 0 };
+    toast.error(error?.message)
+    return { users: [], maxPage: 0 }
   }
 }
 
-export async function findUserById({
-  id,
-}: {
-  id?: string;
-}): Promise<User | null> {
+export async function findUserById({ id }: { id?: string }): Promise<User | null> {
   try {
     const res = await fetch(base + `/admin/users/${id}`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-    });
-    return await res.json();
+    })
+    return await res.json()
   } catch (error) {
-    toast.error("An error occurred while fetching user");
-    return null;
+    toast.error('An error occurred while fetching user')
+    return null
   }
 }
 
-export async function registerUser(
-  email: string,
-  password: string,
-  is_admin: boolean,
-) {
+export async function registerUser(email: string, password: string, is_admin: boolean) {
   try {
-    const res = await fetch(base + "/admin/users/create", {
-      method: "POST",
+    const res = await fetch(base + '/admin/users/create', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email, password, is_admin }),
-    });
+    })
 
-    const data = await res.json();
+    const data = await res.json()
 
     if (res.status === 200) {
-      toast.success("User registered successfully");
-      return true;
+      toast.success('User registered successfully')
+      return true
     }
 
-    toast.error(data?.message);
+    toast.error(data?.message)
   } catch (error: { message: string } | any) {
-    toast.error("Failed to create new user");
-    return false;
+    toast.error('Failed to create new user')
+    return false
   }
 }
 
 export async function removeUser(id: string) {
   try {
-    const url = base + `/admin/users/delete`;
+    const url = base + `/admin/users/delete`
     const res = await fetch(url, {
-      method: "DELETE",
+      method: 'DELETE',
       body: JSON.stringify({
         id,
       }),
-    });
+    })
 
     if (res.status === 200) {
-      toast.success("User removed successfully");
+      toast.success('User removed successfully')
     }
   } catch (error) {
-    toast.error("An error occurred while removing user");
-    return null;
+    toast.error('An error occurred while removing user')
+    return null
   }
 }
 
 export async function undoDeletion(id: string) {
   try {
-    const url = base + `/admin/users/delete/undo`;
+    const url = base + `/admin/users/delete/undo`
     const res = await fetch(url, {
-      method: "DELETE",
+      method: 'DELETE',
       body: JSON.stringify({
         id,
       }),
-    });
+    })
 
     if (res.status === 200) {
-      toast.success("Removed user from deleted");
+      toast.success('Removed user from deleted')
     }
   } catch (error) {
-    toast.error("An error occurred while removing user from deleted");
-    return null;
+    toast.error('An error occurred while removing user from deleted')
+    return null
   }
 }
 
@@ -123,23 +115,23 @@ export async function updateUser({
   is_deleted,
 }: EditUserSchema): Promise<EditUserSchema | undefined> {
   try {
-    const res = await fetch(base + "/admin/users/edit", {
-      method: "PUT",
+    const res = await fetch(base + '/admin/users/edit', {
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ id, email, role, is_blocked, is_deleted }),
-    });
+    })
 
-    const data = await res.json();
+    const data = await res.json()
 
     if (res.status === 200) {
-      toast.success(data?.message);
-      return data?.user;
+      toast.success(data?.message)
+      return data?.user
     }
 
-    toast.error(data?.message);
+    toast.error(data?.message)
   } catch (error: { message: string } | any) {
-    toast.error("Failed to update user");
+    toast.error('Failed to update user')
   }
 }

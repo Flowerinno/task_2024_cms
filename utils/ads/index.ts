@@ -3,8 +3,6 @@ import toast from 'react-hot-toast'
 
 const base = process.env.NEXT_PUBLIC_API_URL
 
-export const getAds = async () => {}
-
 export const createAd = async (
   payload: Partial<AdvertisementDraft>,
 ): Promise<Advertisement | undefined> => {

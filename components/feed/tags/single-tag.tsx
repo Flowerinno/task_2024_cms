@@ -40,7 +40,7 @@ export const SingleTag = ({ tag, isSearching = false }: SingleTagProps) => {
             name='is_active'
             type='submit'
             checked={tag.is_active}
-            data-test-id={tag.label}
+            data-test-id={`switch-${tag.label}`}
           />
           <span>on</span>
         </div>

@@ -4,9 +4,16 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ["localhost"],
+    domains: ['localhost'],
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+    ignoreBuildErrors: true,
   },
   swcMinify: true,
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

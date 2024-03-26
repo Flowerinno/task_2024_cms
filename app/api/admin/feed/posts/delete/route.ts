@@ -39,6 +39,22 @@ export async function DELETE(req: NextRequest) {
     })
 
     if (deletedPost) {
+      if (deletedPost.advertisement_id) {
+        await prisma.advertisement.update({
+          where: {
+            id: deletedPost.advertisement_id,
+          },
+          data: {
+            post_id: null,
+            Post: {
+              disconnect: {
+                id: deletedPost.id,
+              },
+            },
+          },
+        })
+      }
+
       if (deletedPost.media) {
         await minio.client.removeObject('default', `post_${id}.png`)
       }

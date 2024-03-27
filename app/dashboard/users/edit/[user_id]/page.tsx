@@ -19,8 +19,8 @@ import { updateUser } from 'utils'
 import { useEffect, useState } from 'react'
 import LoadingDots from '@/components/loading-dots'
 import fetcher from '@/lib/fetcher'
-import { User } from '@prisma/client'
 import useSWR from 'swr'
+import { GetUserResponse } from 'utils/users/types'
 
 export default function EditUsers({ params }: { params: { user_id: string } }) {
   const [user, setUser] = useState<EditUserSchema | null>(null)
@@ -46,7 +46,7 @@ export default function EditUsers({ params }: { params: { user_id: string } }) {
     }
   }
 
-  const { data, isLoading } = useSWR<User>(`/api/admin/users/${params.user_id}`, fetcher, {
+  const { data, isLoading } = useSWR<GetUserResponse>(`/api/admin/users/${params.user_id}`, fetcher, {
     refreshInterval: 50,
     revalidateOnFocus: false,
     revalidateIfStale: false,

@@ -1,10 +1,10 @@
 'use client'
 
+import useSWR from 'swr'
+import fetcher from '@/lib/fetcher'
 import LoadingDots from '@/components/loading-dots'
 import { Label } from '@/components/ui/label'
 import { User } from '@prisma/client'
-import { useEffect, useState } from 'react'
-import { findUserById } from 'utils'
 
 export default function Settings({
   params,
@@ -13,23 +13,24 @@ export default function Settings({
     user_id: string
   }
 }) {
-  const [user, setUser] = useState<Partial<User> | null>(null)
+  const { data, isLoading } = useSWR<User>(`/api/admin/users/${params.user_id}`, fetcher, {
+    refreshInterval: 50,
+    revalidateOnFocus: false,
+    revalidateIfStale: false,
+    shouldRetryOnError: false,
+  })
 
-  useEffect(() => {
-    findUserById({ id: params.user_id }).then((res) => {
-      if (res) {
-        setUser(res)
-      }
-    })
-  }, [])
-
-  if (!user) {
+  if (isLoading) {
     return <LoadingDots />
+  }
+
+  if (!data) {
+    return <Label>No user found</Label>
   }
 
   return (
     <div className='w-full p-3 text-center'>
-      <Label>Email: {user.email}</Label>
+      <Label>Email: {data.email}</Label>
     </div>
   )
 }

@@ -1,9 +1,9 @@
-import { SingleTag } from '@/components/feed'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import prisma from '@/lib/prisma'
 
 export default async function EditPost({ params }: { params: { post_id: string } }) {
   const post = await prisma?.post.findUnique({

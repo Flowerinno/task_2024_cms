@@ -39,7 +39,7 @@ export async function DELETE(req: NextRequest) {
 
     if (deletedAd) {
       if (deletedAd?.media) {
-        await minio.client.removeObject('default', `ads_${deletedAd.media}.png`)
+        await minio.client.removeObject('default', `ads_${deletedAd.id}.png`)
       }
       return NextResponse.json(
         {

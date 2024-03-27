@@ -29,17 +29,17 @@ services:
       - ~/minio/data:/data
     command: server /data --console-address ":9001"
 
-  # task_app:
-  #   depends_on:
-  #     - task_postgres
-  #   container_name: task_app
-  #   restart: always
-  #   command: sh -c "npx prisma migrate dev --name init && npx prisma db seed && npm i tsx -g && npx next build && npx next start -p 5173"
-  #   build:
-  #     context: .
-  #     dockerfile: dev.Dockerfile
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - 5173:5173
-  #     - 5555:5555
+  task_app:
+    depends_on:
+      - task_postgres
+    container_name: task_app
+    restart: always
+    command: sh -c "npx prisma migrate dev --name init && npx prisma db seed && npm i tsx -g && npx next build && npx next start -p 5173"
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 5173:5173
+      - 5555:5555

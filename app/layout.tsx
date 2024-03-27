@@ -33,8 +33,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Toaster />
         <Suspense fallback='Loading...'>
           <Header />
+          {children}
         </Suspense>
-        {children}
       </body>
     </html>
   )

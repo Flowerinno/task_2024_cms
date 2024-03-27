@@ -13,6 +13,7 @@
       "@/styles/*": ["styles/*"],
       "@theme/*": ["theme/*"]
     },
+    "noUnusedLocals": false,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,

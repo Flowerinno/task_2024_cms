@@ -8,7 +8,7 @@ import Loading from './loading'
 import Link from 'next/link'
 import { FeedPost } from '@/components/feed/posts'
 import { getServerSession } from 'next-auth'
-import { authOptions } from './api/auth/[...nextauth]/route'
+import { authOptions } from '@/lib/auth'
 import { SingleAdvertisement } from '@/components/ads'
 import { PostWithTags } from 'utils/feed/types'
 import { Advertisement } from '@prisma/client'
@@ -91,7 +91,6 @@ export default async function Home({
                 )
               }
             }
-
             return <FeedPost key={item.id} post={item as PostWithTags} isAdmin={isAdmin} />
           })
         ) : (

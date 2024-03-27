@@ -1,5 +1,7 @@
 'use client'
 
+import useSWR from 'swr'
+import fetcher from '@/lib/fetcher'
 import { CreateTagsForm, SingleTag } from '@/components/feed'
 import LoadingDots from '@/components/loading-dots'
 import { NoData } from '@/components/no-data'
@@ -8,26 +10,20 @@ import { Separator } from '@/components/ui/separator'
 import { Label } from '@radix-ui/react-label'
 import { useEffect, useState } from 'react'
 import { useTags } from 'store'
-import { getTags } from 'utils'
+import { Tag } from '@prisma/client'
 
 export default function Tags() {
-  const [isLoading, setIsLoading] = useState(true)
   const [isInactiveShown, setIsInactiveShown] = useState(1)
   const setTags = useTags((state) => state.setTags)
   const tags = useTags((state) => state.tags)
 
+  const { data, isLoading } = useSWR<Tag[]>('/api/admin/feed/tags', fetcher)
+
   useEffect(() => {
-    getTags()
-      .then((tags) => {
-        if (tags) {
-          setTags(tags)
-          setIsLoading(false)
-        }
-      })
-      .catch(() => {
-        setIsLoading(false)
-      })
-  }, [])
+    if (data) {
+      setTags(data)
+    }
+  }, [data])
 
   return (
     <div className='w-full h-screen flex flex-row gap-2  md:gap-10'>

@@ -1,7 +1,9 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
+import useSWR from 'swr'
 import { useNews, useTags } from 'store'
+import fetcher from '@/lib/fetcher'
 import { Button } from '@/components/ui/button'
 import {
   FormControl,
@@ -14,14 +16,13 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Tag } from '@prisma/client'
 import { Controller, useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { createDraft, createPost, getTags } from 'utils'
+import { createDraft, createPost } from 'utils'
 import { CreatePostSchema, createPostSchema } from 'utils/validation/feed.schema'
 import { SingleTag } from '../tags'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Image from 'next/image'
-import { fileToDataUrl, presignedToDataUrl } from 'utils/files'
+import { fileToDataUrl } from 'utils/files'
 import { Cross2Icon } from '@radix-ui/react-icons'
 
 export const AddPostForm = () => {
@@ -32,18 +33,13 @@ export const AddPostForm = () => {
   const [isSearching, setIsSearching] = useState(false)
   const [search, setSearch] = useState<Tag[] | []>([])
 
+  const { data } = useSWR<Tag[]>('/api/admin/feed/tags', fetcher)
+
   useEffect(() => {
-    if (!tags.length) {
-      getTags()
-        .then((data) => {
-          const activeOnly = data.filter((tag) => tag.is_active)
-          setTags(activeOnly)
-        })
-        .catch(() => {
-          toast.error('Failed to fetch tags')
-        })
+    if (!tags.length && data) {
+      setTags(data)
     }
-  }, [])
+  }, [data])
 
   const form = useForm<CreatePostSchema>({
     resolver: zodResolver(createPostSchema),

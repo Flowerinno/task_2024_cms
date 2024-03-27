@@ -1,49 +1,7 @@
-import { User } from '@prisma/client'
 import toast from 'react-hot-toast'
 import { EditUserSchema } from 'utils/validation/user.schema'
 
 const base = process.env.NEXT_PUBLIC_API_URL
-
-export async function getUsers({
-  page = 1,
-  email = '',
-}: {
-  page?: number
-  email: string
-}): Promise<{ users: User[] | []; maxPage: number }> {
-  try {
-    const url = base + `/admin/users?page=${page}&email=${email}`
-    const res = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      cache: 'no-store',
-    })
-
-    const data = await res.json()
-
-    return data
-  } catch (error: { message: string } | any) {
-    toast.error(error?.message)
-    return { users: [], maxPage: 0 }
-  }
-}
-
-export async function findUserById({ id }: { id?: string }): Promise<User | null> {
-  try {
-    const res = await fetch(base + `/admin/users/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    return await res.json()
-  } catch (error) {
-    toast.error('An error occurred while fetching user')
-    return null
-  }
-}
 
 export async function registerUser(email: string, password: string, is_admin: boolean) {
   try {

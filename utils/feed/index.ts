@@ -1,56 +1,11 @@
 import { CreateRssRequestInput, FeedItem } from '@/lib/helpers/types'
 import { Advertisement, News_source, Tag } from '@prisma/client'
 import toast from 'react-hot-toast'
-import { DraftResponse, PostWithTags, Statistics } from './types'
+import { DraftResponse, PostWithTags } from './types'
 import { CreatePostSchema } from 'utils/validation/feed.schema'
 
 const base = process.env.NEXT_PUBLIC_API_URL
 
-export async function getStatistics(): Promise<Statistics | undefined> {
-  try {
-    const url = base + `/admin`
-    const res = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-store, max-age=0',
-      },
-      cache: 'no-store',
-    })
-
-    const data = await res.json()
-
-    if (res.status !== 200) {
-      toast.error(data?.message ?? '')
-      return
-    }
-    return data
-  } catch (error: { message: string } | any) {
-    return
-  }
-}
-
-export async function getRssList(): Promise<News_source[] | []> {
-  try {
-    const url = base + `/admin/feed`
-    const res = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-
-    const data = await res.json()
-
-    if (res.status !== 200) {
-      toast.error(data?.message ?? '')
-    }
-
-    return data ?? []
-  } catch (error: { message: string } | any) {
-    return []
-  }
-}
 
 export async function createRssSource(
   payload: CreateRssRequestInput,
@@ -166,30 +121,6 @@ export async function verifyRss(rss_url: string): Promise<FeedItem | undefined> 
   } catch (error: { message: string } | any) {}
 }
 
-export async function getTags(): Promise<Tag[] | []> {
-  try {
-    const url = base + `/admin/feed/tags`
-    const res = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-store, max-age=0',
-      },
-      cache: 'no-store',
-    })
-
-    const data = await res.json()
-
-    if (res.status !== 200) {
-      toast.error(data?.message ?? '')
-    }
-
-    return data ?? []
-  } catch (error: { message: string } | any) {
-    return []
-  }
-}
-
 export async function searchByTags({ page, search }: { page: number; search: string }): Promise<{
   feed: PostWithTags[] | []
   maxPage: number
@@ -282,28 +213,6 @@ export async function updateTagActivity({
     return data
   } catch (_) {
     toast.error('Failed to update tag')
-  }
-}
-
-export async function getDrafts(): Promise<DraftResponse[] | []> {
-  try {
-    const url = base + `/admin/feed/drafts`
-    const res = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-
-    const data = await res.json()
-
-    if (res.status !== 200) {
-      toast.error(data?.message ?? '')
-    }
-
-    return data ?? []
-  } catch (error: { message: string } | any) {
-    return []
   }
 }
 

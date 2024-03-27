@@ -2,9 +2,10 @@
 
 import LoadingDots from '@/components/loading-dots'
 import { UsersTable } from '@/components/users'
-import { useEffect } from 'react'
-import { useUserStore } from 'store'
-import { getUsers } from 'utils'
+import useSWR from 'swr'
+import fetcher from '@/lib/fetcher'
+import { NoData } from '@/components/no-data'
+import { GetUsersResponse } from 'utils/users/types'
 
 export default function Users({
   searchParams,
@@ -17,24 +18,22 @@ export default function Users({
   const page = searchParams?.page && Number(searchParams.page) > 0 ? Number(searchParams.page) : 1
   const email = searchParams?.email ?? ''
 
-  const { users, maxPage, setUsers, setMaxPage } = useUserStore((state) => state)
+  const { data, isLoading } = useSWR<GetUsersResponse>(
+    `/api/admin/users?page=${page}&emai=${email}`,
+    fetcher,
+  )
 
-  useEffect(() => {
-    getUsers({ page, email }).then((res) => {
-      if (res) {
-        setUsers(res?.users)
-        setMaxPage(res?.maxPage)
-      }
-    })
-  }, [page, email])
-
-  if (users?.length === 0 || !maxPage) {
+  if (isLoading) {
     return <LoadingDots />
+  }
+
+  if (!data) {
+    return <NoData title='No users' href='/dashboard/users/create' />
   }
 
   return (
     <div className='flex flex-col h-screen w-11/12'>
-      <UsersTable users={users} maxPage={maxPage} page={page} email={email} />
+      <UsersTable users={data?.users} maxPage={data?.maxPage} page={page} email={email} />
     </div>
   )
 }

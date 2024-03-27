@@ -1,23 +1,15 @@
 'use client'
+import useSWR from 'swr'
 import LoadingDots from '@/components/loading-dots'
-import { Label } from '@/components/ui/label'
+import fetcher from '@/lib/fetcher'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { getStatistics } from 'utils'
+import { Label } from '@/components/ui/label'
 import { Statistics } from 'utils/feed/types'
 
 export default function Dashboard() {
-  const [statistics, setStatistics] = useState<Statistics | null>(null)
+  const { data, isLoading } = useSWR<Statistics>('/api/admin', fetcher)
 
-  useEffect(() => {
-    getStatistics().then((data) => {
-      if (data) {
-        setStatistics(data)
-      }
-    })
-  }, [])
-
-  if (!statistics) {
+  if (!data || isLoading) {
     return <LoadingDots />
   }
 
@@ -26,31 +18,31 @@ export default function Dashboard() {
       id: 1,
       title: 'Users',
       href: '/dashboard/users',
-      count: statistics.users,
+      count: data.users,
     },
     {
       id: 2,
       title: 'Posts',
       href: '/',
-      count: statistics.posts,
+      count: data.posts,
     },
     {
       id: 3,
       title: 'Tags',
       href: '/dashboard/feed/tags',
-      count: statistics.tags,
+      count: data.tags,
     },
     {
       id: 4,
       title: 'News Sources',
       href: '/dashboard/feed',
-      count: statistics.news_sources,
+      count: data.news_sources,
     },
     {
       id: 5,
       title: 'Advertisement',
       href: '/dashboard/ads',
-      count: statistics.ads,
+      count: data.ads,
     },
   ]
 

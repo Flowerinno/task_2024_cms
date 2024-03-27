@@ -34,7 +34,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { removeUser, undoDeletion } from "utils";
 import Link from "next/link";
 
 type User = {

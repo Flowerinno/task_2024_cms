@@ -1,31 +1,26 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import useSWR from 'swr'
+import fetcher from '@/lib/fetcher'
 import { useNews } from 'store/feed'
 import { AddPostForm } from '@/components/feed/create'
 import LoadingDots from '@/components/loading-dots'
 import { Separator } from '@/components/ui/separator'
-import { getDrafts } from 'utils'
 import { DraftComponent } from '@/components/feed/drafts'
 import { Label } from '@/components/ui/label'
-import toast from 'react-hot-toast'
+import { DraftResponse } from 'utils/feed/types'
 
 export default function CreatePost() {
-  const [isLoading, setIsLoading] = useState(true)
   const { drafts, setDrafts } = useNews((state) => state)
 
+  const { data, isLoading } = useSWR<DraftResponse[]>('/api/admin/feed/drafts', fetcher)
+
   useEffect(() => {
-    getDrafts()
-      .then((res) => {
-        console.log(res)
-        setDrafts(res)
-        setIsLoading(false)
-      })
-      .catch((_) => {
-        toast.error('Failed to fetch drafts')
-        setIsLoading(false)
-      })
-  }, [])
+    if (data) {
+      setDrafts(data)
+    }
+  }, [data])
 
   useEffect(() => {}, [drafts?.length])
 

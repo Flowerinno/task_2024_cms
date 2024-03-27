@@ -1,45 +1,45 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
-import { Button } from "@/components/ui/button";
-import { removePost } from "utils";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { Pen, PenIcon } from "lucide-react";
+import { Button } from '@/components/ui/button'
+import { removePost, undoDeletion } from 'utils'
+import { Label } from '@/components/ui/label'
+import Link from 'next/link'
+import { PenIcon } from 'lucide-react'
 
 interface PostControlsProps {
-  post_id: number;
+  post_id: number
 }
 
 export const PostControls = ({ post_id }: PostControlsProps) => {
-  const [isDeleted, setIsDeleted] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false)
   const onClick = async () => {
-    const res = await removePost(post_id);
+    const res = await removePost(post_id)
 
     if (res) {
-      setIsDeleted(true);
+      setIsDeleted(true)
     }
-  };
+  }
 
   return (
     <>
       {isDeleted ? (
-        <Label className="font-bold text-red-500">DELETED</Label>
+        <Label className='font-bold text-red-500'>DELETED</Label>
       ) : (
         <Button
-          variant="destructive"
+          variant='destructive'
           onClick={onClick}
-            aria-label="Delete post"
-          className="text-[10px] p-1 h-fit"
-          size="sm"
+          aria-label='Delete post'
+          className='text-[10px] p-1 h-fit'
+          size='sm'
         >
           Delete
         </Button>
       )}
-      <Link title="Edit post" href={`/dashboard/feed/posts/edit/${post_id}`}>
+      <Link title='Edit post' href={`/dashboard/feed/posts/edit/${post_id}`}>
         <PenIcon size={20} />
       </Link>
     </>
-  );
-};
+  )
+}

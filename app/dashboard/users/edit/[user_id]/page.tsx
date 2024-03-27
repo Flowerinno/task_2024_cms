@@ -15,9 +15,12 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import { findUserById, updateUser } from 'utils'
+import { updateUser } from 'utils'
 import { useEffect, useState } from 'react'
 import LoadingDots from '@/components/loading-dots'
+import fetcher from '@/lib/fetcher'
+import { User } from '@prisma/client'
+import useSWR from 'swr'
 
 export default function EditUsers({ params }: { params: { user_id: string } }) {
   const [user, setUser] = useState<EditUserSchema | null>(null)
@@ -43,18 +46,23 @@ export default function EditUsers({ params }: { params: { user_id: string } }) {
     }
   }
 
-  useEffect(() => {
-    findUserById({ id: params.user_id }).then((res) => {
-      if (res) {
-        setUser(res)
-        Object.keys(res).forEach((key: any) => {
-          form.setValue(key, res[key as keyof EditUserSchema])
-        })
-      }
-    })
-  }, [form, params.user_id])
+  const { data, isLoading } = useSWR<User>(`/api/admin/users/${params.user_id}`, fetcher, {
+    refreshInterval: 50,
+    revalidateOnFocus: false,
+    revalidateIfStale: false,
+    shouldRetryOnError: false,
+  })
 
-  if (!user) {
+  useEffect(() => {
+    if (data) {
+      setUser(data)
+      Object.keys(data).forEach((key: any) => {
+        form.setValue(key, data[key as keyof EditUserSchema])
+      })
+    }
+  }, [data])
+
+  if (isLoading) {
     return <LoadingDots />
   }
 
@@ -97,7 +105,7 @@ export default function EditUsers({ params }: { params: { user_id: string } }) {
               </FormItem>
             )}
           />
-          <div className='flex flex-row gap-10'>
+          <div className='flex flex-col gap-5 md:flex-row md:gap-10'>
             <Controller
               control={form.control}
               name='is_blocked'

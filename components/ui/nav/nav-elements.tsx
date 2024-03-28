@@ -1,37 +1,38 @@
-import Link from "next/link";
-import { INavLink } from "../../interface/INavLink";
-import { Session } from "next-auth";
+import Link from 'next/link'
+import { INavLink } from '../../interface/INavLink'
+import { Session } from 'next-auth'
 
 export function NavElements({
   navigationLinks,
   session,
 }: {
-  navigationLinks: INavLink[];
-  session: Session | null;
+  navigationLinks: INavLink[]
+  session: Session | null
 }) {
   return (
-    <nav className="flex items-center space-x-4 lg:space-x-6">
+    <nav className='flex items-center space-x-4 lg:space-x-6'>
       {navigationLinks.map((link: INavLink) => {
-        if (link?.admin && session?.user.role !== "ADMIN") {
-          return null;
+        if (link?.admin && session?.user.role !== 'ADMIN') {
+          return null
         }
 
         if (link?.auth && !session) {
-          return null;
+          return null
         }
 
         return (
           <Link
             role='navigation'
             aria-label={`Go to ${link.key}`}
+            prefetch={true}
             key={link.key}
             href={`/${link.value}`}
-            className="text-sm font-medium transition-colors hover:text-primary"
+            className='text-sm font-medium transition-colors hover:text-primary'
           >
             {link.key}
           </Link>
-        );
+        )
       })}
     </nav>
-  );
+  )
 }

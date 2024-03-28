@@ -334,6 +334,7 @@ export async function getHomeFeed({
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Cache-Control': 'no-store, max-age=0',
       },
       cache: 'no-store',
     })

@@ -1,9 +1,14 @@
+import prisma from '@/lib/prisma'
 import { CreateAdForm } from '@/components/ads/create-add-form'
 import { Separator } from '@/components/ui/separator'
 import { Label } from '@/components/ui/label'
 import { AdDraft } from '@/components/ads'
 import { minio } from '@/lib/minio'
-import prisma from '@/lib/prisma'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Add new advertisement | News CMS',
+}
 
 export default async function CreateAdd() {
   const drafts = (await prisma?.advertisementDraft.findMany()) ?? []

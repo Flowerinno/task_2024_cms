@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Sign Up',
+  title: 'Sign Up | News CMS',
   description: 'Sign up for a News CMS account',
   twitter: {
     card: 'summary_large_image',

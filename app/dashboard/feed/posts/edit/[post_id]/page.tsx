@@ -1,9 +1,14 @@
+import prisma from '@/lib/prisma'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import prisma from '@/lib/prisma'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Edit post | News CMS',
+}
 
 export default async function EditPost({ params }: { params: { post_id: string } }) {
   const post = await prisma?.post.findUnique({

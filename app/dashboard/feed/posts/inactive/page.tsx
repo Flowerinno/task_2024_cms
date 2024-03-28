@@ -2,6 +2,12 @@ import prisma from '@/lib/prisma'
 import { FeedPost } from '@/components/feed/posts'
 import { Label } from '@/components/ui/label'
 import { PostWithTags } from 'utils/feed/types'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Active/Deleted posts | News CMS',
+  description: 'Manage active or deleted posts.',
+}
 
 export default async function InactivePosts() {
   const posts = await prisma.post.findMany({
@@ -25,7 +31,7 @@ export default async function InactivePosts() {
 
   if (!posts?.length) {
     return <Label>No inactive / deleted posts</Label>
-  } 
+  }
 
   return (
     <div className='flex flex-col w-full gap-3 items-center'>

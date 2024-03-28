@@ -8,6 +8,12 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import prisma from '@/lib/prisma'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Advertisement | News CMS',
+  description: 'List of current advertisements.',
+}
 
 export default async function Ads() {
   let ads = await prisma?.advertisement.findMany()
@@ -37,7 +43,11 @@ export default async function Ads() {
       <div className='text-center p-5'>
         <Label className='text-md'>
           No ads available.{' '}
-          <Link aria-label='Create an advertisement' className='text-blue-400' href='/dashboard/ads/create'>
+          <Link
+            aria-label='Create an advertisement'
+            className='text-blue-400'
+            href='/dashboard/ads/create'
+          >
             Create one.
           </Link>
         </Label>

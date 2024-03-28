@@ -11,7 +11,7 @@ const inter = Inter({
   subsets: ['latin'],
 })
 
-const title = 'News CMS'
+const title = 'Feed | News CMS'
 const description =
   'Get the latest news from around the world. News CMS is a news feed app that allows you to read the latest news from around the world.'
 

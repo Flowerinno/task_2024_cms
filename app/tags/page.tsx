@@ -17,7 +17,7 @@ import prisma from '@/lib/prisma'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Tags',
+  title: 'Tags | News CMS',
   description: 'Search by tags',
 }
 

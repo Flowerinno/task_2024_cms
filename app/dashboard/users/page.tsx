@@ -5,6 +5,12 @@ import { UsersTable } from '@/components/users'
 import useSWR from 'swr'
 import fetcher from '@/lib/fetcher'
 import { GetUsersResponse } from 'utils/users/types'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Users list | News CMS',
+  description: 'List of all News CMS users.',
+}
 
 export default function Users({
   searchParams,

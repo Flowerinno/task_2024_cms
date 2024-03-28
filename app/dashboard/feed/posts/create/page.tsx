@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import useSWR from 'swr'
 import fetcher from '@/lib/fetcher'
 import { useNews } from 'store/feed'
@@ -10,6 +10,12 @@ import { Separator } from '@/components/ui/separator'
 import { DraftComponent } from '@/components/feed/drafts'
 import { Label } from '@/components/ui/label'
 import { DraftResponse } from 'utils/feed/types'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Create a post | News CMS',
+  description: 'Create a new News CMS post.',
+}
 
 export default function CreatePost() {
   const { drafts, setDrafts } = useNews((state) => state)

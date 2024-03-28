@@ -15,6 +15,11 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { registerUser } from 'utils'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Create user | News CMS',
+}
 
 export default function CreateUser() {
   const form = useForm<RegisterSchema>({

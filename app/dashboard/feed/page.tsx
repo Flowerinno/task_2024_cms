@@ -9,6 +9,12 @@ import { NoData } from '@/components/no-data'
 import { Label } from '@/components/ui/label'
 import { News_source } from '@prisma/client'
 import { useRss } from 'store'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Sources | News CMS',
+  description: 'List of RSS sources.',
+}
 
 export default function Feed() {
   const { sources, setSources } = useRss((state) => state)

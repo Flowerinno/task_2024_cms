@@ -1,17 +1,10 @@
-'use client'
+import { Metadata } from 'next'
+import { AddFeed } from './AddFeed'
 
-import { AddFeedForm, VerifyRss } from '@/components/feed'
-import { useAddFeed } from 'store'
+export const metadata: Metadata = {
+  title: 'Add feed source | News CMS',
+}
 
-export default function AddFeed() {
-  const { step, setStep } = useAddFeed((state) => state)
-
-  switch (step) {
-    case 1:
-      return <VerifyRss setStep={setStep} />
-    case 2:
-      return <AddFeedForm setStep={setStep} />
-    default:
-      return <VerifyRss setStep={setStep} />
-  }
+export default async function Page() {
+  return <AddFeed />
 }

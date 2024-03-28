@@ -16,9 +16,11 @@ export const metadata: Metadata = {
 }
 
 export default async function Ads() {
-  let ads = await prisma?.advertisement.findMany()
-  let settings = await prisma?.settings.findFirst()
-  const session = await auth()
+  const adsPromise = prisma?.advertisement.findMany()
+  const settingsPromise = prisma?.settings.findFirst()
+  const sessionPromise = auth()
+
+  const [ads, settings, session] = await Promise.all([adsPromise, settingsPromise, sessionPromise])
 
   let adsWithMedia: Advertisement[] | [] = []
 

@@ -14,6 +14,9 @@ import { PostWithTags } from 'utils/feed/types'
 import { Advertisement } from '@prisma/client'
 import { Label } from '@/components/ui/label'
 
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+
 export default async function Home({
   searchParams: { page, search },
 }: {
@@ -41,8 +44,16 @@ export default async function Home({
   }
 
   return (
-    <div className='flex flex-col items-center justify-center gap-3 p-5 md:p-10 overflow-x-hidden relative' aria-description='News CMS default feed page' aria-current='page'>
-      <form role='searchbox' method='GET' className='w-full md:w-11/12 flex flex-col md:flex-row gap-2'>
+    <div
+      className='flex flex-col items-center justify-center gap-3 p-5 md:p-10 overflow-x-hidden relative'
+      aria-description='News CMS default feed page'
+      aria-current='page'
+    >
+      <form
+        role='searchbox'
+        method='GET'
+        className='w-full md:w-11/12 flex flex-col md:flex-row gap-2'
+      >
         <Input
           placeholder='Search... 🔎'
           aria-label='Search for news by title'
@@ -52,7 +63,11 @@ export default async function Home({
           className='flex-1'
         />
         <div className='flex-1 md:flex-[0.1] flex flex-row gap-2'>
-          <Button aria-label='Find match for search input' className='flex-1 md:flex-[0.2]' type='submit'>
+          <Button
+            aria-label='Find match for search input'
+            className='flex-1 md:flex-[0.2]'
+            type='submit'
+          >
             Search
           </Button>
           <Link

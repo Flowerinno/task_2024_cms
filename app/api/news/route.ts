@@ -3,6 +3,8 @@ import prisma from '@/lib/prisma'
 import { minio } from '@/lib/minio'
 import { rateLimit } from 'utils'
 
+export const revalidate = 10
+
 export async function GET(req: NextRequest) {
   const currHeaders = new Headers(req.headers)
   try {

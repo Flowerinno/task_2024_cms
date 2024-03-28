@@ -1,48 +1,67 @@
-'use client'
-import useSWR from 'swr'
-import LoadingDots from '@/components/loading-dots'
-import fetcher from '@/lib/fetcher'
+import prisma from '@/lib/prisma'
 import Link from 'next/link'
+import { Metadata } from 'next'
 import { Label } from '@/components/ui/label'
-import { Statistics } from 'utils/feed/types'
 
-export default function Dashboard() {
-  const { data, isLoading } = useSWR<Statistics>('/api/admin', fetcher)
+export const metadata: Metadata = {
+  title: 'Dashboard | News CMS',
+}
 
-  if (!data || isLoading) {
-    return <LoadingDots />
+type Fields = 'users' | 'posts' | 'tags' | 'news_sources'
+const fields = ['users', 'posts', 'tags', 'news_sources', 'ads']
+
+export default async function Page() {
+  const usersCount = prisma.user.count()
+  const postsCount = prisma.post.count()
+  const tagsCount = prisma.tag.count()
+  const newsSourceCount = prisma.news_source.count()
+  const ads = prisma.advertisement.count()
+
+  const promises = await Promise.all([usersCount, postsCount, tagsCount, newsSourceCount, ads])
+
+  const initial = {
+    users: 0,
+    posts: 0,
+    tags: 0,
+    news_sources: 0,
+    ads: 0,
   }
+
+  const data = fields.reduce((acc, field, index) => {
+    acc[field as Fields] = promises[index]
+    return acc
+  }, initial)
 
   const links = [
     {
       id: 1,
       title: 'Users',
       href: '/dashboard/users',
-      count: data.users,
+      count: data?.users ?? 0,
     },
     {
       id: 2,
       title: 'Posts',
       href: '/',
-      count: data.posts,
+      count: data?.posts ?? 0,
     },
     {
       id: 3,
       title: 'Tags',
       href: '/dashboard/feed/tags',
-      count: data.tags,
+      count: data?.tags ?? 0,
     },
     {
       id: 4,
       title: 'News Sources',
       href: '/dashboard/feed',
-      count: data.news_sources,
+      count: data?.news_sources ?? 0,
     },
     {
       id: 5,
       title: 'Advertisement',
       href: '/dashboard/ads',
-      count: data.ads,
+      count: data?.ads ?? 0,
     },
   ]
 
@@ -53,6 +72,7 @@ export default function Dashboard() {
         {links.map((link) => (
           <Link
             href={link.href}
+            prefetch={true}
             key={link.id}
             className='flex flex-col items-center justify-center w-48 h-48 text-black bg-gray-200 rounded-lg p-4 m-2 hover:border-black hover:border-[1px]'
           >

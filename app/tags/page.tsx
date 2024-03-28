@@ -1,4 +1,5 @@
 import React from 'react'
+import prisma from '@/lib/prisma'
 import { Suspense } from 'react'
 import { searchByTags } from 'utils'
 import { FeedPagination } from '@/components/feed/posts/feed-pagination'
@@ -13,13 +14,15 @@ import { Label } from '@/components/ui/label'
 import { Advertisement } from '@prisma/client'
 import { SingleAdvertisement } from '@/components/ads'
 import { PostWithTags } from 'utils/feed/types'
-import prisma from '@/lib/prisma'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Tags | News CMS',
   description: 'Search by tags',
 }
+
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
 
 export default async function Tags({
   searchParams: { page, search },

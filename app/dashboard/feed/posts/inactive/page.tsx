@@ -23,11 +23,9 @@ export default async function InactivePosts() {
     },
   })
 
-  console.log(posts)
-
   if (!posts?.length) {
-    return <Label>No incative/deleted posts</Label>
-  }
+    return <Label>No inactive / deleted posts</Label>
+  } 
 
   return (
     <div className='flex flex-col w-full gap-3 items-center'>

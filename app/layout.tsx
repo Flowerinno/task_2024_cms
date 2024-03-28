@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import { Suspense } from 'react'
 import Header from '@/components/header/header'
+import LoadingDots from '@/components/loading-dots'
 
 const inter = Inter({
   variable: '--font-inter',
@@ -30,7 +31,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang='en' suppressHydrationWarning>
       <body className={inter.variable}>
         <Toaster />
-        <Suspense fallback='Loading...'>
+        <Suspense fallback={<LoadingDots />}>
           <Header />
           {children}
         </Suspense>

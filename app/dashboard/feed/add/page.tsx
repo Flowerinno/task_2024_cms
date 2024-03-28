@@ -2,12 +2,6 @@
 
 import { AddFeedForm, VerifyRss } from '@/components/feed'
 import { useAddFeed } from 'store'
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Add source | News CMS',
-  description: 'Add new RSS source.',
-}
 
 export default function AddFeed() {
   const { step, setStep } = useAddFeed((state) => state)

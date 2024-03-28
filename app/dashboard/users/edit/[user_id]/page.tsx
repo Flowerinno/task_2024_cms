@@ -21,11 +21,6 @@ import LoadingDots from '@/components/loading-dots'
 import fetcher from '@/lib/fetcher'
 import useSWR from 'swr'
 import { GetUserResponse } from 'utils/users/types'
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Edit user | News CMS',
-}
 
 export default function EditUsers({ params }: { params: { user_id: string } }) {
   const [user, setUser] = useState<EditUserSchema | null>(null)
@@ -51,12 +46,16 @@ export default function EditUsers({ params }: { params: { user_id: string } }) {
     }
   }
 
-  const { data, isLoading } = useSWR<GetUserResponse>(`/api/admin/users/${params.user_id}`, fetcher, {
-    refreshInterval: 50,
-    revalidateOnFocus: false,
-    revalidateIfStale: false,
-    shouldRetryOnError: false,
-  })
+  const { data, isLoading } = useSWR<GetUserResponse>(
+    `/api/admin/users/${params.user_id}`,
+    fetcher,
+    {
+      refreshInterval: 50,
+      revalidateOnFocus: false,
+      revalidateIfStale: false,
+      shouldRetryOnError: false,
+    },
+  )
 
   useEffect(() => {
     if (data) {

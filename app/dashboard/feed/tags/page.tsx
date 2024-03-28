@@ -11,12 +11,6 @@ import { Label } from '@radix-ui/react-label'
 import { useEffect, useState } from 'react'
 import { useTags } from 'store'
 import { Tag } from '@prisma/client'
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Tags | News CMS',
-  description: 'Active/Inactive tags.',
-}
 
 export default function Tags() {
   const [isInactiveShown, setIsInactiveShown] = useState(1)

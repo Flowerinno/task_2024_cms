@@ -8,29 +8,23 @@ type AdStore = {
   resetSelectedDraft: () => void
 }
 
+const initialDraft: Partial<AdvertisementDraft> = {
+  title: '',
+  link: '',
+  media: '',
+  ad_priority: 0,
+  is_active: false,
+  is_feed: true,
+  is_search: false,
+  post_id: 0,
+}
+
 export const useAdStore = create<AdStore>((set) => ({
-  draft: {
-    title: '',
-    link: '',
-    media: '',
-    ad_priority: 0,
-    is_active: false,
-    is_feed: true,
-    is_search: false,
-    post_id: 0,
-  },
+  draft: initialDraft,
   selectDraft: (draft: AdvertisementDraft) => set((state) => ({ ...state, draft })),
   resetSelectedDraft: () =>
     set((state) => ({
       ...state,
-      draft: {
-        title: '',
-        link: '',
-        media: '',
-        ad_priority: 0,
-        is_feed: true,
-        is_search: false,
-        is_active: false,
-      },
+      draft: initialDraft,
     })),
 }))

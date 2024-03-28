@@ -12,18 +12,20 @@ type NewsStore = {
   removeFromDrafts: (id: number) => void
 }
 
+const initialDraft: CreatePostSchema = {
+  title: '',
+  content: '',
+  link: '',
+  creator: '',
+  tags: [],
+  media: '',
+  is_active: false,
+  pubDate_included: false,
+}
+
 export const useNews = create<NewsStore>((set) => ({
   drafts: [],
-  draft: {
-    title: '',
-    content: '',
-    link: '',
-    media: '',
-    creator: '',
-    tags: [],
-    is_active: false,
-    pubDate_included: false,
-  },
+  draft: initialDraft,
   setDrafts: (drafts: DraftResponse[] | []) => set((state) => ({ ...state, drafts })),
   selectDraft: (draft: CreatePostSchema) => set((state) => ({ ...state, draft })),
   addToDrafts: (draft: DraftResponse) =>
@@ -31,16 +33,7 @@ export const useNews = create<NewsStore>((set) => ({
   resetSelectedDraft: () =>
     set((state) => ({
       ...state,
-      draft: {
-        title: '',
-        content: '',
-        link: '',
-        creator: '',
-        tags: [],
-        media: '',
-        is_active: false,
-        pubDate_included: false,
-      },
+      draft: initialDraft,
     })),
   removeFromDrafts: (id: number) =>
     set((state) => ({

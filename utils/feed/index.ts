@@ -1,11 +1,10 @@
 import { CreateRssRequestInput, FeedItem } from '@/lib/helpers/types'
-import { Advertisement, News_source, Tag } from '@prisma/client'
+import { News_source, Tag } from '@prisma/client'
 import toast from 'react-hot-toast'
-import { DraftResponse, PostWithTags } from './types'
+import { DraftResponse, GetHomeFeedResponse, SearchByTagsResponse } from './types'
 import { CreatePostSchema } from 'utils/validation/feed.schema'
 
 const base = process.env.NEXT_PUBLIC_API_URL
-
 
 export async function createRssSource(
   payload: CreateRssRequestInput,
@@ -121,12 +120,13 @@ export async function verifyRss(rss_url: string): Promise<FeedItem | undefined> 
   } catch (error: { message: string } | any) {}
 }
 
-export async function searchByTags({ page, search }: { page: number; search: string }): Promise<{
-  feed: PostWithTags[] | []
-  maxPage: number
-  ads: Advertisement[]
-  adsPerPage: number
-}> {
+export async function searchByTags({
+  page,
+  search,
+}: {
+  page: number
+  search: string
+}): Promise<SearchByTagsResponse> {
   try {
     const url = new URL(base + `/admin/feed/tags/search`)
 
@@ -149,7 +149,7 @@ export async function searchByTags({ page, search }: { page: number; search: str
     }
 
     return data
-  } catch (error: { message: string } | any) {
+  } catch (_) {
     return { feed: [], maxPage: 1, ads: [], adsPerPage: 1 }
   }
 }
@@ -317,12 +317,13 @@ export async function getPost(id: number) {
   }
 }
 
-export async function getHomeFeed({ page, search }: { page: number; search: string }): Promise<{
-  feed: PostWithTags[] | []
-  maxPage: number
-  ads: Advertisement[] | []
-  adsPerPage: number
-}> {
+export async function getHomeFeed({
+  page,
+  search,
+}: {
+  page: number
+  search: string
+}): Promise<GetHomeFeedResponse> {
   try {
     const url = new URL(`${base}/news`)
 

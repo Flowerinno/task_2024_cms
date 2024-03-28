@@ -15,3 +15,12 @@ export type Statistics = {
 export type PostWithTags = Post & { tags: Tag[] } & {
   advertisement: Advertisement
 }
+
+export type SearchByTagsResponse = {
+  feed: PostWithTags[] | []
+  maxPage: number
+  ads: Advertisement[]
+  adsPerPage: number
+}
+
+export type GetHomeFeedResponse = SearchByTagsResponse

@@ -34,5 +34,5 @@ password: 1234 |
 
 Covered auth, tags, post draft and actual creation. Just learning the tool.
 
-- `npm run compose-dev` - build the project in development mode
+- `npm run compose-dev` - build the project 
 - `npm run cypress:open` - run the tests

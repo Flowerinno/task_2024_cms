@@ -1,6 +1,17 @@
 import Image from 'next/image'
 import Form from '@/components/form'
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Sign In',
+  description: 'Sign in to your News CMS account',
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Sign In',
+    description: 'Sign in to your News CMS account',
+  },
+}
 
 export default function Login() {
   return (

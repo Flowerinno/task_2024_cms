@@ -37,7 +37,7 @@ export default async function Ads() {
       <div className='text-center p-5'>
         <Label className='text-md'>
           No ads available.{' '}
-          <Link className='text-blue-400' href='/dashboard/ads/create'>
+          <Link aria-label='Create an advertisement' className='text-blue-400' href='/dashboard/ads/create'>
             Create one.
           </Link>
         </Label>

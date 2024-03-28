@@ -22,6 +22,8 @@ export function NavElements({
 
         return (
           <Link
+            role='navigation'
+            aria-label={`Go to ${link.key}`}
             key={link.key}
             href={`/${link.value}`}
             className="text-sm font-medium transition-colors hover:text-primary"

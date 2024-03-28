@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -45,12 +45,12 @@ export function UserNav({ session }: UserNavProps) {
         <DropdownMenuGroup>
           {user?.role === "ADMIN" && (
             <DropdownMenuItem>
-              <Link href={"/dashboard"}>Dashboard</Link>
+              <Link role='navigation' aria-label='Go to dashboard' href={"/dashboard"}>Dashboard</Link>
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
           )}
           <DropdownMenuItem>
-            <Link href={`/settings/${session.user.id}`}>Settings</Link>
+            <Link role='navigation' aria-label='Go to user settings' href={`/settings/${session.user.id}`}>Settings</Link>
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -61,6 +61,7 @@ export function UserNav({ session }: UserNavProps) {
               callbackUrl: "/",
             })
           }
+          aria-label="Log out from the current account"
         >
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>

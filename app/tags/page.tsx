@@ -14,6 +14,12 @@ import { Advertisement } from '@prisma/client'
 import { SingleAdvertisement } from '@/components/ads'
 import { PostWithTags } from 'utils/feed/types'
 import prisma from '@/lib/prisma'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Tags',
+  description: 'Search by tags',
+}
 
 export default async function Tags({
   searchParams: { page, search },
@@ -53,12 +59,17 @@ export default async function Tags({
         <Input
           placeholder='Search by tag... 🔎'
           aria-label='Search for news by title'
+          role='search'
           name='search'
           defaultValue={search_q}
           className='flex-1'
         />
         <div className='flex-1 md:flex-[0.1] flex flex-row gap-2'>
-          <Button className='flex-1 md:flex-[0.2]' type='submit'>
+          <Button
+            aria-label='Find posts with search field'
+            className='flex-1 md:flex-[0.2]'
+            type='submit'
+          >
             Search
           </Button>
           <Link
@@ -82,9 +93,10 @@ export default async function Tags({
               }
               return (
                 <button
-                  aria-label='Click to search by tag'
+                  aria-label={`Click to search by #${tag.label} tag`}
                   type='submit'
                   name='search'
+                  role='button'
                   value={tag.label}
                   className='border-[1px] border-gray-400 rounded-md cursor-pointer p-1 text-sm'
                   key={tag.label}

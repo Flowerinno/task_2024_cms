@@ -41,22 +41,24 @@ export default async function Home({
   }
 
   return (
-    <div className='flex flex-col items-center justify-center gap-3 p-5 md:p-10 overflow-x-hidden relative'>
-      <form method='GET' className='w-full md:w-11/12 flex flex-col md:flex-row gap-2'>
+    <div className='flex flex-col items-center justify-center gap-3 p-5 md:p-10 overflow-x-hidden relative' aria-description='News CMS default feed page' aria-current='page'>
+      <form role='searchbox' method='GET' className='w-full md:w-11/12 flex flex-col md:flex-row gap-2'>
         <Input
           placeholder='Search... 🔎'
           aria-label='Search for news by title'
+          role='search'
           name='search'
           defaultValue={search_q}
           className='flex-1'
         />
         <div className='flex-1 md:flex-[0.1] flex flex-row gap-2'>
-          <Button className='flex-1 md:flex-[0.2]' type='submit'>
+          <Button aria-label='Find match for search input' className='flex-1 md:flex-[0.2]' type='submit'>
             Search
           </Button>
           <Link
             className='flex-1 md:flex-[0.2] inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2'
             href='/'
+            aria-label='Reset search field'
           >
             Reset
           </Link>

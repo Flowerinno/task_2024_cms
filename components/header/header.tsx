@@ -26,24 +26,24 @@ export default async function Header() {
 
   return (
     <>
-      <div className='flex-col md:flex'>
+      <header className='flex-col md:flex' role='heading' aria-label='News CMS heading'>
         <div className='border-b'>
           <div className='flex h-16 items-center px-4'>
             {(session && session.user && (
               <>
-                <div className='flex items-center space-x-6 '>
-                  <Image src='/logo.png' alt='logo' width={48} height={48} />
+                <div className='flex items-center space-x-6'>
+                  <Image src='/logo.png' aria-label='News CMS logo image' alt='News CMS logo' width={48} height={48} />
                 </div>
-                <div className='mx-6'>
+                <div className='mx-6' role='navigation' aria-label='Navigation menu'>
                   <NavElements session={session} navigationLinks={navigation} />
                 </div>
-                <div className='ml-auto flex items-center space-x-4'>
+                <div className='ml-auto flex items-center space-x-4' aria-label='User settings dropdown'>
                   <UserNav session={session} />
                 </div>
               </>
             )) || (
               <>
-                <div className='flex items-center space-x-6 '>
+                <div className='flex items-center space-x-6'>
                   <Image src='/logo.png' alt='logo' width={48} height={48} />
                 </div>
                 <div className='mx-6 '>
@@ -61,7 +61,7 @@ export default async function Header() {
             )}
           </div>
         </div>
-      </div>
+      </header>
     </>
   )
 }

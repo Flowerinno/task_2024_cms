@@ -1,6 +1,17 @@
 import Image from 'next/image'
 import Form from '@/components/form'
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Sign Up',
+  description: 'Sign up for a News CMS account',
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Sign Up',
+    description: 'Sign up for a News CMS account',
+  },
+}
 
 export default function Register() {
   return (
@@ -12,6 +23,8 @@ export default function Register() {
               src='/logo.png'
               priority
               alt='Logo'
+              role='navigation'
+              aria-label='News CMS logo image'
               className='h-10 w-10 rounded-full'
               width={20}
               height={20}

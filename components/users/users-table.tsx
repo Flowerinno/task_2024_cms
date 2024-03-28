@@ -294,12 +294,14 @@ export function UsersTable({
       </div>
       <div className="flex items-center justify-end space-x-4 py-4">
         <Link
+          aria-label='Previous page'
           href={`/dashboard/users?page=${page - 1 > 0 ? page - 1 : 1}`}
           className="border-[1px] border-gray-400 p-1 rounded-md min-w-[100px] text-center hover:border-gray-600"
         >
           Previous
         </Link>
         <Link
+          aria-label='Next page'
           href={`/dashboard/users?page=${page + 1 < maxPage ? page + 1 : maxPage}`}
           className="border-[1px] border-gray-400 p-1 rounded-md min-w-[100px] text-center hover:border-gray-600"
         >

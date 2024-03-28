@@ -1,6 +1,6 @@
 import React from 'react'
-import { Label } from '../ui/label'
 import Link from 'next/link'
+import { Label } from '../ui/label'
 
 export const NoData = ({ title, href }: { title: string; href: string }) => {
   return (

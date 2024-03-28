@@ -1,5 +1,4 @@
 import z from "zod";
-import { allowedTypes, maxSizeInMB, fileArrayValidation } from "./files";
 
 export const stepOneVerifySchema = z.object({
   url: z.string().min(1),

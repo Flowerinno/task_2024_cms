@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     const page = url.searchParams.get('page') ?? 1
     const email = url.searchParams.get('email')?.toLowerCase()
 
-    const LIMIT = 20
+    const LIMIT = 10
 
     const maxPage = Math.ceil((await prisma.user.count()) / LIMIT)
 
@@ -32,8 +32,8 @@ export async function GET(req: NextRequest) {
           mode: 'insensitive',
         },
       },
-      skip: Number(page) * LIMIT - LIMIT,
-      take: Number(page) * LIMIT,
+      take: LIMIT,
+      skip: (Number(page) - 1) * LIMIT,
       select: {
         id: true,
         email: true,

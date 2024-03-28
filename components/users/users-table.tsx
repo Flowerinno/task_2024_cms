@@ -158,29 +158,20 @@ export function UsersTable({
   maxPage: number
 }) {
   const [emailFilter, setEmailFilter] = React.useState(email ?? '')
-  const [sorting, setSorting] = React.useState<SortingState>([])
-
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-
-  const LIMIT = 20
 
   const table = useReactTable({
     data: users,
     columns,
-    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     state: {
-      pagination: {
-        pageIndex: page - 1,
-        pageSize: LIMIT,
-      },
-      sorting,
       columnVisibility,
     },
+    pageCount: maxPage,
   })
 
   return (
@@ -281,7 +272,7 @@ export function UsersTable({
         <Link
           aria-label='Next page'
           href={`/dashboard/users?page=${page + 1 < maxPage ? page + 1 : maxPage}`}
-          className='border-[1px] border-gray-400 p-1 rounded-md min-w-[100px] text-center hover:border-gray-600'
+          className={`border-[1px] border-gray-400 p-1 rounded-md min-w-[100px] text-center hover:border-gray-600 ${page === maxPage ? 'cursor-not-allowed' : ''}`}
         >
           Next
         </Link>

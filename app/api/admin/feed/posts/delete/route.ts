@@ -32,9 +32,12 @@ export async function DELETE(req: NextRequest) {
       )
     }
 
-    const deletedPost = await prisma.post.delete({
+    const deletedPost = await prisma.post.update({
       where: {
         id,
+      },
+      data: {
+        is_deleted: true,
       },
     })
 
@@ -60,7 +63,7 @@ export async function DELETE(req: NextRequest) {
       }
       return NextResponse.json(
         {
-          message: 'Draft deleted successfully',
+          message: 'Post deleted successfully',
         },
         {
           status: 200,

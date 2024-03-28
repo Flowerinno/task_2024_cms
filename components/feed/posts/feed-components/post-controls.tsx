@@ -10,10 +10,11 @@ import { PenIcon } from 'lucide-react'
 
 interface PostControlsProps {
   post_id: number
+  is_deleted: boolean
 }
 
-export const PostControls = ({ post_id }: PostControlsProps) => {
-  const [isDeleted, setIsDeleted] = useState(false)
+export const PostControls = ({ post_id, is_deleted }: PostControlsProps) => {
+  const [isDeleted, setIsDeleted] = useState(is_deleted ?? false)
   const onClick = async () => {
     const res = await removePost(post_id)
 

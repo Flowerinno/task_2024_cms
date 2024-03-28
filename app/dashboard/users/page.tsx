@@ -4,7 +4,6 @@ import LoadingDots from '@/components/loading-dots'
 import { UsersTable } from '@/components/users'
 import useSWR from 'swr'
 import fetcher from '@/lib/fetcher'
-import { NoData } from '@/components/no-data'
 import { GetUsersResponse } from 'utils/users/types'
 
 export default function Users({
@@ -19,7 +18,7 @@ export default function Users({
   const email = searchParams?.email ?? ''
 
   const { data, isLoading } = useSWR<GetUsersResponse>(
-    `/api/admin/users?page=${page}&emai=${email}`,
+    `/api/admin/users?page=${page}&email=${email}`,
     fetcher,
   )
 
@@ -27,13 +26,14 @@ export default function Users({
     return <LoadingDots />
   }
 
-  if (!data) {
-    return <NoData title='No users' href='/dashboard/users/create' />
-  }
-
   return (
     <div className='flex flex-col h-screen w-11/12'>
-      <UsersTable users={data?.users} maxPage={data?.maxPage} page={page} email={email} />
+      <UsersTable
+        users={data?.users ?? []}
+        maxPage={data?.maxPage ?? 1}
+        page={page}
+        email={email}
+      />
     </div>
   )
 }

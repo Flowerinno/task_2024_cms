@@ -107,7 +107,7 @@ export const AddPostForm = () => {
     if (draft?.media) {
       form.setValue('media', draft?.media)
     }
-  }, [draft?.title, mediaDep])
+  }, [draft?.title])
 
   useEffect(() => {
     if (form?.getValues('media')) {

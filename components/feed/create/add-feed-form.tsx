@@ -274,11 +274,11 @@ export const AddFeedForm = ({ setStep }: { setStep: (step: 1 | 2) => void }) => 
             }}
           />
 
-          <div className='flex flex-row gap-10'>
-            <Button className='w-full' type='button' onClick={() => setStep(1)}>
+          <div className='flex flex-col gap-3 md:flex-row md:gap-10'>
+            <Button className='md:w-full' type='button' onClick={() => setStep(1)}>
               Go Back
             </Button>
-            <Button className='w-full' type='submit'>
+            <Button className='md:w-full' type='submit'>
               Create feed source
             </Button>
           </div>

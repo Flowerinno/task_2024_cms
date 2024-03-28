@@ -17,20 +17,23 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    const url = new URL(req?.url || '', 'http://localhost')
+    const url = new URL(req?.url || '')
     const page = url.searchParams.get('page') ?? 1
     const email = url.searchParams.get('email')?.toLowerCase()
 
-    const maxPage = Math.ceil((await prisma.user.count()) / 10)
+    const LIMIT = 20
+
+    const maxPage = Math.ceil((await prisma.user.count()) / LIMIT)
 
     const users = await prisma.user.findMany({
       where: {
         email: {
           contains: email ? email : undefined,
+          mode: 'insensitive',
         },
       },
-      skip: Number(page) * 10 - 10,
-      take: Number(page) * 10,
+      skip: Number(page) * LIMIT - LIMIT,
+      take: Number(page) * LIMIT,
       select: {
         id: true,
         email: true,

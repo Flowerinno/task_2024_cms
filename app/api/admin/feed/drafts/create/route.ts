@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
           })
           .toBuffer()
 
-        await minio.client.putObject('default', `draft_${draft.id}.png`, buffer)
+        await minio.client.putObject('default', `draft_${draft.id}.webp`, buffer)
       }
 
       return NextResponse.json(

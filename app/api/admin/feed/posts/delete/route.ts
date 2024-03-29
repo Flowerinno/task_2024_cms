@@ -58,9 +58,6 @@ export async function DELETE(req: NextRequest) {
         })
       }
 
-      if (deletedPost.media) {
-        await minio.client.removeObject('default', `post_${id}.png`)
-      }
       return NextResponse.json(
         {
           message: 'Post deleted successfully',

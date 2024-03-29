@@ -6,9 +6,11 @@ type Options = {
 }
 type TokenType = { count: number; lastCheck: number }
 
+const ttl = 60000 // 1 minute
+
 const tokenCache = new LRUCache({
-  max: 500,
-  ttl: 60000,
+  max: 500, //max 500 unique tokens
+  ttl,
 })
 
 export function rateLimit(options?: Options) {
@@ -25,14 +27,14 @@ export function rateLimit(options?: Options) {
         const now = Date.now()
         const elapsedTime = now - lastCheck
 
-        if (elapsedTime > (options?.interval || 60000)) {
+        if (elapsedTime > (options?.interval || ttl)) {
           tokenCache.set(token, { count: 1, lastCheck: now })
         } else {
           tokenCache.set(token, { count: count + 1, lastCheck: now })
         }
 
         if (count >= limit) {
-          const timeLeft = (options?.interval || 60000) - elapsedTime
+          const timeLeft = (options?.interval || ttl) - elapsedTime
           headers.set('Retry-After', Math.ceil(timeLeft / 1000).toString())
           reject(new Error('Rate limit exceeded'))
         } else {

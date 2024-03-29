@@ -1,26 +1,33 @@
 import prisma from '@/lib/prisma'
 import { hash } from 'bcrypt'
 import { NextResponse } from 'next/server'
+import { rateLimit } from 'utils'
 import { registerSchema } from 'utils/validation/user.schema'
 
 export async function POST(req: Request) {
-  const { email, password } = await req.json()
-
-  const validate = await registerSchema.safeParseAsync({ email, password })
-
-  if (!validate.success) {
-    return NextResponse.json(
-      {
-        message: 'Invalid input',
-        error: validate.error,
-      },
-      {
-        status: 400,
-      },
-    )
-  }
+  const currHeaders = new Headers(req.headers)
 
   try {
+    await rateLimit({
+      uniqueTokenPerInterval: 500,
+      interval: 60000,
+    }).check(currHeaders, 5, 'secret_token')
+
+    const { email, password } = await req.json()
+
+    const validate = await registerSchema.safeParseAsync({ email, password })
+
+    if (!validate.success) {
+      return NextResponse.json(
+        {
+          message: 'Invalid input',
+          error: validate.error,
+        },
+        {
+          status: 400,
+        },
+      )
+    }
     const exists = await prisma.user.findUnique({
       where: {
         email,

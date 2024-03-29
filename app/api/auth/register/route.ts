@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     await rateLimit({
       uniqueTokenPerInterval: 500,
       interval: 60000,
-    }).check(currHeaders, 5, 'secret_token')
+    }).check(currHeaders, 50, 'secret_token')
 
     const { email, password } = await req.json()
 

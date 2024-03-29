@@ -5,6 +5,8 @@ import { createAdSchema } from 'utils/validation/ads.schema'
 import { minio } from '@/lib/minio'
 import { dataUrlToBuffer } from 'utils/files'
 
+import sharp from 'sharp'
+
 export async function POST(req: NextRequest) {
   try {
     const session = await auth()
@@ -75,8 +77,14 @@ export async function POST(req: NextRequest) {
     if (ad) {
       if (media) {
         await minio.createBucket('default')
-        const buffer = dataUrlToBuffer(media)
-        await minio.client.putObject('default', `ads_${ad.id}.png`, buffer)
+        const uncompressed = dataUrlToBuffer(media)
+        const buffer = await sharp(uncompressed)
+          .webp({
+            quality: 70,
+          })
+          .toBuffer()
+
+        await minio.client.putObject('default', `ads_${ad.id}.webp`, buffer)
       }
 
       return NextResponse.json(ad)

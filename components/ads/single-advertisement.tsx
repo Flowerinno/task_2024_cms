@@ -39,6 +39,7 @@ export const SingleAdvertisement = ({
             alt={ad.title}
             width={200}
             height={200}
+            priority
             className='w-full h-24 rounded-sm object-fill'
           />
         )}
@@ -67,6 +68,7 @@ export const SingleAdvertisement = ({
           alt={ad.title}
           width={200}
           height={200}
+          priority
           className='w-full h-24 rounded-sm object-fill opacity-80'
         />
       )}

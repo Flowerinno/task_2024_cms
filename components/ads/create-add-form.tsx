@@ -211,7 +211,7 @@ export const CreateAdForm = () => {
                   <FormControl>
                     <Input
                       id="ad_input_upload"
-                      accept="image/png"
+                      accept='image/png,image/jpeg,image/webp'
                       type="file"
                       className="cursor-pointer"
                       onChange={async (e) => {

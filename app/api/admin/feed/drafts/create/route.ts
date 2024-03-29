@@ -4,6 +4,7 @@ import { createPostSchema } from 'utils/validation/feed.schema'
 import { auth } from 'utils/auth'
 import { minio } from '@/lib/minio'
 import { dataUrlToBuffer } from 'utils/files'
+import sharp from 'sharp'
 
 export async function POST(req: NextRequest) {
   try {
@@ -75,7 +76,13 @@ export async function POST(req: NextRequest) {
     if (draft) {
       if (media) {
         await minio.createBucket('default')
-        const buffer = dataUrlToBuffer(media)
+        const uncompressed = dataUrlToBuffer(media)
+        const buffer = await sharp(uncompressed)
+          .webp({
+            quality: 70,
+          })
+          .toBuffer()
+
         await minio.client.putObject('default', `draft_${draft.id}.png`, buffer)
       }
 

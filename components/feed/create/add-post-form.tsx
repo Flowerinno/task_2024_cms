@@ -202,7 +202,7 @@ export const AddPostForm = () => {
                   <FormLabel className='flex flex-row gap-2'>Media </FormLabel>
                   <FormControl>
                     <Input
-                      accept='image/png'
+                      accept='image/png,image/jpeg,image/webp'
                       type='file'
                       onChange={async (e) => {
                         if (e?.target?.files) {

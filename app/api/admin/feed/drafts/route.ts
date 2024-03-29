@@ -34,7 +34,7 @@ export async function GET() {
     const draftsWithSignedUrl = await Promise.all(
       drafts.map(async (draft) => {
         if (draft.media) {
-          const dataURL = await minio.getObject('default', `draft_${draft.id}.png`)
+          const dataURL = await minio.getObject('default', `draft_${draft.id}.webp`)
 
           return {
             ...draft,

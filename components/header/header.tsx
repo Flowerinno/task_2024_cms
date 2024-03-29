@@ -26,7 +26,7 @@ export default async function Header() {
 
   return (
     <>
-      <header className='flex-col md:flex' role='heading' aria-label='News CMS heading'>
+      <header className='flex-col md:flex' role='heading' aria-level={1} aria-label='News CMS heading'>
         <div className='border-b'>
           <div className='flex h-16 items-center px-4'>
             {(session && session.user && (

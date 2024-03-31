@@ -1,8 +1,13 @@
 import { parseRss } from '@/lib/helpers/rss'
+import { createClient } from 'redis'
 import prisma from '@/lib/prisma'
 
 export const importFeedJob = async () => {
   console.log('job working')
+
+  const redis = await createClient({
+    url: process.env.REDIS_URL,
+  }).connect()
 
   try {
     const sources = await prisma.news_source.findMany({
@@ -61,6 +66,7 @@ export const importFeedJob = async () => {
             },
           })
           count++
+          await redis.incr('post')
         }
       }
 
@@ -79,5 +85,7 @@ export const importFeedJob = async () => {
     }
   } catch (error) {
     console.error('Feed import job failed', error)
+  } finally {
+    await redis.disconnect()
   }
 }

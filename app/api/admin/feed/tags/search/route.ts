@@ -2,6 +2,7 @@ import { minio } from '@/lib/minio'
 import prisma from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 import { rateLimit } from 'utils'
+import { countTable } from 'utils/redis'
 
 export async function GET(req: NextRequest) {
   const currHeaders = new Headers(req.headers)
@@ -89,14 +90,7 @@ export async function GET(req: NextRequest) {
       }),
     )
 
-    const maxPage = Math.ceil(
-      (await prisma.post.count({
-        where: {
-          is_active: true,
-          is_deleted: false,
-        },
-      })) / count,
-    )
+    const maxPage = Math.ceil((await countTable('post')) / count)
 
     const ads = await prisma.advertisement.findMany({
       where: {

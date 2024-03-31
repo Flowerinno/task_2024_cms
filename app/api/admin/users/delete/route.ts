@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from 'utils/auth'
+import { decrement } from 'utils/redis'
 
 export async function DELETE(req: NextRequest) {
   const session = await auth()
@@ -29,6 +30,8 @@ export async function DELETE(req: NextRequest) {
     if (!deletedUser) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 })
     }
+
+    await decrement('user')
 
     return NextResponse.json({ message: 'User deleted.' })
   } catch (error) {

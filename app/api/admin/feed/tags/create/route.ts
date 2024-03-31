@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { auth } from 'utils/auth'
+import { increment } from 'utils/redis'
 
 export async function POST(req: NextRequest) {
   try {
@@ -64,6 +65,8 @@ export async function POST(req: NextRequest) {
         },
       )
     }
+
+    await increment('tag')
 
     return NextResponse.json(tag, {
       status: 201,

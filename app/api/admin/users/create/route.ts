@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma'
 import { hash } from 'bcrypt'
 import { NextResponse } from 'next/server'
 import { auth } from 'utils/auth'
+import { increment } from 'utils/redis'
 
 export async function POST(req: Request) {
   const session = await auth()
@@ -41,6 +42,13 @@ export async function POST(req: Request) {
         role: is_admin ? 'ADMIN' : 'USER',
       },
     })
+
+    if (!user) {
+      return NextResponse.json({ message: 'Failed to create new user.' }, { status: 500 })
+    }
+
+    await increment('user')
+
     return NextResponse.json(user)
   } catch (error) {
     return NextResponse.json({ message: 'Failed to create new user.' }, { status: 500 })

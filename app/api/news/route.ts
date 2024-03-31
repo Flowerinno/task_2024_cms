@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { minio } from '@/lib/minio'
 import { rateLimit } from 'utils'
+import { countTable } from 'utils/redis'
 
 export const revalidate = 10
 
@@ -88,14 +89,7 @@ export async function GET(req: NextRequest) {
       }),
     )
 
-    const maxPage = Math.ceil(
-      (await prisma.post.count({
-        where: {
-          is_active: true,
-          is_deleted: false,
-        },
-      })) / count,
-    )
+    const maxPage = Math.ceil((await countTable('post')) / count)
 
     const ads = await prisma.advertisement.findMany({
       where: {

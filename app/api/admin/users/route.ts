@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from 'utils/auth'
+import { countTable } from 'utils/redis'
 
 export async function GET(req: NextRequest) {
   try {
@@ -23,7 +24,7 @@ export async function GET(req: NextRequest) {
 
     const LIMIT = 10
 
-    const maxPage = Math.ceil((await prisma.user.count()) / LIMIT)
+    const maxPage = Math.ceil((await countTable('user')) / LIMIT)
 
     const users = await prisma.user.findMany({
       where: {

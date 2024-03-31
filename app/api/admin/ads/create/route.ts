@@ -4,7 +4,7 @@ import { auth } from 'utils/auth'
 import { createAdSchema } from 'utils/validation/ads.schema'
 import { minio } from '@/lib/minio'
 import { dataUrlToBuffer } from 'utils/files'
-
+import { increment } from 'utils/redis'
 import sharp from 'sharp'
 
 export async function POST(req: NextRequest) {
@@ -75,6 +75,7 @@ export async function POST(req: NextRequest) {
     })
 
     if (ad) {
+      await increment('advertisement')
       if (media) {
         await minio.createBucket('default')
         const uncompressed = dataUrlToBuffer(media)

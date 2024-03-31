@@ -1,8 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server'
 import prisma from '@/lib/prisma'
 import { auth } from 'utils/auth'
-
-import { minio } from '@/lib/minio'
+import { decrement } from 'utils/redis'
 
 export async function DELETE(req: NextRequest) {
   try {
@@ -42,6 +41,7 @@ export async function DELETE(req: NextRequest) {
     })
 
     if (deletedPost) {
+      await decrement('post')
       if (deletedPost.advertisement_id) {
         await prisma.advertisement.update({
           where: {

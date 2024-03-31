@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma'
 import { hash } from 'bcrypt'
 import { NextResponse } from 'next/server'
 import { rateLimit } from 'utils'
+import { increment } from 'utils/redis'
 import { registerSchema } from 'utils/validation/user.schema'
 
 export async function POST(req: Request) {
@@ -44,6 +45,13 @@ export async function POST(req: Request) {
         password: await hash(password, 10),
       },
     })
+
+    if (!user) {
+      return NextResponse.json({ message: 'Failed to create new user.' }, { status: 500 })
+    }
+
+    await increment('user')
+
     return NextResponse.json(user)
   } catch (error) {
     return NextResponse.json(

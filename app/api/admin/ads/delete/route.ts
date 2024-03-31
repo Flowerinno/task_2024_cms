@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { minio } from '@/lib/minio'
 import { auth } from 'utils/auth'
+import { decrement } from 'utils/redis'
 
 export async function DELETE(req: NextRequest) {
   try {
@@ -38,6 +39,7 @@ export async function DELETE(req: NextRequest) {
     })
 
     if (deletedAd) {
+      await decrement('advertisement')
       if (deletedAd?.media) {
         await minio.client.removeObject('default', `ads_${deletedAd.id}.png`)
       }

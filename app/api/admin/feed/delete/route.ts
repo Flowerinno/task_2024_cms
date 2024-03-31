@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { auth } from 'utils/auth'
+import { decrement } from 'utils/redis'
 
 export async function DELETE(req: NextRequest) {
   try {
@@ -26,6 +27,7 @@ export async function DELETE(req: NextRequest) {
     })
 
     if (deletedSource) {
+      await decrement('news_source')
       return NextResponse.json(
         {
           message: 'RSS feed deleted successfully',

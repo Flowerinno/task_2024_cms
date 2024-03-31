@@ -1,34 +1,37 @@
-import prisma from '@/lib/prisma'
-import Link from 'next/link'
 import { Metadata } from 'next'
 import { Label } from '@/components/ui/label'
+import { countTable, Tables } from 'utils/redis'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Dashboard | News CMS',
 }
 
-type Fields = 'users' | 'posts' | 'tags' | 'news_sources'
-const fields = ['users', 'posts', 'tags', 'news_sources', 'ads']
+type Fields = 'user' | 'post' | 'tag' | 'news_source' | 'advertisement'
+const keys = ['user', 'post', 'tag', 'news_source', 'advertisement']
 
 export default async function Page() {
-  const usersCount = prisma.user.count()
-  const postsCount = prisma.post.count()
-  const tagsCount = prisma.tag.count()
-  const newsSourceCount = prisma.news_source.count()
-  const ads = prisma.advertisement.count()
-
-  const promises = await Promise.all([usersCount, postsCount, tagsCount, newsSourceCount, ads])
-
   const initial = {
-    users: 0,
-    posts: 0,
-    tags: 0,
-    news_sources: 0,
-    ads: 0,
+    user: 0,
+    post: 0,
+    tag: 0,
+    news_source: 0,
+    advertisement: 0,
   }
 
-  const data = fields.reduce((acc, field, index) => {
-    acc[field as Fields] = promises[index]
+  const values = await Promise.all(
+    keys.map(async (key) => {
+      try {
+        const count = await countTable(key as Tables)
+        return count ?? 0
+      } catch (error) {
+        return 0
+      }
+    }),
+  )
+
+  const data = keys.reduce((acc, field, index) => {
+    acc[field as Fields] = values[index]
     return acc
   }, initial)
 
@@ -37,31 +40,31 @@ export default async function Page() {
       id: 1,
       title: 'Users',
       href: '/dashboard/users',
-      count: data?.users ?? 0,
+      count: data?.user ?? 0,
     },
     {
       id: 2,
       title: 'Posts',
       href: '/',
-      count: data?.posts ?? 0,
+      count: data?.post ?? 0,
     },
     {
       id: 3,
       title: 'Tags',
       href: '/dashboard/feed/tags',
-      count: data?.tags ?? 0,
+      count: data?.tag ?? 0,
     },
     {
       id: 4,
       title: 'News Sources',
       href: '/dashboard/feed',
-      count: data?.news_sources ?? 0,
+      count: data?.news_source ?? 0,
     },
     {
       id: 5,
       title: 'Advertisement',
       href: '/dashboard/ads',
-      count: data?.ads ?? 0,
+      count: data?.advertisement ?? 0,
     },
   ]
 
@@ -70,15 +73,14 @@ export default async function Page() {
       <Label className='font-bold text-[24px]'>Quick overview</Label>
       <div className='flex flex-row flex-wrap justify-around items-center p-3'>
         {links.map((link) => (
-          <Link
+          <a
             href={link.href}
-            prefetch={true}
             key={link.id}
             className='flex flex-col items-center justify-center w-48 h-48 text-black bg-gray-200 rounded-lg p-4 m-2 hover:border-black hover:border-[1px]'
           >
             <h2 className='text-lg font-bold'>{link.title}</h2>
             <p className='text-xl font-bold'>{link.count}</p>
-          </Link>
+          </a>
         ))}
       </div>
     </div>

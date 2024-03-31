@@ -3,6 +3,7 @@ import { auth } from 'utils/auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { addFeedSchema } from 'utils/validation/feed.schema'
 import { CreateRssRequestInput } from '@/lib/helpers/types'
+import { increment } from 'utils/redis'
 
 export async function POST(req: NextRequest) {
   try {
@@ -105,6 +106,8 @@ export async function POST(req: NextRequest) {
         },
       )
     }
+
+    await increment('news_source')
 
     return NextResponse.json(
       {

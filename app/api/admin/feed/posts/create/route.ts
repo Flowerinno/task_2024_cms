@@ -5,6 +5,7 @@ import { createPostSchema } from 'utils/validation/feed.schema'
 import { minio } from '@/lib/minio'
 import { dataUrlToBuffer } from 'utils/files'
 import sharp from 'sharp'
+import { increment } from 'utils/redis'
 
 export async function POST(req: NextRequest) {
   try {
@@ -67,6 +68,7 @@ export async function POST(req: NextRequest) {
     })
 
     if (newPost) {
+      await increment('post')
       if (media) {
         await minio.createBucket('default')
         const uncompressed = dataUrlToBuffer(media)

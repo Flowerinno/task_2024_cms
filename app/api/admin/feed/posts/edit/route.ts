@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from 'utils/auth'
 import prisma from '@/lib/prisma'
 import { updatePostSchema } from 'utils/validation/feed.schema'
+import { increment } from 'utils/redis'
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData()
@@ -57,6 +58,10 @@ export async function POST(req: NextRequest) {
         creator: data.creator,
       },
     })
+
+    if (!is_deleted) {
+      await increment('post')
+    }
   } catch (_) {
   } finally {
     return NextResponse.redirect(new URL(req.url).origin + `/dashboard/feed/posts/edit/${id}`, 302)

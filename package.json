@@ -10,6 +10,7 @@
     "compose-dev": "docker-compose -f docker-compose.dev.yml up",
     "stop": "docker-compose -f docker-compose.dev.yml down",
     "cron": "tsx cron-job.ts && node cron-job.js",
+    "cron-container": "docker exec -it task_app sh -c 'npm run cron'",
     "cypress:open": "cypress open"
   },
   "prisma": {

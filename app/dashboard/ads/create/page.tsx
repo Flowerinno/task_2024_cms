@@ -17,7 +17,7 @@ export default async function CreateAdd() {
     drafts &&
       drafts.map(async (draft) => {
         if (draft.media) {
-          const dataURL = await minio.getObject('default', `ads_draft_${draft.id}.webp`)
+          const dataURL = await minio.client.presignedGetObject('default', `ads_draft_${draft.id}.webp`)
 
           return {
             ...draft,

@@ -34,11 +34,11 @@ export async function GET() {
     const draftsWithSignedUrl = await Promise.all(
       drafts.map(async (draft) => {
         if (draft.media) {
-          const dataURL = await minio.getObject('default', `draft_${draft.id}.webp`)
+          const asset = await minio.client.presignedGetObject('default', `draft_${draft.id}.webp`)
 
           return {
             ...draft,
-            media: dataURL ?? null,
+            media: asset ?? null,
           }
         }
         return draft
@@ -49,6 +49,7 @@ export async function GET() {
       status: 200,
     })
   } catch (error) {
+    console.log(error)
     return NextResponse.json(
       {
         message: 'Failed to fetch drafts',

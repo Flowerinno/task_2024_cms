@@ -63,7 +63,7 @@ export async function GET(req: NextRequest) {
       feed.map(async (post) => {
         let postMedia, adMedia
         if (post.media) {
-          postMedia = await minio.getObject('default', `post_${post.id}.webp`)
+          postMedia = await minio.client.presignedGetObject('default', `post_${post.id}.webp`)
         }
 
         let ad = post?.advertisement
@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
           adsPerPage -= 1 // decrease adpsPerPage by 1 when inserting an ad
 
           if (ad?.media) {
-            adMedia = await minio.getObject('default', `ads_${ad.id}.webp`)
+            adMedia = await minio.client.presignedGetObject('default', `ads_${ad.id}.webp`)
           }
         } else if (ad) {
           ad = null
@@ -108,7 +108,7 @@ export async function GET(req: NextRequest) {
     const adsWithMedia = await Promise.all(
       ads.map(async (ad) => {
         if (ad.media) {
-          const adsMedia = await minio.getObject('default', `ads_${ad.id}.webp`)
+          const adsMedia = await minio.client.presignedGetObject('default', `ads_${ad.id}.webp`)
 
           return {
             ...ad,

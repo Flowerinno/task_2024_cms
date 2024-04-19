@@ -29,7 +29,10 @@ export const useNews = create<NewsStore>((set) => ({
   setDrafts: (drafts: DraftResponse[] | []) => set((state) => ({ ...state, drafts })),
   selectDraft: (draft: CreatePostSchema) => set((state) => ({ ...state, draft })),
   addToDrafts: (draft: DraftResponse) =>
-    set((state) => ({ ...state, drafts: [...state.drafts, draft] })),
+    set((state) => ({
+      ...state,
+      drafts: state?.drafts?.length > 0 ? [...state?.drafts, draft] : [draft],
+    })),
   resetSelectedDraft: () =>
     set((state) => ({
       ...state,

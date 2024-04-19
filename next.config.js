@@ -4,7 +4,7 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
   images: {
-    domains: ['localhost'],
+    domains: ['localhost', 'host.docker.internal'],
   },
   eslint: {
     ignoreDuringBuilds: false,

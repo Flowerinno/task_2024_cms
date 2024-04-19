@@ -38,7 +38,7 @@ export default async function InactivePosts() {
   posts = await Promise.all(
     posts.map(async (post) => {
       if (post.media) {
-        const media = await minio.getObject('default', `post_${post.id}.webp`)
+        const media = await minio.client.presignedGetObject('default', `post_${post.id}.webp`)
         return {
           ...post,
           media: media ?? null,

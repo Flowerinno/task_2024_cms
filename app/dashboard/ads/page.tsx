@@ -28,7 +28,7 @@ export default async function Ads() {
     adsWithMedia = await Promise.all(
       ads.map(async (ad) => {
         if (ad.media) {
-          const adMedia = await minio.getObject('default', `ads_${ad.id}.webp`)
+          const adMedia = await minio.client.presignedGetObject('default', `ads_${ad.id}.webp`)
 
           return {
             ...ad,
